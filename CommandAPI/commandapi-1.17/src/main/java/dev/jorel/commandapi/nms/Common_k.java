@@ -18,8 +18,10 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.nms;
 
+//#//
+package dev.jorel.commandapi.nms;
+//#prefix+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -79,6 +81,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
+import dev.jorel.commandapi.nms.NMS;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -148,12 +151,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+//#prefix-
 
 // Mojang-Mapped reflection
 @RequireField(in = ServerResources.class, name = "functionLibrary", ofType = ServerFunctionLibrary.class)
 @RequireField(in = ServerFunctionLibrary.class, name = "functionCompilationLevel", ofType = int.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
-public abstract class Common implements NMS<CommandSourceStack> {
+abstract class Common_k implements NMS<CommandSourceStack> {
 	
 	static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 
