@@ -131,23 +131,6 @@ public final class CommandAPI {
 	/**
 	 * Initializes the CommandAPI for loading. This should be placed at the
 	 * start of your <code>onLoad()</code> method.
-	 * @param verbose if true, enables verbose output for the CommandAPI
-	 * @deprecated Use {@link CommandAPI#onLoad(CommandAPIConfig)} instead
-	 */
-	@Deprecated
-	public static void onLoad(boolean verbose) {
-		if(!loaded) {
-			CommandAPI.config = new Config(verbose);
-			CommandAPIHandler.getInstance().checkDependencies();
-			loaded = true;
-		} else {
-			getLog().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
-		}
-	}
-	
-	/**
-	 * Initializes the CommandAPI for loading. This should be placed at the
-	 * start of your <code>onLoad()</code> method.
 	 * @param config the configuration to use for the CommandAPI
 	 */
 	public static void onLoad(CommandAPIConfig config) {

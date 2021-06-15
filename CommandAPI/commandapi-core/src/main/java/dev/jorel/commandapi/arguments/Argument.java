@@ -20,9 +20,7 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.Collection;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -167,114 +165,6 @@ public abstract class Argument {
 	 */
 	public Optional<Function<SuggestionInfo, IStringTooltip[]>> getIncludedSuggestions() {
 		return addedSuggestions;
-	}
-	
-	/**
-	 * Override the suggestions of this argument with a String array.
-	 * 
-	 * @param suggestions the string array to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
-	 */
-	@Deprecated
-	public final Argument overrideSuggestions(String... suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions));
-		return this;
-	}
-	
-	/**
-	 * Override the suggestions of this argument with a <code>Collection&lt;String&gt;</code>.
-	 * 
-	 * @param suggestions the collection of suggestions to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
-	 */
-	@Deprecated
-	public final Argument overrideSuggestions(Collection<String> suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> fromSuggestions(suggestions.toArray(new String[0])));
-		return this;
-	}
-
-	/**
-	 * Override the suggestions of this argument with a function that maps the
-	 * command sender to a String array.
-	 * 
-	 * @param suggestions the function to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
-	 */
-	@Deprecated
-	public final Argument overrideSuggestions(Function<CommandSender, String[]> suggestions) {
-		this.suggestions =  Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo.sender())));
-		return this;
-	}
-	
-	/**
-	 * Override the suggestions of this argument with a function that maps the
-	 * command sender and a data set of previously declared arguments to a String array.
-	 * 
-	 * @param suggestions the function to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link Argument#replaceSuggestions(Function)}
-	 */
-	@Deprecated
-	public final Argument overrideSuggestions(BiFunction<CommandSender, Object[], String[]> suggestions) {
-		this.suggestions =  Optional.of(suggestionInfo -> fromSuggestions(suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs())));
-		return this;
-	}
-	
-	/**
-	 * Override the suggestions of this argument with a <code>Collection&lt;IStringTooltip&gt;</code>.
-	 * 
-	 * @param suggestions the collection of IStringTooltip to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
-	 */
-	@Deprecated
-	public final Argument overrideSuggestionsT(Collection<IStringTooltip> suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> suggestions.toArray(new IStringTooltip[0]));
-		return this;
-	}
-	
-	/**
-	 * Override the suggestions of this argument with an IStringTooltip array.
-	 * 
-	 * @param suggestions the IStringTooltip array to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
-	 */
-	@Deprecated
-	public final Argument overrideSuggestionsT(IStringTooltip... suggestions) {
-		this.suggestions = Optional.of(suggestionInfo -> suggestions);
-		return this;
-	}
-
-	/**
-	 * Override the suggestions of this argument with a function that maps the
-	 * command sender to an IStringTooltip array.
-	 * 
-	 * @param suggestions the function to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
-	 */
-	@Deprecated
-	public final Argument overrideSuggestionsT(Function<CommandSender, IStringTooltip[]> suggestions) {
-		this.suggestions =  Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo.sender()));
-		return this;
-	}
-	
-	/**
-	 * Override the suggestions of this argument with a function that maps the
-	 * command sender and a data set of previously declared arguments to an IStringTooltip array.
-	 * 
-	 * @param suggestions the function to override suggestions with
-	 * @return the current argument
-	 * @deprecated use {@link Argument#replaceSuggestionsT(Function)}
-	 */
-	@Deprecated
-	public final Argument overrideSuggestionsT(BiFunction<CommandSender, Object[], IStringTooltip[]> suggestions) {
-		this.suggestions =  Optional.of(suggestionInfo -> suggestions.apply(suggestionInfo.sender(), suggestionInfo.previousArgs()));
-		return this;
 	}
 
 	/**
