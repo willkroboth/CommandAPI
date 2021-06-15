@@ -29,23 +29,41 @@
 	<artifactId>commandapi</artifactId>
 	<version>7.0.0</version>
 	<packaging>pom</packaging>
-	<modules>
-		<!-- Compile time reflection checker -->
-		<module>commandapi-preprocessor</module>
-
-		<!-- NMS versions -->
-		<module>commandapi-1.17</module>
-		<module>commandapi-1.16.5</module>
-
-		<!-- Main core code + NMS selector -->
-		<module>commandapi-core</module>
-		<module>commandapi-vh</module>
-
-		<!-- Outputs -->
-		<module>commandapi-plugin</module>
-		<module>commandapi-shade</module>
-		<module>commandapi-annotations</module>
-	</modules>
+	
+	<profiles>
+		<profile>
+			<id>commonlink</id>
+			<modules>
+				<module>commandapi-preprocessor</module>
+				<module>commandapi-common-linker</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>everythingelse</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<modules>
+				<!-- Compile time reflection checker -->
+				<module>commandapi-preprocessor</module>
+		
+				<!-- NMS versions -->
+				<module>commandapi-1.17</module>
+				<module>commandapi-1.16.5</module>
+		
+				<!-- Main core code + NMS selector -->
+				<module>commandapi-core</module>
+				<module>commandapi-vh</module>
+		
+				<!-- Outputs -->
+				<module>commandapi-plugin</module>
+				<module>commandapi-shade</module>
+				<module>commandapi-annotations</module>
+			</modules>
+		</profile>
+	</profiles>
+	
+	
 	
 	<repositories>
         <repository>
@@ -69,6 +87,11 @@
 		<finalName>CommandAPIv${project.version}_${maven.build.timestamp}</finalName>
 		<pluginManagement>
 			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-plugin-plugin</artifactId>
+					<version>3.6.1</version>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
@@ -97,6 +120,18 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-plugin-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-descriptor</id>
+						<phase>process-classes</phase>
+					</execution>
+					<!-- if you want to generate help goal <execution> <id>help-goal</id> 
+						<goals> <goal>helpmojo</goal> </goals> </execution> -->
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
