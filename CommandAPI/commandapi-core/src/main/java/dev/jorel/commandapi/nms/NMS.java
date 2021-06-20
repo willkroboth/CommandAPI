@@ -58,7 +58,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
-import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -260,7 +259,7 @@ public interface NMS<CommandListenerWrapper> {
 	MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws CommandSyntaxException;
 
-	NBTContainer getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
 
 	String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
 			throws IllegalArgumentException, CommandSyntaxException;

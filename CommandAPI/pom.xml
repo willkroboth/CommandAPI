@@ -27,7 +27,7 @@
 
 	<groupId>dev.jorel</groupId>
 	<artifactId>commandapi</artifactId>
-	<version>6.0.5</version>
+	<version>6.0.6</version>
 	<packaging>pom</packaging>
 	<modules>
 		<!-- Compile time reflection checker -->
@@ -44,6 +44,7 @@
 		<!-- Outputs -->
 		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
+		<module>commandapi-shade-nbtapi</module>
 		<module>commandapi-annotations</module>
 	</modules>
 	

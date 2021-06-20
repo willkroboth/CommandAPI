@@ -85,9 +85,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
-import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.NBTAPIHook;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.preprocessor.RequireField;
 import dev.jorel.commandapi.wrappers.ComplexRecipeImpl;
@@ -665,8 +665,8 @@ public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public NBTContainer getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
-		return new NBTContainer(ArgumentNBTTag.a(cmdCtx, key));
+	public Object getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return NBTAPIHook.construct(ArgumentNBTTag.a(cmdCtx, key));
 	}
 
 	@Override
