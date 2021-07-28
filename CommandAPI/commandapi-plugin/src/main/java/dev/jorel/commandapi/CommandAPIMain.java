@@ -25,6 +25,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import dev.jorel.commandapi.executors.ExecutorType;
+
 public class CommandAPIMain extends JavaPlugin {
 	
 	@Override
@@ -58,5 +60,11 @@ public class CommandAPIMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		CommandAPI.onEnable(this);
+		
+		new CommandAPICommand("sayhello")
+			.executes((sender, args) -> {
+				
+			}, ExecutorType.PLAYER, ExecutorType.CONSOLE)
+			.register();
 	}
 }

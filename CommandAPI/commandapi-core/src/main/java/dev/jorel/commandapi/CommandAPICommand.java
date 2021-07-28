@@ -35,6 +35,7 @@ import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
 import dev.jorel.commandapi.executors.CommandExecutor;
@@ -42,6 +43,7 @@ import dev.jorel.commandapi.executors.ConsoleCommandExecutor;
 import dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor;
 import dev.jorel.commandapi.executors.EntityCommandExecutor;
 import dev.jorel.commandapi.executors.EntityResultingCommandExecutor;
+import dev.jorel.commandapi.executors.ExecutorType;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.executors.NativeResultingCommandExecutor;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
@@ -172,6 +174,29 @@ public class CommandAPICommand {
 	}
 	
 	// Regular command executor 
+	
+	public CommandAPICommand executes(CommandExecutor executor, ExecutorType...  executorTypes) {
+		if(executorTypes.length == 0) {
+			this.executor.addNormalExecutor(executor);
+			return this;
+		}
+		for(ExecutorType type : executorTypes) {
+			this.executor.addNormalExecutor(new CommandExecutor() {
+					
+					@Override
+					public void run(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+						executor.run(sender, args);
+					}
+					
+					@Override
+					public ExecutorType getType() {
+						return type;
+					}
+				}
+			);
+		}
+		return this;
+	}
 	
 	/**
 	 * Adds an executor to the current command builder
