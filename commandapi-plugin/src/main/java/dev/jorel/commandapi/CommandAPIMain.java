@@ -23,6 +23,7 @@ package dev.jorel.commandapi;
 import java.io.File;
 import java.util.Map.Entry;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CommandAPIMain extends JavaPlugin {

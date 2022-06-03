@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,7 +73,7 @@ import dev.jorel.commandapi.preprocessor.RequireField;
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
-public abstract class CommandAPIHandler<CommandSourceStack, ImplementedSender> {
+public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, ImplementedSender>, CommandSourceStack, ImplementedSender> {
 
 	private final static VarHandle COMMANDNODE_CHILDREN;
 	private final static VarHandle COMMANDNODE_LITERALS;
@@ -100,6 +99,20 @@ public abstract class CommandAPIHandler<CommandSourceStack, ImplementedSender> {
 		COMMANDNODE_ARGUMENTS = commandNodeArguments;
 		COMMANDCONTEXT_ARGUMENTS = commandContextArguments;
 	}
+	
+	final List<CommandHelp> commands;
+	final Map<ClassCache, Field> FIELDS = new HashMap<>();
+	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
+	final NMSType NMS;
+	CommandDispatcher<CommandSourceStack> DISPATCHER;
+	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
+
+
+	public CommandAPIHandler(NMSType NMS) {
+		this.NMS = NMS;
+		this.registeredCommands = null;
+		this.commands = new ArrayList<>();
+	}
 
 	/**
 	 * Returns the raw input for an argument for a given command context and its
@@ -116,13 +129,6 @@ public abstract class CommandAPIHandler<CommandSourceStack, ImplementedSender> {
 		StringRange range = ((Map<String, ParsedArgument<CommandSourceStack, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx)).get(key).getRange();
 		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
 	}
-
-	final Map<ClassCache, Field> FIELDS = new HashMap<>();
-	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
-	final NMS<CommandSourceStack> NMS;
-	final CommandDispatcher<CommandSourceStack> DISPATCHER;
-	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
-
 	void checkDependencies() {
 		try {
 			Class.forName("com.mojang.brigadier.CommandDispatcher");
@@ -168,7 +174,9 @@ public abstract class CommandAPIHandler<CommandSourceStack, ImplementedSender> {
 	 * 
 	 * @return an instance of NMS
 	 */
-	public abstract <NMSType extends NMS<CommandSourceStack>> NMSType getNMS();
+	public NMSType getNMS() {
+		return this.NMS;
+	}
 
 	/**
 	 * Unregisters a command from the NMS command graph.
@@ -304,44 +312,6 @@ public abstract class CommandAPIHandler<CommandSourceStack, ImplementedSender> {
 	// SECTION: Permissions //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	/**
-	 * This permission generation setup ONLY works iff: 
-	 * <ul>
-	 * <li>You register the parent permission node FIRST.</li>
-	 * <li>Example:<br>/mycmd - permission node: <code>my.perm</code> <br>/mycmd &lt;arg> - permission node: <code>my.perm.other</code></li>
-	 * </ul>
-	 *
-	 * The <code>my.perm.other</code> permission node is revoked for the COMMAND REGISTRATION, however: 
-	 * <ul>
-	 * <li>The permission node IS REGISTERED.</li> 
-	 * <li>The permission node, if used for an argument (as in this case), 
-	 *  	will be used for suggestions for said argument</li></ul>
-	 * @param requirements 
-	 */
-	Predicate<CommandSourceStack> generatePermissions(String commandName, CommandPermission permission, Predicate<ImplementedSender> requirements) {
-		// If we've already registered a permission, set it to the "parent" permission.
-		if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
-			if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
-				permission = PERMISSIONS_TO_FIX.get(commandName.toLowerCase());
-			}
-		} else {
-			// Add permission to a list to fix conflicts with minecraft:permissions
-			PERMISSIONS_TO_FIX.put(commandName.toLowerCase(), permission);
-		}
-
-		final CommandPermission finalPermission = permission;
-
-		// Register it to the Bukkit permissions registry
-		if (finalPermission.getPermission().isPresent()) {
-			try {
-				Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission().get()));
-			} catch (IllegalArgumentException e) {
-				assert true; // nop, not an error.
-			}
-		}
-
-		return (CommandSourceStack css) -> permissionCheck(NMS.getImplementedSenderFromCSS(css), finalPermission, requirements);
-	}
 
 	/**
 	 * Checks if a sender has a given permission.
@@ -621,8 +591,8 @@ public abstract class CommandAPIHandler<CommandSourceStack, ImplementedSender> {
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
 	abstract LiteralArgumentBuilder<CommandSourceStack> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<ImplementedSender> requirements);
-	
-	
+
+
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(
 			final Argument<?, ImplementedSender>[] args, Argument<?, ImplementedSender> argument) {

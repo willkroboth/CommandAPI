@@ -39,17 +39,9 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 public abstract class CommandAPIBase {
 	
 	private static boolean canRegister = true;
-	static Config config;
 	static File dispatcherFile;
 	static Logger logger;
 	private static boolean loaded = false;
-
-	static Config getConfiguration() {
-		if(config == null) {
-			logWarning("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
-		}
-		return config;
-	}
 	
 	static File getDispatcherFile() {
 		return dispatcherFile;
@@ -74,52 +66,6 @@ public abstract class CommandAPIBase {
 			};
 		}
 		return logger;
-	}
-	
-	/**
-	 * Logs a message to the console using Logger.info() if the configuration has
-	 * verbose logging enabled
-	 * 
-	 * @param message the message to log to the console
-	 */
-	public static void logInfo(String message) {
-		if(config.hasVerboseOutput() && !config.hasSilentLogs()) {
-			getLog().info(message);
-		}
-	}
-	
-	/**
-	 * Logs a message from the CommandAPI. If silent logs are enabled, this message
-	 * is not logged.
-	 * 
-	 * @param message the message to log
-	 */
-	public static void logNormal(String message) {
-		if(!config.hasSilentLogs()) {
-			getLog().info(message);			
-		}
-	}
-	
-	/**
-	 * Logs a warning from the CommandAPI. If silent logs are enabled, this warning
-	 * is not logged.
-	 * 
-	 * @param message the message to log as a warning
-	 */
-	public static void logWarning(String message) {
-		if(!config.hasSilentLogs()) {
-			getLog().warning(message);
-		}
-	}
-	
-	/**
-	 * Logs an error from the CommandAPI. This always gets logged, even if silent
-	 * logs are enabled.
-	 * 
-	 * @param message the message to log as an error
-	 */
-	public static void logError(String message) {
-		getLog().severe(message);
 	}
 	
 	/**

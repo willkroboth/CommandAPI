@@ -8,19 +8,15 @@ import java.util.function.Predicate;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
+import org.bukkit.permissions.Permission;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import dev.jorel.commandapi.nms.BukkitNMS;
 
-public class BukkitCommandAPIHandler<CommandSourceStack> extends CommandAPIHandler<CommandSourceStack, CommandSender> {
+public class BukkitCommandAPIHandler<CommandSourceStack> extends CommandAPIHandler<BukkitNMS<CommandSourceStack>, CommandSourceStack, CommandSender> {
 
-	final List<CommandHelp> commands;
-	final BukkitNMS<CommandSourceStack> NMS;
-	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking
-
 	private static BukkitCommandAPIHandler<?> instance;
 	
 	public static BukkitCommandAPIHandler<?> getInstance() {
@@ -30,20 +26,55 @@ public class BukkitCommandAPIHandler<CommandSourceStack> extends CommandAPIHandl
 		return instance;
 	}
 	
-	
 	private BukkitCommandAPIHandler() {
-		String bukkit = Bukkit.getServer().toString();
-		NMS = (BukkitNMS<CommandSourceStack>) CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
-		DISPATCHER = NMS.getBrigadierDispatcher();
+		super(getNewNMS());
+		super.DISPATCHER = NMS.getBrigadierDispatcher();
 		registeredCommands = new ArrayList<>();
-		commands = new ArrayList<>();
+	}
+	
+	private static <CommandSourceStack> BukkitNMS<CommandSourceStack> getNewNMS() {
+		String bukkit = Bukkit.getServer().toString();
+		return (BukkitNMS<CommandSourceStack>) CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
 	}
 
+    /**
+     * This permission generation setup ONLY works iff: 
+     * <ul>
+     * <li>You register the parent permission node FIRST.</li>
+     * <li>Example:<br>/mycmd - permission node: <code>my.perm</code> <br>/mycmd &lt;arg> - permission node: <code>my.perm.other</code></li>
+     * </ul>
+     *
+     * The <code>my.perm.other</code> permission node is revoked for the COMMAND REGISTRATION, however: 
+     * <ul>
+     * <li>The permission node IS REGISTERED.</li> 
+     * <li>The permission node, if used for an argument (as in this case), 
+     *      will be used for suggestions for said argument</li></ul>
+     * @param requirements 
+     */
+    Predicate<CommandSourceStack> generatePermissions(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
+        // If we've already registered a permission, set it to the "parent" permission.
+        if (PERMISSIONS_TO_FIX.containsKey(commandName.toLowerCase())) {
+            if (!PERMISSIONS_TO_FIX.get(commandName.toLowerCase()).equals(permission)) {
+                permission = PERMISSIONS_TO_FIX.get(commandName.toLowerCase());
+            }
+        } else {
+            // Add permission to a list to fix conflicts with minecraft:permissions
+            PERMISSIONS_TO_FIX.put(commandName.toLowerCase(), permission);
+        }
 
-	@Override
-	public BukkitNMS<CommandSourceStack> getNMS() {
-		return this.NMS;
-	}
+        final CommandPermission finalPermission = permission;
+
+        // Register it to the Bukkit permissions registry
+        if (finalPermission.getPermission().isPresent()) {
+            try {
+                Bukkit.getPluginManager().addPermission(new Permission(finalPermission.getPermission().get()));
+            } catch (IllegalArgumentException e) {
+                assert true; // nop, not an error.
+            }
+        }
+
+        return (CommandSourceStack css) -> permissionCheck(NMS.getImplementedSenderFromCSS(css), finalPermission, requirements);
+    }
 
 	/**
 	 * Checks if a sender has a given permission.
