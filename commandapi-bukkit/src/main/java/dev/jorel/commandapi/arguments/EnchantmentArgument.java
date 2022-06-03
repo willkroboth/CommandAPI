@@ -25,7 +25,6 @@ import org.bukkit.enchantments.Enchantment;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
@@ -38,7 +37,7 @@ public class EnchantmentArgument extends BukkitSafeOverrideableArgument<Enchantm
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public EnchantmentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
+		super(nodeName, BukkitNMS.get()._ArgumentEnchantment(), fromKey(Enchantment::getKey));
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class EnchantmentArgument extends BukkitSafeOverrideableArgument<Enchantm
 	@Override
 	public CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.ENCHANTMENT;
-	}
+	}	
 	
 	@Override
 	public <CommandListenerWrapper> Enchantment parseArgument(BukkitNMS<CommandListenerWrapper> nms,

@@ -27,7 +27,6 @@ import org.bukkit.World.Environment;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
@@ -40,7 +39,7 @@ public class EnvironmentArgument extends BukkitSafeOverrideableArgument<Environm
 	 * @param nodeName the name of the node for this argument
 	 */
 	public EnvironmentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
+		super(nodeName, BukkitNMS.get()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
 	}
 	
 	@Override

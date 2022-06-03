@@ -37,7 +37,7 @@ public class MathOperationArgument extends BukkitSafeOverrideableArgument<MathOp
 	 * @param nodeName the name of the node for this argument
 	 */
 	public MathOperationArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMathOperation(), MathOperation::toString);
+		super(nodeName, BukkitNMS.get()._ArgumentMathOperation(), MathOperation::toString);
 	}
 	
 	@Override

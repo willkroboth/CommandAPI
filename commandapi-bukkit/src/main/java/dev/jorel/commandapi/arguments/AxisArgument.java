@@ -27,7 +27,6 @@ import org.bukkit.Axis;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
@@ -41,7 +40,7 @@ public class AxisArgument extends BukkitSafeOverrideableArgument<EnumSet, EnumSe
 	 * @param nodeName the name of the node for argument
 	 */
 	public AxisArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentAxis(), e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get());
+		super(nodeName, BukkitNMS.get()._ArgumentAxis(), e -> e.stream().map(Axis::name).map(String::toLowerCase).reduce(String::concat).get());
 	}
 
 	@Override

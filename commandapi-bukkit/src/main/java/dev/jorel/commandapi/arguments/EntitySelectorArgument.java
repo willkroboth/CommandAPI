@@ -30,7 +30,6 @@ import org.bukkit.entity.Player;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.enums.EntitySelector;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
@@ -55,7 +54,7 @@ public class EntitySelectorArgument<T> extends BukkitArgument<T> {
 	 * @param selector the entity selector for this argument
 	 */
 	public EntitySelectorArgument(String nodeName, EntitySelector selector) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentEntity(selector));
+		super(nodeName, BukkitNMS.get()._ArgumentEntity(selector));
 		this.selector = selector;
 	}
 

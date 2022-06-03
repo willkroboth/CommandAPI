@@ -25,7 +25,6 @@ import java.util.function.Predicate;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
@@ -39,7 +38,7 @@ public class BlockPredicateArgument extends BukkitArgument<Predicate> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public BlockPredicateArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentBlockPredicate());
+		super(nodeName, BukkitNMS.get()._ArgumentBlockPredicate());
 	}
 
 	@Override

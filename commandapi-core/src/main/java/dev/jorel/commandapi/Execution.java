@@ -1,15 +1,14 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.arguments.Argument;
-import org.bukkit.command.CommandSender;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import dev.jorel.commandapi.arguments.Argument;
 
 /**
  * A list of arguments which results in an execution. This is used for building branches in a {@link CommandTree}
  */
-record Execution(List<Argument<?>> arguments, CustomCommandExecutor<? extends CommandSender> executor) {
+record Execution(List<Argument<?>> arguments, CustomCommandExecutor<? extends CommandAPICommandSender> executor) {
 
 	/**
 	 * Register a command with the given arguments and executor to brigadier, by converting it into a {@link CommandAPICommand}

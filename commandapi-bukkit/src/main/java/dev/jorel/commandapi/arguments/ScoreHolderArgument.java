@@ -50,7 +50,7 @@ public class ScoreHolderArgument<T> extends BukkitArgument<T> {
 	 * @param type whether this argument represents a single score holder or a collection of score holders
 	 */
 	public ScoreHolderArgument(String nodeName, ScoreHolderType type) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
+		super(nodeName, BukkitNMS.get()._ArgumentScoreholder(type == ScoreHolderType.SINGLE));
 		single = (type == ScoreHolderType.SINGLE);
 	}
 	

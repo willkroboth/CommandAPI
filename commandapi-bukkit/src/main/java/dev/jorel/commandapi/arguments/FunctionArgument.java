@@ -25,7 +25,6 @@ import org.bukkit.NamespacedKey;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 
@@ -41,7 +40,7 @@ public class FunctionArgument extends BukkitSafeOverrideableArgument<FunctionWra
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FunctionArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentTag(), fromKey(n -> n));
+		super(nodeName, BukkitNMS.get()._ArgumentTag(), fromKey(n -> n));
 	}
 
 	@Override

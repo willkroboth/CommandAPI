@@ -40,7 +40,7 @@ public class PlayerArgument extends BukkitSafeOverrideableArgument<Player, Playe
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PlayerArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentProfile(), Player::getName);
+		super(nodeName, BukkitNMS.get()._ArgumentProfile(), Player::getName);
 	}
 
 	@Override

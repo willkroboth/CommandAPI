@@ -37,7 +37,7 @@ public class ScoreboardSlotArgument extends BukkitSafeOverrideableArgument<Score
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ScoreboardSlotArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardSlot(), ScoreboardSlot::toString);
+		super(nodeName, BukkitNMS.get()._ArgumentScoreboardSlot(), ScoreboardSlot::toString);
 	}
 
 	@Override

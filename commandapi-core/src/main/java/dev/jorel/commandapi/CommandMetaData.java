@@ -8,7 +8,7 @@ import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 /**
  * This class stores metadata about a command
  */
-final class CommandMetaData {
+final class CommandMetaData<ImplementedSender> {
 
 	/**
 	 * The command's name
@@ -28,7 +28,7 @@ final class CommandMetaData {
 	/**
 	 * A predicate that a {@link CommandSender} must pass in order to execute the command
 	 */
-	Predicate<CommandAPICommandSender> requirements = s -> true;
+	Predicate<ImplementedSender> requirements = s -> true;
 	
 	/**
 	 * An optional short description for the command

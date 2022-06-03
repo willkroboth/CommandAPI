@@ -59,7 +59,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import de.tr7zw.nbtapi.NBTContainer;
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.BukkitCommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.enums.EntitySelector;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -77,7 +77,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWrapper> {
 	
 	static BukkitNMS<?> get() {
-		return (BukkitNMS<?>) CommandAPIHandler.getInstance().getNMS();
+		return (BukkitNMS<?>) BukkitBukkitNMS.get();
 	}
 
 	String convert(ItemStack is);

@@ -23,7 +23,6 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.FloatRange;
 
@@ -37,7 +36,7 @@ public class FloatRangeArgument extends BukkitSafeOverrideableArgument<FloatRang
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FloatRangeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentFloatRange(), FloatRange::toString);
+		super(nodeName, BukkitNMS.get()._ArgumentFloatRange(), FloatRange::toString);
 	}
 
 	@Override

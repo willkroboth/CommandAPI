@@ -50,7 +50,7 @@ public abstract class BukkitSafeOverrideableArgument<T, S> extends BukkitArgumen
 		this.mapper = mapper;
 	}
 
-	public final Argument<T> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final BukkitArgument<T> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
 		return this;
 	}
@@ -60,8 +60,8 @@ public abstract class BukkitSafeOverrideableArgument<T, S> extends BukkitArgumen
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Argument<T> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
-		return this.includeSuggestions(suggestions.toSuggestions(mapper));
+	public final BukkitArgument<T> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
+		return (BukkitArgument<T>) this.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
 
 	static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {

@@ -38,7 +38,7 @@ public class PotionEffectArgument extends BukkitSafeOverrideableArgument<PotionE
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PotionEffectArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMobEffect(), BukkitNMS.get()::convert);
+		super(nodeName, BukkitNMS.get()._ArgumentMobEffect(), BukkitNMS.get()::convert);
 	}
 
 	@Override

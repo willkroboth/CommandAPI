@@ -36,7 +36,7 @@ public class ObjectiveCriteriaArgument extends BukkitArgument<String> {
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ObjectiveCriteriaArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardCriteria());
+		super(nodeName, BukkitNMS.get()._ArgumentScoreboardCriteria());
 	}
 	
 	@Override

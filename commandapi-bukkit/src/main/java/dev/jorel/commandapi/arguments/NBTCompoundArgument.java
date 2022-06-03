@@ -37,7 +37,7 @@ public class NBTCompoundArgument extends BukkitSafeOverrideableArgument<NBTConta
 	 * @param nodeName the name of the node for this argument
 	 */
 	public NBTCompoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentNBTCompound(), NBTContainer::toString);
+		super(nodeName, BukkitNMS.get()._ArgumentNBTCompound(), NBTContainer::toString);
 	}
 	
 	@Override

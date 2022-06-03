@@ -25,7 +25,6 @@ import org.bukkit.inventory.ItemStack;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
@@ -38,7 +37,7 @@ public class ItemStackArgument extends BukkitSafeOverrideableArgument<ItemStack,
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ItemStackArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentItemStack(), BukkitNMS.get()::convert);
+		super(nodeName, BukkitNMS.get()._ArgumentItemStack(), BukkitNMS.get()::convert);
 	}
 
 	@Override

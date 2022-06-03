@@ -37,7 +37,7 @@ public class TimeArgument extends BukkitSafeOverrideableArgument<Integer, Time> 
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public TimeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentTime(), Time::toString);
+		super(nodeName, BukkitNMS.get()._ArgumentTime(), Time::toString);
 	}
 
 	@Override

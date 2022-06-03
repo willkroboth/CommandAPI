@@ -25,7 +25,6 @@ import org.bukkit.block.data.BlockData;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
@@ -38,7 +37,7 @@ public class BlockStateArgument extends BukkitArgument<BlockData> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public BlockStateArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentBlockState());
+		super(nodeName, BukkitNMS.get()._ArgumentBlockState());
 	}
 
 	@Override

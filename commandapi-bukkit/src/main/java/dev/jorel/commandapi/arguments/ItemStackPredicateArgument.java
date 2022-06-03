@@ -27,7 +27,6 @@ import org.bukkit.inventory.ItemStack;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
@@ -41,7 +40,7 @@ public class ItemStackPredicateArgument extends BukkitArgument<Predicate> {
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public ItemStackPredicateArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentItemPredicate());
+		super(nodeName, BukkitNMS.get()._ArgumentItemPredicate());
 	}
 
 	@Override

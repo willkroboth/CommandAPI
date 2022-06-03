@@ -47,8 +47,8 @@ public class LocationArgument extends BukkitSafeOverrideableArgument<Location, L
 	 * @param type the location type of this location, either LocationType.BLOCK_POSITION or LocationType.PRECISE_POSITION
 	 */
 	public LocationArgument(String nodeName, LocationType type) {
-		super(nodeName, type == LocationType.BLOCK_POSITION ? CommandAPIHandler.getInstance().getNMS()._ArgumentPosition()
-				: CommandAPIHandler.getInstance().getNMS()._ArgumentVec3(),
+		super(nodeName, type == LocationType.BLOCK_POSITION ? BukkitNMS.get()._ArgumentPosition()
+				: BukkitNMS.get()._ArgumentVec3(),
 				type == LocationType.BLOCK_POSITION
 						? (Location l) -> l.getBlockX() + " " + l.getBlockY() + " " + l.getBlockZ()
 						: (Location l) -> l.getX() + " " + l.getY() + " " + l.getZ());

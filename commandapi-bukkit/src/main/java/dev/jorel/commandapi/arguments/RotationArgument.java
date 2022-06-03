@@ -37,7 +37,7 @@ public class RotationArgument extends BukkitSafeOverrideableArgument<Rotation, R
 	 * @param nodeName the name of the node for this argument
 	 */
 	public RotationArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentRotation(), Rotation::toString);
+		super(nodeName, BukkitNMS.get()._ArgumentRotation(), Rotation::toString);
 	}
 	
 	@Override

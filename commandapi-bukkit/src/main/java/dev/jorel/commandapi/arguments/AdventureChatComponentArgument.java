@@ -23,7 +23,6 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import net.kyori.adventure.text.Component;
@@ -39,7 +38,7 @@ public class AdventureChatComponentArgument extends BukkitArgument<Component> {
 	 * @param nodeName the name of the node for argument
 	 */
 	public AdventureChatComponentArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChatComponent());
+		super(nodeName, BukkitNMS.get()._ArgumentChatComponent());
 		
 		try {
 			Class.forName("net.kyori.adventure.text.Component");

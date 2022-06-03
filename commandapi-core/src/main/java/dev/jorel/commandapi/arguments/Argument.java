@@ -23,19 +23,15 @@ package dev.jorel.commandapi.arguments;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.function.Predicate;
-
-import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.ArgumentTree;
+import dev.jorel.commandapi.CommandAPICommandSender;
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.SuggestionInfo;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -43,7 +39,7 @@ import dev.jorel.commandapi.nms.NMS;
  * 
  * @param <T> The type of the underlying object that this argument casts to
  */
-public abstract class Argument<T> extends ArgumentTree {
+public abstract class Argument<T, ImplementedSender> extends ArgumentTree {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -125,41 +121,9 @@ public abstract class Argument<T> extends ArgumentTree {
 	 *
 	 * @return the current argument
 	 */
-	public Argument<T> includeSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<T, ImplementedSender> includeSuggestions(ArgumentSuggestions suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return this;
-	}
-
-	/**
-	 * Include suggestions to add to the list of default suggestions represented by
-	 * this argument.
-	 * 
-	 * @param suggestions a function that takes in SuggestionInfo which includes
-	 *                    information about the current state at the time the
-	 *                    suggestions are run and returns a String[] of suggestions
-	 *                    to add
-	 * @return the current argument
-	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public Argument<T> includeSuggestions(Function<SuggestionInfo, String[]> suggestions) {
-		return includeSuggestions(ArgumentSuggestions.strings(suggestions));
-	}
-
-	/**
-	 * Include suggestions to add to the list of default suggestions represented by
-	 * this argument.
-	 * 
-	 * @param suggestions a function that takes in SuggestionInfo which includes
-	 *                    information about the current state at the time the
-	 *                    suggestions are run and returns an IStringTooltip[] of
-	 *                    suggestions (with tooltips) to add
-	 * @return the current argument
-	 * @deprecated use {@link #includeSuggestions(ArgumentSuggestions)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public Argument<T> includeSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
-		return includeSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
 	/**
@@ -179,31 +143,9 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @return the current argument
 	 */
   
-	public Argument<T> replaceSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<T, ImplementedSender> replaceSuggestions(ArgumentSuggestions suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
-	}
-
-	/**
-	 * Replaces the suggestions of this argument with an array of suggestions.
-	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link String[]} of suggestions
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public Argument<T> replaceSuggestions(Function<SuggestionInfo, String[]> suggestions) {
-		return replaceSuggestions(ArgumentSuggestions.strings(suggestions));
-	}
-
-	/**
-	 * Replaces the suggestions of this argument with an array of suggestions with tooltips.
-	 * @param suggestions a function that takes in {@link SuggestionInfo} and returns a {@link IStringTooltip[]} of suggestions
-	 * @return the current argument
-	 * @deprecated use {@link #replaceSuggestions(ArgumentSuggestions)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public Argument<T> replaceSuggestionsT(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
-		return replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(suggestions));
 	}
 
 	/**
@@ -229,7 +171,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument<T> withPermission(CommandPermission permission) {
+	public final Argument<T, ImplementedSender> withPermission(CommandPermission permission) {
 		this.permission = permission;
 		return this;
 	}
@@ -240,7 +182,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument<T> withPermission(String permission) {
+	public final Argument<T, ImplementedSender> withPermission(String permission) {
 		this.permission = CommandPermission.fromString(permission);
 		return this;
 	}
@@ -257,13 +199,13 @@ public abstract class Argument<T> extends ArgumentTree {
 	// Requirements //
 	//////////////////
 	
-	private Predicate<CommandSender> requirements = s -> true;
+	private Predicate<ImplementedSender> requirements = s -> true;
 		
 	/**
 	 * Returns the requirements required to run this command
 	 * @return the requirements required to run this command
 	 */
-	public final Predicate<CommandSender> getRequirements() {
+	public final Predicate<ImplementedSender> getRequirements() {
 		return this.requirements;
 	}
 	
@@ -275,7 +217,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Argument<T> withRequirement(Predicate<CommandSender> requirement) {
+	public final Argument<T, ImplementedSender> withRequirement(Predicate<ImplementedSender> requirement) {
 		this.requirements = this.requirements.and(requirement);
 		return this;
 	}
@@ -299,7 +241,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 * @param listed if true, this argument will be included in the Object args[] of the command executor
 	 * @return this current argument
 	 */
-	public Argument<T> setListed(boolean listed) {
+	public Argument<T, ImplementedSender> setListed(boolean listed) {
 		this.isListed = listed;
 		return this;
 	}

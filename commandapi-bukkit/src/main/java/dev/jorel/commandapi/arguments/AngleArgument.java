@@ -40,7 +40,7 @@ public class AngleArgument extends BukkitSafeOverrideableArgument<Float, Float> 
 	 * @param nodeName the name of the node for argument
 	 */
 	public AngleArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentAngle(), String::valueOf);
+		super(nodeName, BukkitNMS.get()._ArgumentAngle(), String::valueOf);
 	}
 
 	@Override

@@ -39,7 +39,7 @@ public class RecipeArgument extends BukkitSafeOverrideableArgument<Recipe, Recip
 	 * @param nodeName the name of the node for this argument
 	 */
 	public RecipeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
+		super(nodeName, BukkitNMS.get()._ArgumentMinecraftKeyRegistered(), fromKey((Recipe r) -> ((Keyed) r).getKey()));
 	}
 
 	@Override

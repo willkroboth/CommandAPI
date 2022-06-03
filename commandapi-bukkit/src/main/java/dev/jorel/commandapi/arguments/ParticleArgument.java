@@ -38,7 +38,7 @@ public class ParticleArgument extends BukkitSafeOverrideableArgument<ParticleDat
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ParticleArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentParticle(), BukkitNMS.get()::convert);
+		super(nodeName, BukkitNMS.get()._ArgumentParticle(), BukkitNMS.get()::convert);
 	}
 
 	@Override

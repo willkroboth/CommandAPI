@@ -38,7 +38,7 @@ public class UUIDArgument extends BukkitSafeOverrideableArgument<UUID, UUID> {
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public UUIDArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentUUID(), UUID::toString);
+		super(nodeName, BukkitNMS.get()._ArgumentUUID(), UUID::toString);
 	}
 
 	@Override

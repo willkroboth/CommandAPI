@@ -40,7 +40,7 @@ public class OfflinePlayerArgument extends BukkitSafeOverrideableArgument<Offlin
 	 * @param nodeName the name of the node for this argument
 	 */
 	public OfflinePlayerArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentProfile(), OfflinePlayer::getName);
+		super(nodeName, BukkitNMS.get()._ArgumentProfile(), OfflinePlayer::getName);
 	}
 
 	@Override

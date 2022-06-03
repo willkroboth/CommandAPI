@@ -32,7 +32,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -40,9 +39,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.SimpleCommandMap;
-import org.bukkit.help.HelpTopic;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -78,7 +74,7 @@ import dev.jorel.commandapi.preprocessor.RequireField;
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
-public class CommandAPIHandler<CommandSourceStack> {
+public abstract class CommandAPIHandler<CommandSourceStack, ImplementedSender> {
 
 	private final static VarHandle COMMANDNODE_CHILDREN;
 	private final static VarHandle COMMANDNODE_LITERALS;
@@ -121,34 +117,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
 	}
 
-	private static CommandAPIHandler<?> instance;
-
-	/**
-	 * Returns the Singleton instance of the CommandAPI's internal handler
-	 * 
-	 * @return the Singleton instance of the CommandAPI's internal handler
-	 */
-	public static CommandAPIHandler<?> getInstance() {
-		if(instance == null) {
-			instance = new CommandAPIHandler<>();
-		}
-		return instance;
-	}
-
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
-	final List<CommandHelp> commands;
-
-	private CommandAPIHandler() {
-		String bukkit = Bukkit.getServer().toString();
-		NMS = CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
-		DISPATCHER = NMS.getBrigadierDispatcher();
-		registeredCommands = new ArrayList<>();
-		commands = new ArrayList<>();
-	}
 
 	void checkDependencies() {
 		try {
@@ -195,9 +168,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * 
 	 * @return an instance of NMS
 	 */
-	public NMS<CommandSourceStack> getNMS() {
-		return NMS;
-	}
+	public abstract <NMSType extends NMS<CommandSourceStack>> NMSType getNMS();
 
 	/**
 	 * Unregisters a command from the NMS command graph.
@@ -379,29 +350,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @param permission the CommandAPI CommandPermission permission to check
 	 * @return true if the sender satisfies the provided permission
 	 */
-	boolean permissionCheck(CommandSender sender, CommandPermission permission, Predicate<CommandSender> requirements) {
-		boolean satisfiesPermissions;
-		if (sender == null) {
-			satisfiesPermissions = true;
-		} else {
-			if (permission.equals(CommandPermission.NONE)) {
-				satisfiesPermissions = true;
-			} else if (permission.equals(CommandPermission.OP)) {
-				satisfiesPermissions = sender.isOp();
-			} else {
-				satisfiesPermissions = sender.hasPermission(permission.getPermission().get());
-			}
-		}
-		if(permission.isNegated()) {
-			satisfiesPermissions = !satisfiesPermissions;
-		}
-		return satisfiesPermissions && requirements.test(sender);
-	}
+	abstract boolean permissionCheck(CommandAPICommandSender<ImplementedSender> sender, CommandPermission permission, Predicate<CommandAPICommandSender<ImplementedSender>> requirements);
 
 	/*
 	 * Makes permission checks more "Bukkit" like and less "Vanilla Minecraft" like
 	 */
-	void fixPermissions() {
+	abstract void fixPermissions() {
 		// Get the command map to find registered commands
 		SimpleCommandMap map = NMS.getSimpleCommandMap();
 
@@ -453,8 +407,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
 	 * returns false if multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args,
-			CustomCommandExecutor<? extends CommandSender> executor,
+	private boolean expandMultiLiterals(CommandMetaData<ImplementedSender> meta, final Argument<?>[] args,
+			CustomCommandExecutor<? extends ImplementedSender> executor,
 			boolean converted) throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
@@ -583,8 +537,8 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
-	void register(CommandMetaData meta,
-			final Argument<?>[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
+	void register(CommandMetaData<ImplementedSender> meta,
+			final Argument<?>[] args, CustomCommandExecutor<? extends ImplementedSender> executor, boolean converted)
 					throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
@@ -602,7 +556,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		String commandName = meta.commandName;
 		CommandPermission permission = meta.permission;
 		String[] aliases = meta.aliases;
-		Predicate<CommandSender> requirements = meta.requirements;
+		Predicate<ImplementedSender> requirements = meta.requirements;
 		Optional<String> shortDescription = meta.shortDescription;
 		Optional<String> fullDescription = meta.fullDescription;
 
@@ -706,11 +660,9 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * @param permission  the permission required to use this literal
 	 * @return a brigadier LiteralArgumentBuilder representing a literal
 	 */
-	LiteralArgumentBuilder<CommandSourceStack> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<CommandSender> requirements) {
-		LiteralArgumentBuilder<CommandSourceStack> builder = LiteralArgumentBuilder.literal(commandName);
-		return builder.requires((CommandSourceStack css) -> permissionCheck(NMS.getCommandSenderFromCSS(css), permission, requirements));
-	}
-
+	abstract LiteralArgumentBuilder<CommandSourceStack> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<CommandAPICommandSender> requirements);
+	
+	
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(
 			final Argument<?>[] args, Argument<?> argument) {
@@ -836,96 +788,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 	}
 
-	private String generateCommandHelpPrefix(String command) {
-		return (Bukkit.getPluginCommand(command) == null ? "/" : "/minecraft:") + command;
-	}
-
-	private void generateHelpUsage(StringBuilder sb, CommandHelp command) {
-		sb.append(ChatColor.GOLD + "Usage: " + ChatColor.WHITE);
-
-		// Generate usages
-		List<String> usages = new ArrayList<>();
-		for(RegisteredCommand rCommand : registeredCommands) {
-			if(rCommand.command().equals(command.commandName())) {
-				StringBuilder usageString = new StringBuilder();
-				usageString.append("/" + command.commandName() + " ");
-				for(String arg : rCommand.argsAsStr()) {
-					usageString.append("<" + arg.split(":")[0] + "> ");
-				}
-				usages.add(usageString.toString());
-			}
-		}
-
-		// If 1 usage, put it on the same line, otherwise format like a list
-		if(usages.size() == 1) {
-			sb.append(usages.get(0));
-		} else if(usages.size() > 1) {
-			for(String usage : usages) {
-				sb.append("\n- " + usage);
-			}
-		}
-	}
-
-	public void updateHelpForCommands() {
-		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
-
-		for(CommandHelp command : this.commands) {
-			// Generate short description
-			final String shortDescription;
-			if(command.shortDescription().isPresent()) {
-				shortDescription = command.shortDescription().get();
-			} else if(command.fullDescription().isPresent()) {
-				shortDescription = command.fullDescription().get();
-			} else {
-				shortDescription = "A Mojang provided command.";
-			}
-
-			// Generate full description
-			StringBuilder sb = new StringBuilder();
-			if(command.fullDescription().isPresent()) {
-				sb.append(ChatColor.GOLD + "Description: " + ChatColor.WHITE + command.fullDescription().get() + "\n");
-			}
-
-			generateHelpUsage(sb, command);
-			sb.append("\n");
-
-			// Generate aliases. We make a copy of the StringBuilder because we
-			// want to change the output when we register aliases
-			StringBuilder aliasSb = new StringBuilder(sb.toString());
-			if(command.aliases().length > 0) {
-				sb.append(ChatColor.GOLD + "Aliases: " + ChatColor.WHITE + String.join(", ", command.aliases()));
-			}
-
-			// Must be empty string, not null as defined by OBC::CustomHelpTopic
-			String permission = command.permission().getPermission().orElseGet(() -> "");
-
-			// Don't override the plugin help topic
-			String commandPrefix = generateCommandHelpPrefix(command.commandName);
-			helpTopicsToAdd.put(commandPrefix, NMS.generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission));
-
-			for(String alias : command.aliases) {
-				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
-				if(command.aliases().length > 0) {
-					currentAliasSb.append(ChatColor.GOLD + "Aliases: " + ChatColor.WHITE);
-
-					// We want to get all aliases (including the original command name),
-					// except for the current alias
-					List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
-					aliases.add(command.commandName());
-					aliases.remove(alias);
-
-					currentAliasSb.append(ChatColor.WHITE + String.join(", ", aliases));
-				}
-
-				// Don't override the plugin help topic
-				commandPrefix = generateCommandHelpPrefix(alias);
-				helpTopicsToAdd.put(commandPrefix, NMS.generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission));
-			}
-		}
-
-		NMS.addToHelpMap(helpTopicsToAdd);
-	}
-
 	//////////////////////////////
 	// SECTION: Private classes //
 	//////////////////////////////
@@ -937,17 +799,6 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * key is made up of a class and a field or method name
 	 */
 	private record ClassCache(Class<?> clazz, String name) {}
-
-	/**
-	 * Class to store a registered command which has its command name and a
-	 * list of arguments as a string. The arguments are expected to be of the
-	 * form node_name:class_name, for example value:IntegerArgument
-	 */
-	private record RegisteredCommand(String command, List<String> argsAsStr) {};
-
-	private record CommandHelp(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
-			String[] aliases, CommandPermission permission) {
-	};
 
 	/**
 	 * A class to compute the Cartesian product of a number of lists.

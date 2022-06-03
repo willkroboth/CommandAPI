@@ -23,7 +23,6 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -40,7 +39,7 @@ public class ChatArgument extends BukkitArgument<BaseComponent[]> implements IGr
 	 * @param nodeName the name of the node for argument
 	 */
 	public ChatArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentChat());
+		super(nodeName, BukkitNMS.get()._ArgumentChat());
 		
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");

@@ -20,15 +20,14 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import org.bukkit.command.CommandSender;
-
+import dev.jorel.commandapi.CommandAPICommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
  * The interface for resulting command executors
  * @param <T> the commandsender
  */
-public interface IExecutorResulting<T extends CommandSender> extends IExecutorTyped {
+public interface IExecutorResulting<T extends CommandAPICommandSender> extends IExecutorTyped {
 	
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
@@ -39,7 +38,7 @@ public interface IExecutorResulting<T extends CommandSender> extends IExecutorTy
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	default int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+	default int executeWith(CommandAPICommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
 		return this.run((T) sender, args);
 	}
 

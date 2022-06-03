@@ -38,7 +38,7 @@ public class SoundArgument extends BukkitSafeOverrideableArgument<Sound, Sound> 
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), BukkitNMS.get()::convert);
+		super(nodeName, BukkitNMS.get()._ArgumentMinecraftKeyRegistered(), BukkitNMS.get()::convert);
 	}
 
 	@Override

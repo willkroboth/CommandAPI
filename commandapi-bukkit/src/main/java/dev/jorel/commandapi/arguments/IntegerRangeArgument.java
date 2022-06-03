@@ -23,7 +23,6 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.IntegerRange;
 
@@ -37,7 +36,7 @@ public class IntegerRangeArgument extends BukkitSafeOverrideableArgument<Integer
 	 * @param nodeName the name of the node for this argument 
 	 */
 	public IntegerRangeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentIntRange(), IntegerRange::toString);
+		super(nodeName, BukkitNMS.get()._ArgumentIntRange(), IntegerRange::toString);
 	}
 	
 	@Override

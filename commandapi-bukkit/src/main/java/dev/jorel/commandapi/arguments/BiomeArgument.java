@@ -27,7 +27,6 @@ import org.bukkit.block.Biome;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
@@ -40,7 +39,7 @@ public class BiomeArgument extends BukkitSafeOverrideableArgument<Biome, Biome> 
 	 * @param nodeName the name of the node for argument
 	 */
 	public BiomeArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentSyntheticBiome(),((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
+		super(nodeName, BukkitNMS.get()._ArgumentSyntheticBiome(),((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
 	}
 
 	@Override

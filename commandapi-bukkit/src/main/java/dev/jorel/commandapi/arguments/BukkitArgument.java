@@ -1,5 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -7,7 +9,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.nms.NMS;
 
-public abstract class BukkitArgument<T> extends Argument<T> {
+public abstract class BukkitArgument<T> extends Argument<T, CommandSender> {
 
 	protected BukkitArgument(String nodeName, ArgumentType<?> rawType) {
 		super(nodeName, rawType);
