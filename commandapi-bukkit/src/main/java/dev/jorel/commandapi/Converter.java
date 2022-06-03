@@ -36,6 +36,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.BukkitArgument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.nms.BukkitNMS;
@@ -50,7 +51,7 @@ public final class Converter {
 	private Converter() {
 	}
 
-	private static final List<Argument<?>> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
+	private static final List<BukkitArgument<?>> PLAIN_ARGUMENTS = Arrays.asList(new GreedyStringArgument("args"));
 	private static final Set<String> CALLER_METHODS = Set.of("isPermissionSet", "hasPermission",
 			"addAttachment", "removeAttachment", "recalculatePermissions", "getEffectivePermissions", "isOp", "setOp");
 
@@ -86,7 +87,7 @@ public final class Converter {
 	 * @param cmdName   The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(JavaPlugin plugin, String cmdName, Argument<?>... arguments) {
+	public static void convert(JavaPlugin plugin, String cmdName, BukkitArgument<?>... arguments) {
 		convertPluginCommand(plugin, cmdName, Arrays.asList(arguments));
 	}
 
@@ -98,7 +99,7 @@ public final class Converter {
 	 * @param cmdName   The command to convert
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(JavaPlugin plugin, String cmdName, List<Argument<?>> arguments) {
+	public static void convert(JavaPlugin plugin, String cmdName, List<BukkitArgument<?>> arguments) {
 		convertPluginCommand(plugin, cmdName, arguments);
 	}
 
@@ -121,20 +122,20 @@ public final class Converter {
 	 *                  be "/set"
 	 * @param arguments The arguments that should be used to parse this command
 	 */
-	public static void convert(String cmdName, List<Argument<?>> arguments) {
+	public static void convert(String cmdName, List<BukkitArgument<?>> arguments) {
 		convertCommand(cmdName, arguments);
 	}
 
-	private static void convertCommand(String commandName, List<Argument<?>> arguments) {
+	private static void convertCommand(String commandName, List<BukkitArgument<?>> arguments) {
 		CommandAPI.logInfo("Converting command /" + commandName);
 
 		// No arguments
-		new CommandAPICommandBase(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
+		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
 			Bukkit.dispatchCommand(mergeProxySender(sender), commandName);
 		}).register();
 
 		// Multiple arguments
-		CommandAPICommandBase multiArgs = new CommandAPICommandBase(commandName).withPermission(CommandPermission.NONE)
+		CommandAPICommand multiArgs = new CommandAPICommand(commandName).withPermission(CommandPermission.NONE)
 				.withArguments(arguments).executesNative((sender, args) -> {
 					// We know the args are a String[] because that's how converted things are
 					// handled in generateCommand()
@@ -146,7 +147,7 @@ public final class Converter {
 		multiArgs.register();
 	}
 
-	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<Argument<?>> arguments) {
+	private static void convertPluginCommand(JavaPlugin plugin, String commandName, List<BukkitArgument<?>> arguments) {
 		CommandAPI.logInfo("Converting " + plugin.getName() + " command /" + commandName);
 		/* Parse the commands */
 		Map<String, Object> cmdData = plugin.getDescription().getCommands().get(commandName);
@@ -206,7 +207,7 @@ public final class Converter {
 		};
 
 		// No arguments
-		new CommandAPICommandBase(commandName)
+		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
@@ -216,7 +217,7 @@ public final class Converter {
 			.register();
 
 		// Multiple arguments
-		new CommandAPICommandBase(commandName)
+		new CommandAPICommand(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)

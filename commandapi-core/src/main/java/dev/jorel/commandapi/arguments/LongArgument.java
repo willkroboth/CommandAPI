@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java longs
  */
-public class LongArgument<ImplementedSender> extends SafeOverrideableArgument<Long, Long, ImplementedSender> {
+public class LongArgument<ImplementedSender> extends SafeOverrideableArgument<Long, Long, ImplementedSender, LongArgument<ImplementedSender>> {
 
 	/**
 	 * A long argument

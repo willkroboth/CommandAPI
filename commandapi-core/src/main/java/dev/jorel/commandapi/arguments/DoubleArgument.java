@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java doubles
  */
-public class DoubleArgument<ImplementedSender> extends SafeOverrideableArgument<Double, Double, ImplementedSender> {
+public class DoubleArgument<ImplementedSender> extends SafeOverrideableArgument<Double, Double, ImplementedSender, DoubleArgument<ImplementedSender>> {
 
 	/**
 	 * A double argument

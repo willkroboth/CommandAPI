@@ -23,14 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.Time;
 
 /**
  * An argument that represents a duration of time in ticks
  */
-public class TimeArgument extends BukkitSafeOverrideableArgument<Integer, Time> {
+public class TimeArgument extends BukkitSafeOverrideableArgument2<Integer, Time> {
 	
 	/**
 	 * A Time argument. Represents the number of in game ticks

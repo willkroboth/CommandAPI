@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Advancement object
  */
-public class AdvancementArgument extends BukkitSafeOverrideableArgument<Advancement, Advancement> implements ICustomProvidedArgument {
+public class AdvancementArgument extends BukkitSafeOverrideableArgument3<Advancement> implements ICustomProvidedArgument {
 	
 	/**
 	 * Constructs an AdvancementArgument with a given node name

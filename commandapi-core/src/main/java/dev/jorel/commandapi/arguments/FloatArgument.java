@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java floats
  */
-public class FloatArgument<ImplementedSender> extends SafeOverrideableArgument<Float, Float, ImplementedSender> {
+public class FloatArgument<ImplementedSender> extends SafeOverrideableArgument<Float, Float, ImplementedSender, FloatArgument<ImplementedSender>> {
 
 	/**
 	 * A float argument

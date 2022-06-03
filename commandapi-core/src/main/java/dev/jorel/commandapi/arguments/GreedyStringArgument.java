@@ -29,7 +29,9 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents arbitrary strings
  */
-public class GreedyStringArgument<ImplementedSender> extends SafeOverrideableArgument<String, String, ImplementedSender> implements IGreedyArgument {
+public class GreedyStringArgument<ImplementedSender>
+		extends SafeOverrideableArgument<String, String, ImplementedSender, GreedyStringArgument<ImplementedSender>>
+		implements IGreedyArgument {
 	
 	/**
 	 * A string argument for a string of any length

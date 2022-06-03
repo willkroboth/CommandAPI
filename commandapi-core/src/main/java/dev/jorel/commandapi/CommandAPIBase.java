@@ -25,8 +25,6 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
@@ -47,6 +45,13 @@ public abstract class CommandAPIBase {
 		return dispatcherFile;
 	}
 	
+	// TODO: Implement these
+	public static void logWarning(String s) {};
+	static void logInfo(String s) {};
+	static void logNormal(String s) {};
+	static void logError(String s) {};
+	static Config getConfiguration() { return null; }
+	
 	/**
 	 * Returns the CommandAPI's logger
 	 * @return the CommandAPI's logger
@@ -55,7 +60,8 @@ public abstract class CommandAPIBase {
 		if(logger == null) {
 			logger = new Logger("CommandAPI", null) {
 				{
-					this.setParent(Bukkit.getServer().getLogger());
+					// TODO: Logging. Just everything about logging needs redoing anyway
+//					this.setParent(Bukkit.getServer().getLogger());
 					this.setLevel(Level.ALL);
 				}
 				

@@ -8,7 +8,7 @@ import java.util.List;
  */
 public abstract class CommandTreeBase<ImplementedSender> extends ExecutableCommand<CommandTreeBase<ImplementedSender>, ImplementedSender> {
 
-	private final List<ArgumentTree<ImplementedSender>> arguments = new ArrayList<>();
+	private final List<ArgumentTree<ImplementedSender, ?>> arguments = new ArrayList<>();
 
 	public CommandTreeBase(final String commandName) {
 		super(commandName);
@@ -19,7 +19,7 @@ public abstract class CommandTreeBase<ImplementedSender> extends ExecutableComma
 	 * @param tree the child node
 	 * @return this root node
 	 */
-	public CommandTreeBase<ImplementedSender> then(final ArgumentTree<ImplementedSender> tree) {
+	public CommandTreeBase<ImplementedSender> then(final ArgumentTree<ImplementedSender, ?> tree) {
 		this.arguments.add(tree);
 		return this;
 	}
@@ -32,7 +32,7 @@ public abstract class CommandTreeBase<ImplementedSender> extends ExecutableComma
 		if(this.executor.hasAnyExecutors()) {
 			executions.add(new Execution<ImplementedSender>(new ArrayList<>(), this.executor));
 		}
-		for(ArgumentTree<ImplementedSender> tree : arguments) {
+		for(ArgumentTree<ImplementedSender, ?> tree : arguments) {
 			executions.addAll(tree.getExecutions());
 		}
 		for(Execution<ImplementedSender> execution : executions) {

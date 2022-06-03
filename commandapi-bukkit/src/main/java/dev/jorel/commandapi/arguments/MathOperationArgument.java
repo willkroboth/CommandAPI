@@ -23,14 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.MathOperation;
 
 /**
  * An argument that represents Minecraft scoreboard math operations
  */
-public class MathOperationArgument extends BukkitSafeOverrideableArgument<MathOperation, MathOperation> {
+public class MathOperationArgument extends BukkitSafeOverrideableArgument3<MathOperation> {
 
 	/**
 	 * A MathOperation argument. Represents a math operation (e.g. addition, subtraction etc.)

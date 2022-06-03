@@ -38,7 +38,8 @@ import dev.jorel.commandapi.nms.NMS;
  * 
  * @param <T> The type of the underlying object that this argument casts to
  */
-public abstract class Argument<T, ImplementedSender> extends ArgumentTree<ImplementedSender> {
+public abstract class Argument<T, ImplementedSender, ArgumentImpl extends Argument<T, ImplementedSender, ArgumentImpl>>
+		extends ArgumentTree<ImplementedSender, ArgumentImpl> {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -50,7 +51,7 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree<Implem
 
 	/**
 	 * Returns the argument type for this argument.
-	 * 
+	 * D
 	 * @return the argument type for this argument
 	 */
 	public abstract CommandAPIArgumentType getArgumentType();
@@ -120,9 +121,10 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree<Implem
 	 *
 	 * @return the current argument
 	 */
-	public Argument<T, ImplementedSender> includeSuggestions(ArgumentSuggestions<ImplementedSender> suggestions) {
+	@SuppressWarnings("unchecked")
+	public ArgumentImpl includeSuggestions(ArgumentSuggestions<ImplementedSender> suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
-		return this;
+		return (ArgumentImpl) this;
 	}
 
 	/**
@@ -141,10 +143,10 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree<Implem
 	 * ArgumentSuggestions to create these.
 	 * @return the current argument
 	 */
-  
-	public Argument<T, ImplementedSender> replaceSuggestions(ArgumentSuggestions<ImplementedSender> suggestions) {
+	@SuppressWarnings("unchecked")
+	public ArgumentImpl replaceSuggestions(ArgumentSuggestions<ImplementedSender> suggestions) {
 		this.suggestions = Optional.of(suggestions);
-		return this;
+		return (ArgumentImpl) this;
 	}
 
 	/**
@@ -170,9 +172,10 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree<Implem
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument<T, ImplementedSender> withPermission(CommandPermission permission) {
+	@SuppressWarnings("unchecked")
+	public final ArgumentImpl withPermission(CommandPermission permission) {
 		this.permission = permission;
-		return this;
+		return (ArgumentImpl) this;
 	}
 	
 	/**
@@ -181,9 +184,10 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree<Implem
 	 * @param permission the permission required to execute this command
 	 * @return this current argument
 	 */
-	public final Argument<T, ImplementedSender> withPermission(String permission) {
+	@SuppressWarnings("unchecked")
+	public final ArgumentImpl withPermission(String permission) {
 		this.permission = CommandPermission.fromString(permission);
-		return this;
+		return (ArgumentImpl) this;
 	}
 
 	/**
@@ -216,9 +220,10 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree<Implem
 	 * @param requirement the predicate that must be satisfied to use this argument
 	 * @return this current argument
 	 */
-	public final Argument<T, ImplementedSender> withRequirement(Predicate<ImplementedSender> requirement) {
+	@SuppressWarnings("unchecked")
+	public final ArgumentImpl withRequirement(Predicate<ImplementedSender> requirement) {
 		this.requirements = this.requirements.and(requirement);
-		return this;
+		return (ArgumentImpl) this;
 	}
 	
 	/////////////////
@@ -240,9 +245,10 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree<Implem
 	 * @param listed if true, this argument will be included in the Object args[] of the command executor
 	 * @return this current argument
 	 */
-	public Argument<T, ImplementedSender> setListed(boolean listed) {
+	@SuppressWarnings("unchecked")
+	public ArgumentImpl setListed(boolean listed) {
 		this.isListed = listed;
-		return this;
+		return (ArgumentImpl) this;
 	}
 
 	////////////////////////////

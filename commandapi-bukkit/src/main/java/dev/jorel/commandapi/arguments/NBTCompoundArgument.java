@@ -24,13 +24,12 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.tr7zw.nbtapi.NBTContainer;
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents an NBTContainer from the NBTAPI
  */
-public class NBTCompoundArgument extends BukkitSafeOverrideableArgument<NBTContainer, NBTContainer> {
+public class NBTCompoundArgument extends BukkitSafeOverrideableArgument3<NBTContainer> {
 
 	/**
 	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the NBT API

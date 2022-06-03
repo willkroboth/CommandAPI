@@ -37,6 +37,7 @@ import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * Class to register commands with the 1.13 command UI
@@ -48,12 +49,12 @@ public final class CommandAPI extends CommandAPIBase {
 	private CommandAPI() {}
 	
 	private static boolean canRegister = true;
-	static Config config;
+	static BukkitConfig config;
 	static File dispatcherFile;
 	static Logger logger;
 	private static boolean loaded = false;
 
-	static Config getConfiguration() {
+	static BukkitConfig getConfiguration() {
 		if(config == null) {
 			logWarning("Could not find any configuration for the CommandAPI. Loading basic built-in configuration. Did you forget to call CommandAPI.onLoad(config)?");
 			CommandAPI.onLoad(new CommandAPIConfig());
@@ -139,7 +140,7 @@ public final class CommandAPI extends CommandAPIBase {
 	 */
 	public static void onLoad(CommandAPIConfig config) {
 		if(!loaded) {
-			CommandAPI.config = new Config(config);
+			CommandAPI.config = new BukkitConfig(config);
 			CommandAPIHandler.getInstance().checkDependencies();
 			loaded = true;
 		} else {
@@ -161,18 +162,18 @@ public final class CommandAPI extends CommandAPIBase {
 			CommandAPIHandler.getInstance().fixPermissions();
 			
 			try {
-				CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
+				BukkitNMS.get().reloadDataPacks();
 			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
 			}
 			
-			CommandAPIHandler.getInstance().updateHelpForCommands();
+			BukkitCommandAPIHandler.getInstance().updateHelpForCommands();
 		}, 0L);
 		
 		final Listener playerJoinListener = new Listener() {
 			@EventHandler(priority = EventPriority.MONITOR)
 			public void onPlayerJoin(PlayerJoinEvent e) {
-				CommandAPIHandler.getInstance().getNMS().resendPackets(e.getPlayer());
+				BukkitNMS.get().resendPackets(e.getPlayer());
 			}
 		};
 
@@ -184,7 +185,7 @@ public final class CommandAPI extends CommandAPIBase {
 	 * @param player the player whos requirements to update
 	 */
 	public static void updateRequirements(Player player) {
-		CommandAPIHandler.getInstance().getNMS().resendPackets(player);
+		BukkitNMS.get().resendPackets(player);
 	}
 	
 	/**
@@ -194,7 +195,7 @@ public final class CommandAPI extends CommandAPIBase {
 	 */
 	public static void reloadDatapacks() {
 		try {
-			CommandAPIHandler.getInstance().getNMS().reloadDataPacks();
+			BukkitNMS.get().reloadDataPacks();
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
 			e.printStackTrace();
 		}

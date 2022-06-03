@@ -25,13 +25,12 @@ import org.bukkit.Sound;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends BukkitSafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
+public class SoundArgument extends BukkitSafeOverrideableArgument3<Sound> implements ICustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object

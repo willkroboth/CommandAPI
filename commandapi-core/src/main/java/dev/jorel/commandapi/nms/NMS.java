@@ -160,4 +160,6 @@ public interface NMS<CommandListenerWrapper, ImplementedSender> {
 	 * @throws IOException When the file fails to be written to
 	 */
 	void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException;
+
+	void checkAndWarnRegisteredPluginCommand(String commandName);
 }

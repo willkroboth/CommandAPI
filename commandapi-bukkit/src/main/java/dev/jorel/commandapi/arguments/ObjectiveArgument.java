@@ -25,13 +25,12 @@ import org.bukkit.scoreboard.Objective;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the name of a scoreboard objective
  */
-public class ObjectiveArgument extends BukkitSafeOverrideableArgument<String, Objective> {
+public class ObjectiveArgument extends BukkitSafeOverrideableArgument2<String, Objective> {
 
 	/**
 	 * An Objective argument. Represents a scoreboard objective

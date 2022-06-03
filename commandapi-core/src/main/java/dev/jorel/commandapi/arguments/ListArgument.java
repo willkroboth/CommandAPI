@@ -44,7 +44,7 @@ import dev.jorel.commandapi.nms.NMS;
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
-public class ListArgument<T, ImplementedSender> extends Argument<List, ImplementedSender> implements IGreedyArgument {
+public class ListArgument<T, ImplementedSender> extends Argument<List, ImplementedSender, ListArgument<T, ImplementedSender>> implements IGreedyArgument {
 
 	private final String delimiter;
 	private final boolean allowDuplicates;

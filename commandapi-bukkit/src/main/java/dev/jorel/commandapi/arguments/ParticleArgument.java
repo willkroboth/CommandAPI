@@ -23,7 +23,6 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 
@@ -31,7 +30,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
  * An argument that represents the Bukkit Particle object
  */
 @SuppressWarnings("rawtypes")
-public class ParticleArgument extends BukkitSafeOverrideableArgument<ParticleData, ParticleData<?>> {
+public class ParticleArgument extends BukkitSafeOverrideableArgument2<ParticleData, ParticleData<?>> {
 
 	/**
 	 * A Particle argument. Represents Minecraft particles

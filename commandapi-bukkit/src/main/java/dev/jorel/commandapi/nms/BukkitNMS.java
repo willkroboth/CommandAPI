@@ -28,6 +28,7 @@ import java.util.UUID;
 import java.util.function.Predicate;
 
 import org.bukkit.Axis;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -56,6 +57,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.CommandAPIBase;
 import dev.jorel.commandapi.enums.EntitySelector;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -73,6 +75,15 @@ public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWr
 	
 	static BukkitNMS<?> get() {
 		return (BukkitNMS<?>) BukkitNMS.get();
+	}
+	
+	@Override
+	default void checkAndWarnRegisteredPluginCommand(java.lang.String commandName) {
+		if (Bukkit.getPluginCommand(commandName) != null) {
+			CommandAPIBase.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
+					+ Bukkit.getPluginCommand(commandName).getPlugin().getName()
+					+ "). Did you forget to remove this from your plugin.yml file?");
+		}
 	}
 
 	String convert(ItemStack is);

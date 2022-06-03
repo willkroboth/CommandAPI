@@ -25,13 +25,12 @@ import org.bukkit.potion.PotionEffectType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit PotionEffectType object
  */
-public class PotionEffectArgument extends BukkitSafeOverrideableArgument<PotionEffectType, PotionEffectType> {
+public class PotionEffectArgument extends BukkitSafeOverrideableArgument3<PotionEffectType> {
 
 	/**
 	 * A PotionEffect argument. Represents status/potion effects

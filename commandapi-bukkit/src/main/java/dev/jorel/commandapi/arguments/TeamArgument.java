@@ -25,13 +25,12 @@ import org.bukkit.scoreboard.Team;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the name of a scoreboard Team
  */
-public class TeamArgument extends BukkitSafeOverrideableArgument<String, Team> {
+public class TeamArgument extends BukkitSafeOverrideableArgument2<String, Team> {
 
 	/**
 	 * A Team argument. Represents a scoreboard Team

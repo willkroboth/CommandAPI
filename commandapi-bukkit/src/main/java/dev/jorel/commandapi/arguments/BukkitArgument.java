@@ -9,15 +9,15 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.nms.NMS;
 
-public abstract class BukkitArgument<T> extends Argument<T, CommandSender> {
+public abstract class BukkitArgument<T> extends Argument<T, CommandSender, BukkitArgument<T>> {
 
 	protected BukkitArgument(String nodeName, ArgumentType<?> rawType) {
 		super(nodeName, rawType);
 	}
-
+	
 	@Override
-	public <CommandSourceStack> T parseArgument(NMS<CommandSourceStack, CommandSender> nms, CommandContext<CommandSourceStack> cmdCtx,
-			String key) throws CommandSyntaxException {
+	public <CommandSourceStack> T parseArgument(NMS<CommandSourceStack, CommandSender> nms,
+			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return parseArgument(nms, cmdCtx, key);
 	}
 

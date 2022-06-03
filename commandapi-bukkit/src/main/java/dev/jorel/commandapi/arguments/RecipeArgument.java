@@ -26,13 +26,12 @@ import org.bukkit.inventory.Recipe;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit Recipe object
  */
-public class RecipeArgument extends BukkitSafeOverrideableArgument<Recipe, Recipe> implements ICustomProvidedArgument {
+public class RecipeArgument extends BukkitSafeOverrideableArgument3<Recipe> implements ICustomProvidedArgument {
 
 	/**
 	 * A Recipe argument. Represents a Bukkit Recipe or ComplexRecipe

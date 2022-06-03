@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ * Copyright 2022 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -20,46 +20,23 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+
 import java.util.function.Function;
 
-import org.bukkit.block.Biome;
+import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.nms.BukkitNMS;
+import com.mojang.brigadier.arguments.ArgumentType;
 
 /**
- * An argument that represents the Bukkit Biome object
+ * An interface declaring methods required to override argument suggestions
+ * 
+ * @param <T> The type of the underlying object that this argument casts to
+ * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
-public class BiomeArgument extends BukkitSafeOverrideableArgument3<Biome> implements ICustomProvidedArgument {
-	
-	/**
-	 * Constructs a BiomeArgument with a given node name.
-	 * @param nodeName the name of the node for argument
-	 */
-	public BiomeArgument(String nodeName) {
-		super(nodeName, BukkitNMS.get()._ArgumentSyntheticBiome(),((Function<Biome, String>) Biome::name).andThen(String::toLowerCase));
-	}
+public abstract class BukkitSafeOverrideableArgument3<T> extends BukkitSafeOverrideableArgument2<T, T> {
 
-	@Override
-	public Class<Biome> getPrimitiveType() {
-		return Biome.class;
-	}
-	
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.BIOME;
-	}
-
-	@Override
-	public SuggestionProviders getSuggestionProvider() {
-		return SuggestionProviders.BIOMES;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> Biome parseArgument(BukkitNMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getBiome(cmdCtx, key);
+	protected BukkitSafeOverrideableArgument3(String nodeName, ArgumentType<?> rawType, Function<T, String> mapper) {
+		super(nodeName, rawType, mapper);
 	}
 }

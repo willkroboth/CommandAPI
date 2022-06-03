@@ -34,7 +34,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
  * @param <T> The type of the underlying object that this argument casts to
  * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
-public abstract class BukkitSafeOverrideableArgument<T, S> extends BukkitArgument<T> {
+public abstract class BukkitSafeOverrideableArgument<T, S, ArgumentImpl extends BukkitSafeOverrideableArgument<T, S, ArgumentImpl>> extends BukkitArgument<T> {
 
 	private final Function<S, String> mapper;
 
@@ -51,9 +51,10 @@ public abstract class BukkitSafeOverrideableArgument<T, S> extends BukkitArgumen
 		this.mapper = mapper;
 	}
 
-	public final Argument<T, CommandSender> replaceSafeSuggestions(SafeSuggestions<S, CommandSender> suggestions) {
+	@SuppressWarnings("unchecked")
+	public final ArgumentImpl replaceSafeSuggestions(SafeSuggestions<S, CommandSender> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
-		return this;
+		return (ArgumentImpl) this;
 	}
 
 	/**
@@ -61,8 +62,9 @@ public abstract class BukkitSafeOverrideableArgument<T, S> extends BukkitArgumen
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Argument<T, CommandSender> includeSafeSuggestions(SafeSuggestions<S, CommandSender> suggestions) {
-		return this.includeSuggestions(suggestions.toSuggestions(mapper));
+	@SuppressWarnings("unchecked")
+	public final ArgumentImpl includeSafeSuggestions(SafeSuggestions<S, CommandSender> suggestions) {
+		return (ArgumentImpl) this.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
 
 	static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {

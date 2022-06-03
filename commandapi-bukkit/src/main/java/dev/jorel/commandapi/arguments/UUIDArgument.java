@@ -25,13 +25,12 @@ import java.util.UUID;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents a UUID
  */
-public class UUIDArgument extends BukkitSafeOverrideableArgument<UUID, UUID> {
+public class UUIDArgument extends BukkitSafeOverrideableArgument3<UUID> {
 	
 	/**
 	 * A UUID argument. Represents an in-game entity UUID

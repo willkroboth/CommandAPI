@@ -32,14 +32,14 @@ public class GreedyArgumentException extends RuntimeException {
 	/**
 	 * Creates a GreedyArgumentException
 	 */
-	public GreedyArgumentException(Argument<?, ?>[] arguments) {
+	public GreedyArgumentException(Argument<?, ?, ?>[] arguments) {
 		super("Only one GreedyStringArgument or ChatArgument can be declared, at the end of a List. Found arguments: "
 				+ buildArgsStr(arguments));
 	}
 
-	private static String buildArgsStr(Argument<?, ?>[] arguments) {
+	private static String buildArgsStr(Argument<?, ?, ?>[] arguments) {
 		StringBuilder builder = new StringBuilder();
-		for (Argument<?, ?> arg : arguments) {
+		for (Argument<?, ?, ?> arg : arguments) {
 			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
 		}
 		return builder.toString();

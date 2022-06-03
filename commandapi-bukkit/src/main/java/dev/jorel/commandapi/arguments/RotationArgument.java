@@ -23,14 +23,13 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.Rotation;
 
 /**
  * An argument that represents rotation as pitch and yaw
  */
-public class RotationArgument extends BukkitSafeOverrideableArgument<Rotation, Rotation> {
+public class RotationArgument extends BukkitSafeOverrideableArgument3<Rotation> {
 
 	/**
 	 * A Rotation argument. Represents pitch and yaw

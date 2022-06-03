@@ -32,7 +32,7 @@ public class CommandAPIMain extends JavaPlugin {
 	public void onLoad() {
 		//Config loading
 		saveDefaultConfig();
-		CommandAPI.config = new Config(getConfig());
+		CommandAPI.config = new BukkitConfig(getConfig());
 		CommandAPI.dispatcherFile = new File(getDataFolder(), "command_registration.json");
 		CommandAPI.logger = getLogger();
 		

@@ -38,7 +38,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * only ever read from, nothing is ever written to it. That's why there's only
  * getter methods.
  */
-class Config {
+class BukkitConfig implements Config {
 
 	// Output registering and unregistering of commands
 	private final boolean verboseOutput;
@@ -64,7 +64,7 @@ class Config {
 	// List of arbitrary commands to convert
 	private final List<String> commandsToConvert;
 	
-	public Config(FileConfiguration fileConfig) {
+	public BukkitConfig(FileConfiguration fileConfig) {
 		this.verboseOutput = fileConfig.getBoolean("verbose-outputs");
 		this.silentLogs = fileConfig.getBoolean("silent-logs");
 		this.useLatestNMSVersion = fileConfig.getBoolean("use-latest-nms-version");
@@ -114,11 +114,11 @@ class Config {
 		}
 	}
 
-	public Config(boolean verbose) {
+	public BukkitConfig(boolean verbose) {
 		this(new CommandAPIConfig().verboseOutput(verbose));
 	}
 
-	public Config(CommandAPIConfig config) {
+	public BukkitConfig(CommandAPIConfig config) {
 		this.verboseOutput = config.verboseOutput;
 		this.silentLogs = config.silentLogs;
 		this.useLatestNMSVersion = config.useLatestNMSVersion;
@@ -129,22 +129,27 @@ class Config {
 		this.commandsToConvert = new ArrayList<>();
 	}
 
+	@Override
 	public boolean hasVerboseOutput() {
 		return this.verboseOutput;
 	}
 	
+	@Override
 	public boolean hasSilentLogs() {
 		return this.silentLogs;
 	}
-	
+
+	@Override
 	public boolean shouldUseLatestNMSVersion() {
 		return this.useLatestNMSVersion;
 	}
-	
+
+	@Override
 	public String getMissingImplementationMessage() {
 		return this.message_missingExecutorImplementation;
 	}
 
+	@Override
 	public boolean willCreateDispatcherFile() {
 		return this.createDispatcherFile;
 	}
@@ -156,11 +161,13 @@ class Config {
 	public boolean shouldSkipSenderProxy(Plugin plugin) {
 		return this.skipSenderProxy.contains(plugin.getName());
 	}
-	
+
+	@Override
 	public boolean shouldSkipSenderProxy(String commandName) {
 		return this.skipSenderProxy.contains(commandName);
 	}
-	
+
+	@Override
 	public List<String> getCommandsToConvert() {
 		return this.commandsToConvert;
 	}

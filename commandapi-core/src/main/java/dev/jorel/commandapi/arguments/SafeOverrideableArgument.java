@@ -31,7 +31,8 @@ import com.mojang.brigadier.arguments.ArgumentType;
  * @param <T> The type of the underlying object that this argument casts to
  * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
-public abstract class SafeOverrideableArgument<T, S, ImplementedSender> extends Argument<T, ImplementedSender> {
+public abstract class SafeOverrideableArgument<T, S, ImplementedSender, ArgumentImpl extends SafeOverrideableArgument<T, S, ImplementedSender, ArgumentImpl>>
+		extends Argument<T, ImplementedSender, ArgumentImpl> {
 	
 	private final Function<S, String> mapper;
 
@@ -48,9 +49,10 @@ public abstract class SafeOverrideableArgument<T, S, ImplementedSender> extends 
 		this.mapper = mapper;
 	}
 
-	public final Argument<T, ImplementedSender> replaceSafeSuggestions(SafeSuggestions<S, ImplementedSender> suggestions) {
-		replaceSuggestions(suggestions.toSuggestions(mapper));
-		return this;
+	@SuppressWarnings("unchecked")
+	public final ArgumentImpl replaceSafeSuggestions(SafeSuggestions<S, ImplementedSender> suggestions) {
+		super.replaceSuggestions(suggestions.toSuggestions(mapper));
+		return (ArgumentImpl) this;
 	}
 	
 	/**
@@ -58,8 +60,8 @@ public abstract class SafeOverrideableArgument<T, S, ImplementedSender> extends 
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Argument<T, ImplementedSender> includeSafeSuggestions(SafeSuggestions<S, ImplementedSender> suggestions) {
-		return this.includeSuggestions(suggestions.toSuggestions(mapper));
+	public final ArgumentImpl includeSafeSuggestions(SafeSuggestions<S, ImplementedSender> suggestions) {
+		return super.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
 	
 }

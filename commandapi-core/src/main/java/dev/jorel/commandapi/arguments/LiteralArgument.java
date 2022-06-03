@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * A pseudo-argument representing a single literal string
  */
-public class LiteralArgument<ImplementedSender> extends Argument<String, ImplementedSender> {
+public class LiteralArgument<ImplementedSender> extends Argument<String, ImplementedSender, LiteralArgument<ImplementedSender>> {
 
 	private String literal;
 	

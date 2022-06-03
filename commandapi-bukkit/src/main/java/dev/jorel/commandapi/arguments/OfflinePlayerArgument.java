@@ -25,13 +25,12 @@ import org.bukkit.OfflinePlayer;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit Player object
  */
-public class OfflinePlayerArgument extends BukkitSafeOverrideableArgument<OfflinePlayer, OfflinePlayer> {
+public class OfflinePlayerArgument extends BukkitSafeOverrideableArgument3<OfflinePlayer> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether

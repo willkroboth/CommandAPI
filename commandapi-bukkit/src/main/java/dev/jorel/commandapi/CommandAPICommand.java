@@ -58,13 +58,13 @@ public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, 
 		super.isConverted = false;
 	}
 
-	protected CommandAPICommand(CommandMetaData<CommandSender> metaData) {
+	public CommandAPICommand(CommandMetaData<CommandSender> metaData) {
 		super(metaData);
 		super.isConverted = false;
 	}
 
 	@Override
-	void register(CommandMetaData<CommandSender> meta, Argument<?, CommandSender>[] argumentsArr,
+	void register(CommandMetaData<CommandSender> meta, Argument<?, CommandSender, ?>[] argumentsArr,
 			CustomCommandExecutor<CommandSender> executor, boolean isConverted)
 			throws CommandSyntaxException, IOException {
 		BukkitCommandAPIHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
@@ -269,5 +269,4 @@ public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, 
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
-	
 }

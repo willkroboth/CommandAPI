@@ -25,13 +25,12 @@ import org.bukkit.entity.Player;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit Player object
  */
-public class PlayerArgument extends BukkitSafeOverrideableArgument<Player, Player> {
+public class PlayerArgument extends BukkitSafeOverrideableArgument3<Player> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether

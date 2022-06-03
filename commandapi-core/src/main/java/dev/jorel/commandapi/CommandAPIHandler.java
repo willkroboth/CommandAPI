@@ -37,7 +37,7 @@ import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
-import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -106,13 +106,20 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	final NMSType NMS;
 	CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
-
+	static CommandAPIHandler instance;
 
 	public CommandAPIHandler(NMSType NMS) {
 		this.NMS = NMS;
 		this.registeredCommands = null;
 		this.commands = new ArrayList<>();
+		CommandAPIHandler.instance = this;
 	}
+	
+	public static CommandAPIHandler getInstance() {
+		return instance;
+	}
+	
+	public abstract CommandAPICommandBase<? extends CommandAPICommandBase<?, ImplementedSender>, ImplementedSender> createCommandBase(CommandMetaData<ImplementedSender> meta);	
 
 	/**
 	 * Returns the raw input for an argument for a given command context and its
@@ -137,34 +144,34 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 		}
 
 		// Log successful hooks
-		CommandAPI.logInfo("Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + String.join(", ", NMS.compatibleVersions()) + ")");
+		CommandAPIBase.logInfo("Hooked into NMS " + NMS.getClass().getName() + " (compatible with " + String.join(", ", NMS.compatibleVersions()) + ")");
 
 		// Checks other dependencies
 		try {
 			Class.forName("de.tr7zw.nbtapi.NBTContainer");
-			CommandAPI.logNormal("Hooked into the NBTAPI successfully.");
+			CommandAPIBase.logNormal("Hooked into the NBTAPI successfully.");
 		} catch(ClassNotFoundException e) {
-			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning(
+			if(CommandAPIBase.getConfiguration().hasVerboseOutput()) {
+				CommandAPIBase.logWarning(
 						"Could not hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
 			}
 		}
 
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
-			CommandAPI.logNormal("Hooked into Spigot successfully for Chat/ChatComponents");
+			CommandAPIBase.logNormal("Hooked into Spigot successfully for Chat/ChatComponents");
 		} catch (ClassNotFoundException e) {
-			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning("Could not hook into Spigot for Chat/ChatComponents");
+			if(CommandAPIBase.getConfiguration().hasVerboseOutput()) {
+				CommandAPIBase.logWarning("Could not hook into Spigot for Chat/ChatComponents");
 			}
 		}
 
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
-			CommandAPI.logNormal("Hooked into Adventure for AdventureChat/AdventureChatComponents");
+			CommandAPIBase.logNormal("Hooked into Adventure for AdventureChat/AdventureChatComponents");
 		} catch(ClassNotFoundException e) {
-			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
-				CommandAPI.logWarning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
+			if(CommandAPIBase.getConfiguration().hasVerboseOutput()) {
+				CommandAPIBase.logWarning("Could not hook into Adventure for AdventureChat/AdventureChatComponents");
 			}
 		}
 	}
@@ -188,8 +195,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 *                    have been registered by Minecraft, Bukkit or Spigot etc.
 	 */
 	void unregister(String commandName, boolean force) {
-		if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-			CommandAPI.logInfo("Unregistering command /" + commandName);
+		if (CommandAPIBase.getConfiguration().hasVerboseOutput()) {
+			CommandAPIBase.logInfo("Unregistering command /" + commandName);
 		}
 
 		// Get the child nodes from the loaded dispatcher class
@@ -220,7 +227,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandSourceStack> generateCommand(Argument<?, ImplementedSender>[] args, CustomCommandExecutor<ImplementedSender> executor, boolean converted)
+	Command<CommandSourceStack> generateCommand(Argument<?, ImplementedSender, ?>[] args, CustomCommandExecutor<ImplementedSender> executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
@@ -271,12 +278,12 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * @return an Object[] which can be used in (sender, args) -> 
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument<?, ImplementedSender>[] args) throws CommandSyntaxException {
+	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument<?, ImplementedSender, ?>[] args) throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
 		// Populate array
-		for (Argument<?, ImplementedSender> argument : args) {
+		for (Argument<?, ImplementedSender, ?> argument : args) {
 			if(argument.isListed()) {
 				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, args));
 			}
@@ -296,7 +303,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */
-	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument<?, ImplementedSender> value, Argument<?, ImplementedSender>[] args) throws CommandSyntaxException {
+	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument<?, ImplementedSender, ?> value, Argument<?, ImplementedSender, ?>[] args) throws CommandSyntaxException {
 		if(value.isListed()) {
 			if(value instanceof CustomArgument<?, ImplementedSender> customValue) {
 				return customValue.parseCustomArgument(NMS, cmdCtx, key, generatePreviousArguments(cmdCtx, args, key));
@@ -326,6 +333,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * Makes permission checks more "Bukkit" like and less "Vanilla Minecraft" like
 	 */
 	abstract void fixPermissions();
+	
+	abstract Predicate<CommandSourceStack> generatePermissions(String commandName, CommandPermission permission, Predicate<ImplementedSender> requirements);
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Registration //
@@ -336,8 +345,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
 	 * returns false if multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(CommandMetaData<ImplementedSender> meta, final Argument<?, ImplementedSender>[] args,
-			CustomCommandExecutor<? extends ImplementedSender> executor,
+	private boolean expandMultiLiterals(CommandMetaData<ImplementedSender> meta, final Argument<?, ImplementedSender, ?>[] args,
+			CustomCommandExecutor<ImplementedSender> executor,
 			boolean converted) throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
@@ -354,7 +363,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 							.withRequirement(superArg.getRequirements());
 
 					//Reconstruct the list of arguments and place in the new literals
-					Argument<?, ImplementedSender>[] newArgs = Arrays.copyOf(args, args.length);
+					Argument<?, ImplementedSender, ?>[] newArgs = Arrays.copyOf(args, args.length);
 					newArgs[index] = litArg;
 					register(meta, newArgs, executor, converted);
 				}
@@ -368,7 +377,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	// allow    /race invite<LiteralArgument> player<PlayerArgument>
 	// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
 	// Return true if conflict was present, otherwise return false
-	private boolean hasCommandConflict(String commandName, Argument<?, ImplementedSender>[] args, String argumentsAsString) {
+	private boolean hasCommandConflict(String commandName, Argument<?, ImplementedSender, ?>[] args, String argumentsAsString) {
 		List<String[]> regArgs = new ArrayList<>();
 		for(RegisteredCommand rCommand : registeredCommands) {
 			if(rCommand.command().equals(commandName)) {
@@ -401,7 +410,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 						builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
 					}
 
-					CommandAPI.logError("""
+					CommandAPIBase.logError("""
 							Failed to register command:
 
 							%s %s
@@ -418,8 +427,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	}
 
 	// Links arg -> Executor
-	private ArgumentBuilder<CommandSourceStack, ?> generateInnerArgument(Command<CommandSourceStack> command, Argument<?, ImplementedSender>[] args) {
-		Argument<?, ImplementedSender> innerArg = args[args.length - 1];
+	private ArgumentBuilder<CommandSourceStack, ?> generateInnerArgument(Command<CommandSourceStack> command, Argument<?, ImplementedSender, ?>[] args) {
+		Argument<?, ImplementedSender, ?> innerArg = args[args.length - 1];
 
 		// Handle Literal arguments
 		if (innerArg instanceof LiteralArgument<?> literalArgument) {
@@ -440,10 +449,10 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	}
 
 	// Links arg1 -> arg2 -> ... argN -> innermostArgument
-	private ArgumentBuilder<CommandSourceStack, ?> generateOuterArguments(ArgumentBuilder<CommandSourceStack, ?> innermostArgument, Argument<?, ImplementedSender>[] args) {
+	private ArgumentBuilder<CommandSourceStack, ?> generateOuterArguments(ArgumentBuilder<CommandSourceStack, ?> innermostArgument, Argument<?, ImplementedSender, ?>[] args) {
 		ArgumentBuilder<CommandSourceStack, ?> outer = innermostArgument;
 		for (int i = args.length - 2; i >= 0; i--) {
-			Argument<?, ImplementedSender> outerArg = args[i];
+			Argument<?, ImplementedSender, ?> outerArg = args[i];
 
 			// Handle Literal arguments
 			if (outerArg instanceof LiteralArgument<?> literalArgument) {
@@ -468,7 +477,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	void register(CommandMetaData<ImplementedSender> meta,
-			final Argument<?, ImplementedSender>[] args, CustomCommandExecutor<? extends ImplementedSender> executor, boolean converted)
+			final Argument<?, ImplementedSender, ?>[] args, CustomCommandExecutor<ImplementedSender> executor, boolean converted)
 					throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
@@ -478,7 +487,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 
 		// Create a list of argument names
 		StringBuilder builder = new StringBuilder();
-		for(Argument<?, ImplementedSender> arg : args) {
+		for(Argument<?, ImplementedSender, ?> arg : args) {
 			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
 		}
 
@@ -499,19 +508,15 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 			return;
 		} else {
 			List<String> argumentsString = new ArrayList<>();
-			for(Argument<?, ImplementedSender> arg : args) {
+			for(Argument<?, ImplementedSender, ?> arg : args) {
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
 			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));
 		}
+		
+		NMS.checkAndWarnRegisteredPluginCommand(commandName);
 
-		if (Bukkit.getPluginCommand(commandName) != null) {
-			CommandAPI.logWarning("Plugin command /" + commandName + " is registered by Bukkit ("
-					+ Bukkit.getPluginCommand(commandName).getPlugin().getName()
-					+ "). Did you forget to remove this from your plugin.yml file?");
-		}
-
-		CommandAPI.logInfo("Registering command /" + commandName + " " + builder.toString());
+		CommandAPIBase.logInfo("Registering command /" + commandName + " " + builder.toString());
 		commands.add(new CommandHelp(commandName, shortDescription, fullDescription, aliases, permission));
 
 		// Generate the actual command
@@ -529,7 +534,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 
 			// Register aliases
 			for (String alias : aliases) {
-				CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
+				CommandAPIBase.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permission, requirements)).executes(command));
 			}
 		} else {
@@ -542,8 +547,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 
 			// Register aliases
 			for (String alias : aliases) {
-				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
-					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
+				if (CommandAPIBase.getConfiguration().hasVerboseOutput()) {
+					CommandAPIBase.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
 
 				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permission, requirements)).then(commandArguments));
@@ -557,8 +562,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 
 	// Produce the commandDispatch.json file for debug purposes
 	private void generateDispatcherFile() throws IOException {
-		if (CommandAPI.getConfiguration().willCreateDispatcherFile()) {
-			File file = CommandAPI.getDispatcherFile();
+		if (CommandAPIBase.getConfiguration().willCreateDispatcherFile()) {
+			File file = CommandAPIBase.getDispatcherFile();
 			try {
 				file.createNewFile();
 			} catch (IOException e) {
@@ -595,7 +600,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(
-			final Argument<?, ImplementedSender>[] args, Argument<?, ImplementedSender> argument) {
+			final Argument<?, ImplementedSender, ?>[] args, Argument<?, ImplementedSender, ?> argument) {
 
 		if(argument.getOverriddenSuggestions().isPresent()) {
 			// Override the suggestions
@@ -608,7 +613,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderWithProvider(Argument<?, ImplementedSender> argument, Argument<?, ImplementedSender>[] args, SuggestionProvider<CommandSourceStack> provider) {
+	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderWithProvider(Argument<?, ImplementedSender, ?> argument, Argument<?, ImplementedSender, ?>[] args, SuggestionProvider<CommandSourceStack> provider) {
 		SuggestionProvider<CommandSourceStack> newSuggestionsProvider = provider;
 
 		// If we have suggestions to add, combine provider with the suggestions
@@ -642,8 +647,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 				.suggests(newSuggestionsProvider);
 	}
 
-	static <ImplementedSender> Argument<?, ImplementedSender> getArgument(Argument<?, ImplementedSender>[] args, String nodeName) {
-		for(Argument<?, ImplementedSender> arg : args) {
+	static <ImplementedSender> Argument<?, ImplementedSender, ?> getArgument(Argument<?, ImplementedSender, ?>[] args, String nodeName) {
+		for(Argument<?, ImplementedSender, ?> arg : args) {
 			if(arg.getNodeName().equals(nodeName)) {
 				return arg;
 			}
@@ -651,11 +656,11 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 		throw new NoSuchElementException("Could not find argument '" + nodeName + "'");
 	}
 
-	Object[] generatePreviousArguments(CommandContext<CommandSourceStack> context, Argument<?, ImplementedSender>[] args, String nodeName) throws CommandSyntaxException {
+	Object[] generatePreviousArguments(CommandContext<CommandSourceStack> context, Argument<?, ImplementedSender, ?>[] args, String nodeName) throws CommandSyntaxException {
 		// Populate Object[], which is our previously filled arguments
 		List<Object> previousArguments = new ArrayList<>();
 
-		for (Argument<?, ImplementedSender> arg : args) {
+		for (Argument<?, ImplementedSender, ?> arg : args) {
 			if (arg.getNodeName().equals(nodeName)) {
 				break;
 			}
@@ -681,7 +686,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 		return previousArguments.toArray();
 	}
 
-	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument<?, ImplementedSender>[] args, boolean overrideSuggestions) {
+	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument<?, ImplementedSender, ?>[] args, boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			SuggestionInfoBase<ImplementedSender> suggestionInfo = new SuggestionInfoBase<ImplementedSender>(NMS.getImplementedSenderFromCSS(context.getSource()), generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
 			Optional<ArgumentSuggestions<ImplementedSender>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();
