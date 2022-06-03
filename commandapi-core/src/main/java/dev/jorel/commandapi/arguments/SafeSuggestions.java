@@ -1,11 +1,11 @@
 package dev.jorel.commandapi.arguments;
 
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.SuggestionInfoBase<ImplementedSender>;
-import dev.jorel.commandapi.Tooltip;
-
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
+
+import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.SuggestionInfoBase;
+import dev.jorel.commandapi.Tooltip;
 
 /**
  * This class represents safe suggestions. These are parameterized suggestions which can be converted
