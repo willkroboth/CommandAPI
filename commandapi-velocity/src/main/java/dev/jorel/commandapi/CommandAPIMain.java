@@ -23,6 +23,7 @@ package dev.jorel.commandapi;
 import org.slf4j.Logger;
 
 import com.google.inject.Inject;
+import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
@@ -51,5 +52,14 @@ public class CommandAPIMain {
 		// So you're probably wondering, why does this commit have basically
 		// no content? Well the reason for that is because I actually have
 		// absolutely no idea where to even start with adding Velocity support!
+		
+//		new CommandAPICommand("mycommand")
+//		.executes((sender, args) -> {
+//			
+//		});
+	}
+	
+	public void executes(CommandSource sender, Object[] args) {
+//		PlayerArgument pArg = new PlayerArgument("hi");
 	}
 }

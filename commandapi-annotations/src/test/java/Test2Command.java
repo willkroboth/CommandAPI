@@ -40,9 +40,9 @@ import dev.jorel.commandapi.annotations.arguments.ALocationArgument;
 import dev.jorel.commandapi.annotations.arguments.ALongArgument;
 import dev.jorel.commandapi.annotations.arguments.AMultiLiteralArgument;
 import dev.jorel.commandapi.annotations.arguments.AScoreHolderArgument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
+import dev.jorel.commandapi.enums.EntitySelector;
 
 /* ANCHOR: teleport_command */
 @Command("teleport")    

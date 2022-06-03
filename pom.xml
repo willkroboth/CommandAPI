@@ -69,12 +69,14 @@
 		<!-- Main core code + NMS selector -->
 		<module>commandapi-core</module>
 		<module>commandapi-vh</module>
+		
+		<!-- Target specific core code -->
+		<module>commandapi-bukkit</module>
 
 		<!-- Outputs -->
 		<module>commandapi-plugin</module>
 		<module>commandapi-shade</module>
 		<module>commandapi-annotations</module>
-		
 		<module>commandapi-velocity</module>
 	</modules>
 

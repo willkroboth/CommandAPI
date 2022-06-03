@@ -35,7 +35,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-core</artifactId>
+			<artifactId>commandapi-bukkit</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

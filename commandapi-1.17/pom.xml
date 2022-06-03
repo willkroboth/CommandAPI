@@ -78,10 +78,10 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- CommandAPI core -->
+		<!-- CommandAPI bukkit -->
 		<dependency>
 			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-core</artifactId>
+			<artifactId>commandapi-bukkit</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

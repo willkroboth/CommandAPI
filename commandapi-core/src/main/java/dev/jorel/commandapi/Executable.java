@@ -1,5 +1,8 @@
 package dev.jorel.commandapi;
 
+import org.bukkit.command.CommandSender;
+
+import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
@@ -16,7 +19,6 @@ import dev.jorel.commandapi.executors.PlayerResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ProxyCommandExecutor;
 import dev.jorel.commandapi.executors.ProxyResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ResultingCommandExecutor;
-import org.bukkit.command.CommandSender;
 
 /**
  * This class represents something that is executable. This is mostly, {@link CommandAPICommand} instances, or can also be {@link CommandTree} nodes and even {@link Argument} nodes in a tree

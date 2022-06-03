@@ -273,7 +273,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 
 	@Override
-	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector) {
+	public ArgumentType<?> _ArgumentEntity(dev.jorel.commandapi.enums.EntitySelector selector) {
 		return switch (selector) {
 		case MANY_ENTITIES -> EntityArgument.entities();
 		case MANY_PLAYERS  -> EntityArgument.players();
@@ -583,7 +583,7 @@ public class NMS_1_18_R2 implements NMS<CommandSourceStack> {
 	}
 	
 	@Override
-	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector selector)
+	public Object getEntitySelector(CommandContext<CommandSourceStack> cmdCtx, String str, dev.jorel.commandapi.enums.EntitySelector selector)
 			throws CommandSyntaxException {
 		
 		// We override the rule whereby players need "minecraft.command.selector" and have to have
