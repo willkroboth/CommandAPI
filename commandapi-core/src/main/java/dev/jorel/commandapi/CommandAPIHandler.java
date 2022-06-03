@@ -80,12 +80,12 @@ import dev.jorel.commandapi.preprocessor.RequireField;
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
 public class CommandAPIHandler<CommandSourceStack> {
-	
+
 	private final static VarHandle COMMANDNODE_CHILDREN;
 	private final static VarHandle COMMANDNODE_LITERALS;
 	private final static VarHandle COMMANDNODE_ARGUMENTS;
 	private final static VarHandle COMMANDCONTEXT_ARGUMENTS;
-	
+
 	// Compute all var handles all in one go so we don't do this during main server runtime
 	static {
 		VarHandle commandNodeChildren = null;
@@ -93,10 +93,10 @@ public class CommandAPIHandler<CommandSourceStack> {
 		VarHandle commandNodeArguments = null;
 		VarHandle commandContextArguments = null;
 		try {
-			 commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);
-			 commandNodeLiterals = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "literals", Map.class);
-			 commandNodeArguments = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "arguments", Map.class);
-			 commandContextArguments = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup()).findVarHandle(CommandContext.class, "arguments", Map.class);
+			commandNodeChildren = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "children", Map.class);
+			commandNodeLiterals = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "literals", Map.class);
+			commandNodeArguments = MethodHandles.privateLookupIn(CommandNode.class, MethodHandles.lookup()).findVarHandle(CommandNode.class, "arguments", Map.class);
+			commandContextArguments = MethodHandles.privateLookupIn(CommandContext.class, MethodHandles.lookup()).findVarHandle(CommandContext.class, "arguments", Map.class);
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
 		} 
@@ -105,7 +105,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		COMMANDNODE_ARGUMENTS = commandNodeArguments;
 		COMMANDCONTEXT_ARGUMENTS = commandContextArguments;
 	}
-	
+
 	/**
 	 * Returns the raw input for an argument for a given command context and its
 	 * key. This effectively returns the string value that is currently typed for
@@ -121,9 +121,9 @@ public class CommandAPIHandler<CommandSourceStack> {
 		StringRange range = ((Map<String, ParsedArgument<CommandSourceStack, ?>>) COMMANDCONTEXT_ARGUMENTS.get(cmdCtx)).get(key).getRange();
 		return cmdCtx.getInput().substring(range.getStart(), range.getEnd());
 	}
-	
+
 	private static CommandAPIHandler<?> instance;
-	
+
 	/**
 	 * Returns the Singleton instance of the CommandAPI's internal handler
 	 * 
@@ -135,14 +135,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return instance;
 	}
-		
+
 	final Map<ClassCache, Field> FIELDS = new HashMap<>();
 	final TreeMap<String, CommandPermission> PERMISSIONS_TO_FIX = new TreeMap<>();
 	final NMS<CommandSourceStack> NMS;
 	final CommandDispatcher<CommandSourceStack> DISPATCHER;
 	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking 
 	final List<CommandHelp> commands;
-	
+
 	private CommandAPIHandler() {
 		String bukkit = Bukkit.getServer().toString();
 		NMS = CommandAPIVersionHandler.getNMS(bukkit.substring(bukkit.indexOf("minecraftVersion") + 17, bukkit.length() - 1));
@@ -150,7 +150,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		registeredCommands = new ArrayList<>();
 		commands = new ArrayList<>();
 	}
-	
+
 	void checkDependencies() {
 		try {
 			Class.forName("com.mojang.brigadier.CommandDispatcher");
@@ -168,7 +168,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		} catch(ClassNotFoundException e) {
 			if(CommandAPI.getConfiguration().hasVerboseOutput()) {
 				CommandAPI.logWarning(
-					"Could not hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
+						"Could not hook into the NBTAPI for NBT support. Download it from https://www.spigotmc.org/resources/nbt-api.7939/");
 			}
 		}
 
@@ -180,7 +180,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				CommandAPI.logWarning("Could not hook into Spigot for Chat/ChatComponents");
 			}
 		}
-		
+
 		try {
 			Class.forName("net.kyori.adventure.text.Component");
 			CommandAPI.logNormal("Hooked into Adventure for AdventureChat/AdventureChatComponents");
@@ -190,7 +190,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns an instance of NMS.
 	 * 
@@ -199,7 +199,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	public NMS<CommandSourceStack> getNMS() {
 		return NMS;
 	}
-	
+
 	/**
 	 * Unregisters a command from the NMS command graph.
 	 * 
@@ -251,27 +251,21 @@ public class CommandAPIHandler<CommandSourceStack> {
 			if(converted) {
 				Object[] argObjs = argsToObjectArr(cmdCtx, args);
 				int resultValue = 0;
-				
+
 				// Return a String[] of arguments for converted commands
 				String[] argsAndCmd = cmdCtx.getRange().get(cmdCtx.getInput()).split(" ");
 				String[] result = new String[argsAndCmd.length - 1];
 				System.arraycopy(argsAndCmd, 1, result, 0, argsAndCmd.length - 1);
-				
+
 				@SuppressWarnings("unchecked")
 				List<String>[] entityNamesForArgs = new List[args.length];
-				
-				List<String> entityNamesForArgVal = Arrays.asList(new String[] { null });
+
 				for(int i = 0; i < args.length; i++) {
-					// TODO: Implement EntitySelectorArgument specific for commandapi-bukkit only
-//					if(args[i] instanceof EntitySelectorArgument<?> entitySelectorArg) {
-//						entityNamesForArgs[i] = entitySelectorArg.getEntityNames(argObjs[i]);
-//					} else {
-						entityNamesForArgs[i] = entityNamesForArgVal;
-//					}
+					entityNamesForArgs[i] = args[i].getEntityNames(argObjs[i]);
 				}
-				
+
 				List<List<String>> product = CartesianProduct.getDescartes(Arrays.asList(entityNamesForArgs));
-				
+
 				// These objects in obj are List<String>
 				for(List<String> strings : product) {
 					// We assume result.length == strings.size
@@ -284,14 +278,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 					}
 					resultValue += executor.execute(sender, result);
 				}
-				
+
 				return resultValue;
 			} else {
 				return executor.execute(sender, argsToObjectArr(cmdCtx, args));
 			}
 		};
 	}
-	
+
 	/**
 	 * Converts the List&lt;Argument> into an Object[] for command execution
 	 * @param cmdCtx the command context that will execute this command
@@ -309,11 +303,11 @@ public class CommandAPIHandler<CommandSourceStack> {
 				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, args));
 			}
 		}
-		
+
 		return argList.toArray();
 	}
-	
-	
+
+
 	/**
 	 * Parses an argument and converts it into its standard Bukkit type (as defined in NMS.java)
 	 * @param type the argument type
@@ -415,12 +409,12 @@ public class CommandAPIHandler<CommandSourceStack> {
 		if(!PERMISSIONS_TO_FIX.isEmpty()) {
 			CommandAPI.logInfo("Linking permissions to commands:");
 		}
-		
+
 		for(Entry<String, CommandPermission> entry : PERMISSIONS_TO_FIX.entrySet()) {
 			String cmdName = entry.getKey();
 			CommandPermission perm = entry.getValue();
 			CommandAPI.logInfo(perm.toString() + " -> /" + cmdName);
-			
+
 			final String permNode;
 			if(perm.isNegated() || perm.equals(CommandPermission.NONE) || perm.equals(CommandPermission.OP)) {
 				permNode = "";
@@ -430,7 +424,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				// This case should never occur. Worth testing this with some assertion
 				permNode = null;
 			}
-			
+
 			/*
 			 * Sets the permission. If you have to be OP to run this command,
 			 * we set the permission to null. Doing so means that Bukkit's
@@ -454,7 +448,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
 	// SECTION: Registration //
 	//////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	/*
 	 * Expands multiliteral arguments and registers all expansions of MultiLiteralArguments throughout
 	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
@@ -463,19 +457,19 @@ public class CommandAPIHandler<CommandSourceStack> {
 	private boolean expandMultiLiterals(CommandMetaData meta, final Argument<?>[] args,
 			CustomCommandExecutor<? extends CommandSender> executor,
 			boolean converted) throws CommandSyntaxException, IOException {
-		
+
 		//"Expands" our MultiLiterals into Literals
 		for(int index = 0; index < args.length; index++) {
 			//Find the first multiLiteral in the for loop
 			if(args[index] instanceof MultiLiteralArgument superArg) {
-				
+
 				//Add all of its entries
 				for(int i = 0; i < superArg.getLiterals().length; i++) {
 					LiteralArgument litArg = (LiteralArgument) new LiteralArgument(superArg.getLiterals()[i])
-						.setListed(superArg.isListed())
-						.withPermission(superArg.getArgumentPermission())
-						.withRequirement(superArg.getRequirements());
-					
+							.setListed(superArg.isListed())
+							.withPermission(superArg.getArgumentPermission())
+							.withRequirement(superArg.getRequirements());
+
 					//Reconstruct the list of arguments and place in the new literals
 					Argument<?>[] newArgs = Arrays.copyOf(args, args.length);
 					newArgs[index] = litArg;
@@ -486,7 +480,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return false;
 	}
-	
+
 	// Prevent nodes of the same name but with different types:
 	// allow    /race invite<LiteralArgument> player<PlayerArgument>
 	// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
@@ -523,15 +517,15 @@ public class CommandAPIHandler<CommandSourceStack> {
 					for(String[] arg : regArgs) {
 						builder2.append(arg[0]).append("<").append(arg[1]).append("> ");
 					}
-					
+
 					CommandAPI.logError("""
 							Failed to register command:
-							
-							  %s %s
-							  
+
+							%s %s
+
 							Because it conflicts with this previously registered command:
-							
-							  %s %s
+
+							%s %s
 							""".formatted(commandName, argumentsAsString, commandName, builder2.toString()));
 					return true;
 				}
@@ -539,7 +533,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return false;
 	}
-	
+
 	// Links arg -> Executor
 	private ArgumentBuilder<CommandSourceStack, ?> generateInnerArgument(Command<CommandSourceStack> command, Argument<?>[] args) {
 		Argument<?> innerArg = args[args.length - 1];
@@ -553,7 +547,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		else if (innerArg instanceof ICustomProvidedArgument customProvidedArg && !innerArg.getOverriddenSuggestions().isPresent()) {
 			return getRequiredArgumentBuilderWithProvider(innerArg, args,
 					NMS.getSuggestionProvider(customProvidedArg.getSuggestionProvider()))
-							.executes(command);
+					.executes(command);
 		}
 
 		// Handle every other type of argument
@@ -561,7 +555,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			return getRequiredArgumentBuilderDynamic(args, innerArg).executes(command);
 		}
 	}
-	
+
 	// Links arg1 -> arg2 -> ... argN -> innermostArgument
 	private ArgumentBuilder<CommandSourceStack, ?> generateOuterArguments(ArgumentBuilder<CommandSourceStack, ?> innermostArgument, Argument<?>[] args) {
 		ArgumentBuilder<CommandSourceStack, ?> outer = innermostArgument;
@@ -577,7 +571,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			else if (outerArg instanceof ICustomProvidedArgument customProvidedArg && !outerArg.getOverriddenSuggestions().isPresent()) {
 				outer = getRequiredArgumentBuilderWithProvider(outerArg, args,
 						NMS.getSuggestionProvider(customProvidedArg.getSuggestionProvider()))
-								.then(outer);
+						.then(outer);
 			}
 
 			// Handle every other type of argument
@@ -587,18 +581,18 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return outer;
 	}
-	
+
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	void register(CommandMetaData meta,
 			final Argument<?>[] args, CustomCommandExecutor<? extends CommandSender> executor, boolean converted)
-			throws CommandSyntaxException, IOException {
+					throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
 		if(expandMultiLiterals(meta, args, executor, converted)) {
 			return;
 		}
-		
+
 		// Create a list of argument names
 		StringBuilder builder = new StringBuilder();
 		for(Argument<?> arg : args) {
@@ -668,7 +662,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				if (CommandAPI.getConfiguration().hasVerboseOutput()) {
 					CommandAPI.logInfo("Registering alias /" + alias + " -> " + resultantNode.getName());
 				}
-				
+
 				DISPATCHER.register(getLiteralArgumentBuilder(alias).requires(generatePermissions(alias, permission, requirements)).then(commandArguments));
 			}
 		}
@@ -677,7 +671,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		// command registration. Generate the dispatcher file!
 		generateDispatcherFile();
 	}
-	
+
 	// Produce the commandDispatch.json file for debug purposes
 	private void generateDispatcherFile() throws IOException {
 		if (CommandAPI.getConfiguration().willCreateDispatcherFile()) {
@@ -721,7 +715,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(
 			final Argument<?>[] args, Argument<?> argument) {
-		
+
 		if(argument.getOverriddenSuggestions().isPresent()) {
 			// Override the suggestions
 			return getRequiredArgumentBuilderWithProvider(argument, args, toSuggestions(argument.getNodeName(), args, true));
@@ -735,38 +729,38 @@ public class CommandAPIHandler<CommandSourceStack> {
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
 	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderWithProvider(Argument<?> argument, Argument<?>[] args, SuggestionProvider<CommandSourceStack> provider) {
 		SuggestionProvider<CommandSourceStack> newSuggestionsProvider = provider;
-		
+
 		// If we have suggestions to add, combine provider with the suggestions
 		if(argument.getIncludedSuggestions().isPresent() && argument.getOverriddenSuggestions().isEmpty()) {
 			SuggestionProvider<CommandSourceStack> addedSuggestions = toSuggestions(argument.getNodeName(), args, false);
-			
+
 			newSuggestionsProvider = (cmdCtx, builder) -> {
 				//Heavily inspired by CommandDispatcher#listSuggestions, with combining multiple CompletableFuture<Suggestions> into one.
 				@SuppressWarnings("unchecked")
 				final CompletableFuture<Suggestions>[] futures = new CompletableFuture[]{
-					addedSuggestions.getSuggestions(cmdCtx, builder), provider.getSuggestions(cmdCtx, builder)
+						addedSuggestions.getSuggestions(cmdCtx, builder), provider.getSuggestions(cmdCtx, builder)
 				};
 				CompletableFuture<Suggestions> result = new CompletableFuture<>();
 				CompletableFuture
-					.allOf(futures)
-					.thenRun(() -> {
-						List<Suggestions> suggestions = new ArrayList<>();
-						for(CompletableFuture<Suggestions> future: futures) {
-							suggestions.add(future.join());
-						}
-						result.complete(Suggestions.merge(cmdCtx.getInput(), suggestions));
-					});
+				.allOf(futures)
+				.thenRun(() -> {
+					List<Suggestions> suggestions = new ArrayList<>();
+					for(CompletableFuture<Suggestions> future: futures) {
+						suggestions.add(future.join());
+					}
+					result.complete(Suggestions.merge(cmdCtx.getInput(), suggestions));
+				});
 				return result;
 			};
 		} 
-		
+
 		RequiredArgumentBuilder<CommandSourceStack, ?> requiredArgumentBuilder = RequiredArgumentBuilder.argument(argument.getNodeName(), argument.getRawType());
-		
+
 		return requiredArgumentBuilder
-			.requires(css -> permissionCheck(NMS.getCommandSenderFromCSS(css), argument.getArgumentPermission(), argument.getRequirements()))
-			.suggests(newSuggestionsProvider);
+				.requires(css -> permissionCheck(NMS.getCommandSenderFromCSS(css), argument.getArgumentPermission(), argument.getRequirements()))
+				.suggests(newSuggestionsProvider);
 	}
-	
+
 	static Argument<?> getArgument(Argument<?>[] args, String nodeName) {
 		for(Argument<?> arg : args) {
 			if(arg.getNodeName().equals(nodeName)) {
@@ -775,7 +769,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		throw new NoSuchElementException("Could not find argument '" + nodeName + "'");
 	}
-	
+
 	Object[] generatePreviousArguments(CommandContext<CommandSourceStack> context, Argument<?>[] args, String nodeName) throws CommandSyntaxException {
 		// Populate Object[], which is our previously filled arguments
 		List<Object> previousArguments = new ArrayList<>();
@@ -784,7 +778,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			if (arg.getNodeName().equals(nodeName)) {
 				break;
 			}
-			
+
 			Object result;
 			try {
 				result = parseArgument(context, arg.getNodeName(), arg, args);
@@ -805,7 +799,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 		}
 		return previousArguments.toArray();
 	}
-	
+
 	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument<?>[] args, boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			SuggestionInfo suggestionInfo = new SuggestionInfo(NMS.getCommandSenderFromCSS(context.getSource()), generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
@@ -813,7 +807,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 			return suggestionsToAddOrOverride.orElse(ArgumentSuggestions.empty()).suggest(suggestionInfo, builder);
 		};
 	}
-	
+
 	/////////////////////////
 	// SECTION: Reflection //
 	/////////////////////////
@@ -842,14 +836,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 			return result;
 		}
 	}
-	
+
 	private String generateCommandHelpPrefix(String command) {
 		return (Bukkit.getPluginCommand(command) == null ? "/" : "/minecraft:") + command;
 	}
-	
+
 	private void generateHelpUsage(StringBuilder sb, CommandHelp command) {
 		sb.append(ChatColor.GOLD + "Usage: " + ChatColor.WHITE);
-		
+
 		// Generate usages
 		List<String> usages = new ArrayList<>();
 		for(RegisteredCommand rCommand : registeredCommands) {
@@ -862,7 +856,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 				usages.add(usageString.toString());
 			}
 		}
-		
+
 		// If 1 usage, put it on the same line, otherwise format like a list
 		if(usages.size() == 1) {
 			sb.append(usages.get(0));
@@ -875,7 +869,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 	public void updateHelpForCommands() {
 		Map<String, HelpTopic> helpTopicsToAdd = new HashMap<>();
-		
+
 		for(CommandHelp command : this.commands) {
 			// Generate short description
 			final String shortDescription;
@@ -895,32 +889,32 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 			generateHelpUsage(sb, command);
 			sb.append("\n");
-			
+
 			// Generate aliases. We make a copy of the StringBuilder because we
 			// want to change the output when we register aliases
 			StringBuilder aliasSb = new StringBuilder(sb.toString());
 			if(command.aliases().length > 0) {
 				sb.append(ChatColor.GOLD + "Aliases: " + ChatColor.WHITE + String.join(", ", command.aliases()));
 			}
-			
+
 			// Must be empty string, not null as defined by OBC::CustomHelpTopic
 			String permission = command.permission().getPermission().orElseGet(() -> "");
-			
+
 			// Don't override the plugin help topic
 			String commandPrefix = generateCommandHelpPrefix(command.commandName);
 			helpTopicsToAdd.put(commandPrefix, NMS.generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission));
-			
+
 			for(String alias : command.aliases) {
 				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
 				if(command.aliases().length > 0) {
 					currentAliasSb.append(ChatColor.GOLD + "Aliases: " + ChatColor.WHITE);
-					
+
 					// We want to get all aliases (including the original command name),
 					// except for the current alias
 					List<String> aliases = new ArrayList<>(Arrays.asList(command.aliases()));
 					aliases.add(command.commandName());
 					aliases.remove(alias);
-					
+
 					currentAliasSb.append(ChatColor.WHITE + String.join(", ", aliases));
 				}
 
@@ -929,14 +923,14 @@ public class CommandAPIHandler<CommandSourceStack> {
 				helpTopicsToAdd.put(commandPrefix, NMS.generateHelpTopic(commandPrefix, shortDescription, currentAliasSb.toString().trim(), permission));
 			}
 		}
-		
+
 		NMS.addToHelpMap(helpTopicsToAdd);
 	}
-	
+
 	//////////////////////////////
 	// SECTION: Private classes //
 	//////////////////////////////
-	
+
 	/**
 	 * Class to store cached methods and fields 
 	 * 
@@ -944,7 +938,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	 * key is made up of a class and a field or method name
 	 */
 	private record ClassCache(Class<?> clazz, String name) {}
-	
+
 	/**
 	 * Class to store a registered command which has its command name and a
 	 * list of arguments as a string. The arguments are expected to be of the
@@ -955,7 +949,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 	private record CommandHelp(String commandName, Optional<String> shortDescription, Optional<String> fullDescription,
 			String[] aliases, CommandPermission permission) {
 	};
-	
+
 	/**
 	 * A class to compute the Cartesian product of a number of lists.
 	 * Source: https://www.programmersought.com/article/86195393650/
@@ -964,7 +958,7 @@ public class CommandAPIHandler<CommandSourceStack> {
 
 		// Shouldn't be instantiated
 		private CartesianProduct() {}
-		
+
 		/**
 		 * Returns the Cartesian product of a list of lists
 		 * @param <T> the underlying type of the list of lists

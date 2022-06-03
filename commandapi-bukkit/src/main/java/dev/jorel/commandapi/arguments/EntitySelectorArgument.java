@@ -93,6 +93,7 @@ public class EntitySelectorArgument<T> extends Argument<T> {
 		return (T) nms.getEntitySelector(cmdCtx, key, selector);
 	}
 	
+	@Override
 	public List<String> getEntityNames(Object argument) {
 		return switch (selector) {
 			case MANY_ENTITIES:

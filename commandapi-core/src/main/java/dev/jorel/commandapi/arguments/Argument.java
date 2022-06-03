@@ -20,17 +20,19 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import dev.jorel.commandapi.ArgumentTree;
 import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.ArgumentTree;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.SuggestionInfo;
@@ -301,6 +303,13 @@ public abstract class Argument<T> extends ArgumentTree {
 		this.isListed = listed;
 		return this;
 	}
-	
+
+	////////////////////////////
+	// Platform-specific code //
+	////////////////////////////
+
+	public List<String> getEntityNames(Object args) {
+		return Arrays.asList(new String[] { null });
+	}
 
 }
