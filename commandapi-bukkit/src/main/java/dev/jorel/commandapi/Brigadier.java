@@ -123,7 +123,7 @@ public final class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommand command) {
 		try {
-			BukkitArgument<?>[] args = command.getArguments().toArray(new Argument[0]);
+			BukkitArgument<?>[] args = command.getArguments().toArray(new BukkitArgument[0]);
 			return BukkitCommandAPIHandler.getInstance().generateCommand(args, command.getExecutor(),
 					command.isConverted());
 		} catch (CommandSyntaxException e) {

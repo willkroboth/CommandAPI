@@ -3,12 +3,15 @@ package dev.jorel.commandapi;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.jorel.commandapi.arguments.Argument;
+
 /**
  * This is the root node for creating a command as a tree
  */
-public abstract class CommandTreeBase<ImplementedSender> extends ExecutableCommand<CommandTreeBase<ImplementedSender>, ImplementedSender> {
+public abstract class CommandTreeBase<ImplementedSender, ArgumentImpl extends Argument<?, ImplementedSender, ArgumentImpl>>
+		extends ExecutableCommand<CommandTreeBase<ImplementedSender, ArgumentImpl>, ImplementedSender> {
 
-	private final List<ArgumentTree<ImplementedSender, ?>> arguments = new ArrayList<>();
+	private final List<ArgumentTree<ImplementedSender, ArgumentImpl>> arguments = new ArrayList<>();
 
 	public CommandTreeBase(final String commandName) {
 		super(commandName);
@@ -19,7 +22,7 @@ public abstract class CommandTreeBase<ImplementedSender> extends ExecutableComma
 	 * @param tree the child node
 	 * @return this root node
 	 */
-	public CommandTreeBase<ImplementedSender> then(final ArgumentTree<ImplementedSender, ?> tree) {
+	public CommandTreeBase<ImplementedSender, ArgumentImpl> then(final ArgumentTree<ImplementedSender, ArgumentImpl> tree) {
 		this.arguments.add(tree);
 		return this;
 	}
@@ -28,14 +31,14 @@ public abstract class CommandTreeBase<ImplementedSender> extends ExecutableComma
 	 * Registers the command
 	 */
 	public void register() {
-		List<Execution<ImplementedSender>> executions = new ArrayList<>();
+		List<Execution<ImplementedSender, ArgumentImpl>> executions = new ArrayList<>();
 		if(this.executor.hasAnyExecutors()) {
-			executions.add(new Execution<ImplementedSender>(new ArrayList<>(), this.executor));
+			executions.add(new Execution<ImplementedSender, ArgumentImpl>(new ArrayList<>(), this.executor));
 		}
-		for(ArgumentTree<ImplementedSender, ?> tree : arguments) {
+		for(ArgumentTree<ImplementedSender, ArgumentImpl> tree : arguments) {
 			executions.addAll(tree.getExecutions());
 		}
-		for(Execution<ImplementedSender> execution : executions) {
+		for(Execution<ImplementedSender, ArgumentImpl> execution : executions) {
 			execution.register(this.meta);
 		}
 	}

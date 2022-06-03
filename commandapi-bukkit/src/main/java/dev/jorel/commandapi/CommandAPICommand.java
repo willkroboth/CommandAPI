@@ -27,6 +27,7 @@ import org.bukkit.command.CommandSender;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.BukkitArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
@@ -47,7 +48,7 @@ import dev.jorel.commandapi.executors.ResultingCommandExecutor;
 /**
  * A builder used to create commands to be registered by the CommandAPI.
  */
-public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, CommandSender> {
+public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, CommandSender, BukkitArgument<?>> {
 	
 	/**
 	 * Creates a new command builder
@@ -64,7 +65,7 @@ public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, 
 	}
 
 	@Override
-	void register(CommandMetaData<CommandSender> meta, Argument<?, CommandSender, ?>[] argumentsArr,
+	void register(CommandMetaData<CommandSender> meta, Argument<?, CommandSender, BukkitArgument<?>>[] argumentsArr,
 			CustomCommandExecutor<CommandSender> executor, boolean isConverted)
 			throws CommandSyntaxException, IOException {
 		BukkitCommandAPIHandler.getInstance().register(meta, argumentsArr, executor, isConverted);

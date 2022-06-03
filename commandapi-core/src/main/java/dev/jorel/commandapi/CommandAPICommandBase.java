@@ -36,11 +36,11 @@ import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 /**
  * A builder used to create commands to be registered by the CommandAPI.
  */
-public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, ImplementedSender>, ImplementedSender>
-		extends ExecutableCommand<CommandAPICommandBase<T, ImplementedSender>, ImplementedSender> {
+public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl extends Argument<?, ImplementedSender, ArgumentImpl>>
+		extends ExecutableCommand<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender> {
 
-	List<Argument<?, ImplementedSender, ?>> args = new ArrayList<>();
-	List<CommandAPICommandBase<T, ImplementedSender>> subcommands = new ArrayList<>();
+	List<ArgumentImpl> args = new ArrayList<>();
+	List<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>> subcommands = new ArrayList<>();
 	boolean isConverted;
 	
 	/**
@@ -63,7 +63,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withArguments(List<Argument<?, ImplementedSender, ?>> args) {
+	public T withArguments(List<ArgumentImpl> args) {
 		this.args.addAll(args);
 		return (T) this;
 	}
@@ -75,7 +75,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 	 */
 	@SuppressWarnings("unchecked")
 	@SafeVarargs
-	public final T withArguments(Argument<?, ImplementedSender, ?>... args) {
+	public final T withArguments(ArgumentImpl... args) {
 		this.args.addAll(Arrays.asList(args));
 		return (T) this;
 	}
@@ -95,7 +95,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 	 * Returns the list of arguments that this command has
 	 * @return the list of arguments that this command has
 	 */
-	public List<Argument<?, ImplementedSender, ?>> getArguments() {
+	public List<ArgumentImpl> getArguments() {
 		return args;
 	}
 
@@ -103,7 +103,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 	 * Sets the arguments that this command has
 	 * @param args the arguments that this command has
 	 */
-	public void setArguments(List<Argument<?, ImplementedSender, ?>> args) {
+	public void setArguments(List<ArgumentImpl> args) {
 		this.args = args;
 	}
 
@@ -111,7 +111,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 	 * Returns the list of subcommands that this command has
 	 * @return the list of subcommands that this command has
 	 */
-	public List<CommandAPICommandBase<T, ImplementedSender>> getSubcommands() {
+	public List<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>> getSubcommands() {
 		return subcommands;
 	}
 
@@ -119,7 +119,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 	 * Sets the list of subcommands that this command has
 	 * @param subcommands the list of subcommands that this command has
 	 */
-	public void setSubcommands(List<CommandAPICommandBase<T, ImplementedSender>> subcommands) {
+	public void setSubcommands(List<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>> subcommands) {
 		this.subcommands = subcommands;
 	}
 
@@ -145,7 +145,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 	}
 	
 	//Expand subcommands into arguments
-	private void flatten(CommandAPICommandBase<T, ImplementedSender> rootCommand, List<Argument<?, ImplementedSender, ?>> prevArguments, CommandAPICommandBase<T, ImplementedSender> subcommand) {
+	private void flatten(CommandAPICommandBase<T, ImplementedSender, ArgumentImpl> rootCommand, List<ArgumentImpl> prevArguments, CommandAPICommandBase<T, ImplementedSender, ArgumentImpl> subcommand) {
 		
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
 		literals[0] = subcommand.meta.commandName;
@@ -155,7 +155,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 			.withRequirement(subcommand.meta.requirements)
 			.setListed(false);
 		
-		prevArguments.add(literal);
+		prevArguments.add((ArgumentImpl) literal);
 		
 		if(subcommand.executor.hasAnyExecutors()) {	
 			rootCommand.args = prevArguments;
@@ -166,7 +166,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 			rootCommand.register();
 		}
 		
-		for(CommandAPICommandBase<T, ImplementedSender> subsubcommand : new ArrayList<>(subcommand.subcommands)) {
+		for(CommandAPICommandBase<T, ImplementedSender, ArgumentImpl> subsubcommand : new ArrayList<>(subcommand.subcommands)) {
 			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 		}
 	}
@@ -179,7 +179,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 			CommandAPIBase.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			Argument<?, ImplementedSender, ?>[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
+			Argument<?, ImplementedSender, ArgumentImpl>[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
 			
 			// Check IGreedyArgument constraints 
 			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
@@ -201,7 +201,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 				register(meta, argumentsArr, executor, isConverted);
 			}
 			
-			for(CommandAPICommandBase<T, ImplementedSender> subcommand : this.subcommands) {
+			for(CommandAPICommandBase<T, ImplementedSender, ArgumentImpl> subcommand : this.subcommands) {
 				flatten(this, new ArrayList<>(), subcommand);
 			}
 		} catch (InvalidCommandNameException | GreedyArgumentException | CommandSyntaxException | IOException e) {
@@ -210,7 +210,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 		
 	}
 
-	abstract void register(CommandMetaData<ImplementedSender> meta, Argument<?, ImplementedSender, ?>[] argumentsArr,
+	abstract void register(CommandMetaData<ImplementedSender> meta, Argument<?, ImplementedSender, ArgumentImpl>[] argumentsArr,
 			CustomCommandExecutor<ImplementedSender> executor, boolean isConverted)
 			throws CommandSyntaxException, IOException;
 	
