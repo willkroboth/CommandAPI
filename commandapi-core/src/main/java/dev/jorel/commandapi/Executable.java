@@ -33,7 +33,6 @@ abstract class Executable<T extends Executable<T, ImplementedSender>, Implemente
 	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; ()</code> that will be executed when the command is run
 	 * @return this command builder
 	 */
-	@SuppressWarnings("unchecked")
-	public abstract <K extends IExecutorNormal<L>, L extends ImplementedSender> T executesPlayer(K executor);
+	public abstract T executesPlayer(IExecutorNormal<ImplementedSender> executor);
 
 }

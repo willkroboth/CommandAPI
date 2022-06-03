@@ -23,11 +23,12 @@ package dev.jorel.commandapi;
 import java.io.IOException;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.arguments.ArgumentBase;
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.BukkitArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
@@ -49,7 +50,7 @@ import dev.jorel.commandapi.executors.ResultingCommandExecutor;
 /**
  * A builder used to create commands to be registered by the CommandAPI.
  */
-public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, CommandSender, Argument<?>> {
+public class CommandAPICommand<A extends CommandSender> extends CommandAPICommandBase<CommandAPICommand<A>, A, BukkitArgument<?, A>> {
 	
 	/**
 	 * Creates a new command builder
@@ -66,8 +67,8 @@ public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, 
 	}
 
 	@Override
-	void register(CommandMetaData<CommandSender> meta, ArgumentBase<?, CommandSender, Argument<?>>[] argumentsArr,
-			CustomCommandExecutor<CommandSender> executor, boolean isConverted)
+	void register(CommandMetaData<A> meta, ArgumentBase<?, A, BukkitArgument<?, A>>[] argumentsArr,
+			CustomCommandExecutor<A> executor, boolean isConverted)
 			throws CommandSyntaxException, IOException {
 		BukkitCommandAPIHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
 	}
@@ -132,27 +133,27 @@ public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, 
 
 	// Player command executor
 
-	/**
-	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; ()</code> that will be executed when the command is run
-	 * @return this command builder
-	 */
-	@SuppressWarnings("unchecked")
-	public CommandAPICommand executesPlayer(PlayerCommandExecutor executor) {
-		this.executor.addNormalExecutor(executor);
-		return this;
-	}
-
-	/**
-	 * Adds an executor to the current command builder
-	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; int</code> that will be executed when the command is run
-	 * @return this command builder
-	 */
-	@SuppressWarnings("unchecked")
-	public CommandAPICommand executesPlayer(PlayerResultingCommandExecutor executor) {
-		this.executor.addResultingExecutor(executor);
-		return this;
-	}
+//	/**
+//	 * Adds an executor to the current command builder
+//	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; ()</code> that will be executed when the command is run
+//	 * @return this command builder
+//	 */
+//	@SuppressWarnings("unchecked")
+//	public CommandAPICommand executesPlayer(PlayerCommandExecutor executor) {
+//		this.executor.addNormalExecutor(executor);
+//		return this;
+//	}
+//
+//	/**
+//	 * Adds an executor to the current command builder
+//	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; int</code> that will be executed when the command is run
+//	 * @return this command builder
+//	 */
+//	@SuppressWarnings("unchecked")
+//	public CommandAPICommand executesPlayer(PlayerResultingCommandExecutor executor) {
+//		this.executor.addResultingExecutor(executor);
+//		return this;
+//	}
 
 	// Entity command executor
 
@@ -256,7 +257,7 @@ public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, 
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public CommandAPICommand executesNative(NativeCommandExecutor executor) {
+	public CommandAPICommand<A> executesNative(NativeCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return this;
 	}
@@ -267,14 +268,23 @@ public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, 
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public CommandAPICommand executesNative(NativeResultingCommandExecutor executor) {
+	public CommandAPICommand<A> executesNative(NativeResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return this;
 	}
+	
+	static class AAAAAA {
+		{
+			new CommandAPICommand("hello")
+			.executesPlayer((Player player, Object[] args) -> {
+				
+			}).register();
+		}
+	}
 
 	@Override
-	public <K extends IExecutorNormal<L>, L extends CommandSender> CommandAPICommandBase<CommandAPICommand, CommandSender, Argument<?>> executesPlayer(
-			K executor) {
+	public CommandAPICommandBase<CommandAPICommand<A>, A, BukkitArgument<?, A>> executesPlayer(
+			IExecutorNormal<A> executor) {
 		// TODO Auto-generated method stub
 		return null;
 	}
