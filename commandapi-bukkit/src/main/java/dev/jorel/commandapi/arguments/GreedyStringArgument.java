@@ -10,7 +10,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 public class GreedyStringArgument extends UnaryBukkitSafeOverrideableArgument<String> implements GreedyStringArgumentBase<CommandSender> {
 
 	public GreedyStringArgument(String nodeName) {
-		super(nodeName, GreedyStringArgumentBase.getRawType(), GreedyStringArgumentBase.MAPPER);
+		super(nodeName, RAW_TYPE, MAPPER);
 	}
 
 	@Override

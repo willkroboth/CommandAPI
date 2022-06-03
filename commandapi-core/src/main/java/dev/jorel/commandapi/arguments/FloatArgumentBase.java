@@ -22,33 +22,30 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents arbitrary strings
+ * An argument that represents primitive Java floats
  */
-public interface GreedyStringArgumentBase<ImplementedSender> extends IGreedyArgument, IArgumentBase<String, ImplementedSender> {
-	
-	public static final Function<String, String> MAPPER = s -> s;
-	public static final ArgumentType<?> RAW_TYPE = StringArgumentType.greedyString();
-	
+public interface FloatArgumentBase<ImplementedSender> extends IArgumentBase<Float, ImplementedSender> {
+
+	public static final Function<Float, String> MAPPER = String::valueOf;
+
 	@Override
-	public default Class<String> getPrimitiveType() {
-		return String.class;
+	public default Class<Float> getPrimitiveType() {
+		return float.class;
 	}
 	
 	@Override
 	public default CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
+		return CommandAPIArgumentType.PRIMITIVE_FLOAT;
 	}
-
+	
 	@Override
-	public default <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
+	public default <CommandListenerWrapper> Float parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

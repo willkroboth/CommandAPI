@@ -37,6 +37,7 @@ import dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor;
 import dev.jorel.commandapi.executors.EntityCommandExecutor;
 import dev.jorel.commandapi.executors.EntityResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ExecutorType;
+import dev.jorel.commandapi.executors.IExecutorNormal;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.executors.NativeResultingCommandExecutor;
 import dev.jorel.commandapi.executors.PlayerCommandExecutor;
@@ -269,5 +270,12 @@ public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, 
 	public CommandAPICommand executesNative(NativeResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return this;
+	}
+
+	@Override
+	public <K extends IExecutorNormal<L>, L extends CommandSender> CommandAPICommandBase<CommandAPICommand, CommandSender, Argument<?>> executesPlayer(
+			K executor) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

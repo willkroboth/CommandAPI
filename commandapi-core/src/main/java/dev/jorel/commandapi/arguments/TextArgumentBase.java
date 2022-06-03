@@ -20,6 +20,9 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.Function;
+
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -29,28 +32,23 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents text, encased in quotes
  */
-public class TextArgument<ImplementedSender> extends ArgumentBase<String, ImplementedSender, TextArgument<ImplementedSender>> {
+public interface TextArgumentBase<ImplementedSender> extends IArgumentBase<String, ImplementedSender> {
 
-	/**
-	 * A string argument for one word, or multiple words encased in quotes
-	 * @param nodeName the name of the node for this argument
-	 */
-	public TextArgument(String nodeName) {
-		super(nodeName, StringArgumentType.string());
-	}
+	public static final Function<String, String> MAPPER = s -> s;
+	public static final ArgumentType<?> RAW_TYPE = StringArgumentType.string();
 
 	@Override
-	public Class<String> getPrimitiveType() {
+	public default Class<String> getPrimitiveType() {
 		return String.class;
 	}
 	
 	@Override
-	public CommandAPIArgumentType getArgumentType() {
+	public default CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.PRIMITIVE_TEXT;
 	}
 	
 	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
+	public default <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

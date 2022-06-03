@@ -20,17 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.exceptions.BadLiteralException;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents multiple LiteralArguments
  */
-public class MultiLiteralArgument<ImplementedSender>
-		extends ArgumentBase<String, ImplementedSender, MultiLiteralArgument<ImplementedSender>> {
+public class MultiLiteralArgument extends Argument<String> implements MultiLiteralArgumentBase<CommandSender> {
 
 	private String[] literals;
 	
@@ -49,27 +50,18 @@ public class MultiLiteralArgument<ImplementedSender>
 		this.literals = literals;
 	}
 
-	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
-
 	/**
 	 * Returns the literals that are present in this argument
 	 * @return the literals that are present in this argument
 	 */
+	@Override
 	public String[] getLiterals() {
 		return literals;
 	}
-	
+
 	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.MULTI_LITERAL;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		throw new IllegalStateException("Cannot parse MultiLiteralArgument");
+	public <CommandSourceStack> String parseArgument(BukkitNMS<CommandSourceStack> nms,
+			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return MultiLiteralArgumentBase.super.parseArgument(nms, cmdCtx, key);
 	}
 }

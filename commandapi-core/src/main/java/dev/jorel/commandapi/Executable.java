@@ -1,6 +1,7 @@
 package dev.jorel.commandapi;
 
 import dev.jorel.commandapi.arguments.ArgumentBase;
+import dev.jorel.commandapi.executors.IExecutorNormal;
 
 /**
  * This class represents something that is executable. This is mostly, {@link CommandAPICommandBase} instances, or can also be {@link CommandTreeBase} nodes and even {@link ArgumentBase} nodes in a tree
@@ -26,5 +27,13 @@ abstract class Executable<T extends Executable<T, ImplementedSender>, Implemente
 	public void setExecutor(CustomCommandExecutor<ImplementedSender> executor) {
 		this.executor = executor;
 	}
+
+	/**
+	 * Adds an executor to the current command builder
+	 * @param executor A lambda of type <code>(Player, Object[]) -&gt; ()</code> that will be executed when the command is run
+	 * @return this command builder
+	 */
+	@SuppressWarnings("unchecked")
+	public abstract <K extends IExecutorNormal<L>, L extends ImplementedSender> T executesPlayer(K executor);
 
 }

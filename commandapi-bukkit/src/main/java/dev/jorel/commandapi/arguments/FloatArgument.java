@@ -20,24 +20,26 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.exceptions.InvalidRangeException;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents primitive Java floats
  */
-public class FloatArgument<ImplementedSender> extends SafeOverrideableArgument<Float, Float, ImplementedSender, FloatArgument<ImplementedSender>> {
+public class FloatArgument extends UnaryBukkitSafeOverrideableArgument<Float> implements FloatArgumentBase<CommandSender> {
 
 	/**
 	 * A float argument
 	 * @param nodeName the name of the node for this argument
 	 */
 	public FloatArgument(String nodeName) {
-		super(nodeName, FloatArgumentType.floatArg(), String::valueOf);
+		super(nodeName, FloatArgumentType.floatArg(), MAPPER);
 	}
 	
 	/**
@@ -46,7 +48,7 @@ public class FloatArgument<ImplementedSender> extends SafeOverrideableArgument<F
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public FloatArgument(String nodeName, float min) {
-		super(nodeName, FloatArgumentType.floatArg(min), String::valueOf);
+		super(nodeName, FloatArgumentType.floatArg(min), MAPPER);
 	}
 	
 	/**
@@ -56,25 +58,15 @@ public class FloatArgument<ImplementedSender> extends SafeOverrideableArgument<F
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public FloatArgument(String nodeName, float min, float max) {
-		super(nodeName, FloatArgumentType.floatArg(min, max), String::valueOf);
+		super(nodeName, FloatArgumentType.floatArg(min, max), MAPPER);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}
 	}
-
-	@Override
-	public Class<Float> getPrimitiveType() {
-		return float.class;
-	}
 	
 	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_FLOAT;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> Float parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return cmdCtx.getArgument(key, getPrimitiveType());
+	public <CommandSourceStack> Float parseArgument(BukkitNMS<CommandSourceStack> nms,
+			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return FloatArgumentBase.super.parseArgument(nms, cmdCtx, key);
 	}
 }

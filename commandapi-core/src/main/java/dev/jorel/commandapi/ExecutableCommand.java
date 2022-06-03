@@ -3,12 +3,16 @@ package dev.jorel.commandapi;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+import dev.jorel.commandapi.arguments.ArgumentBase;
+
 /**
- * This is a base class for {@link CommandAPICommandBase} and {@link CommandTreeBase} command definitions
+ * This is a base class for {@link CommandAPICommandBase} and
+ * {@link CommandTreeBase} command definitions
  *
  * @param <T> return type for chain calls
  */
-abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSender>, ImplementedSender> extends Executable<T, ImplementedSender> {
+abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl extends ArgumentBase<?, ImplementedSender, ArgumentImpl>>
+		extends Executable<T, ImplementedSender> {
 
 	protected final CommandMetaData<ImplementedSender> meta;
 
@@ -22,6 +26,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Returns the name of this command
+	 * 
 	 * @return the name of this command
 	 */
 	public String getName() {
@@ -30,6 +35,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Applies a permission to the current command builder
+	 * 
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
@@ -41,6 +47,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Applies a permission to the current command builder
+	 * 
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
@@ -52,6 +59,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Applies a permission to the current command builder
+	 * 
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
@@ -63,6 +71,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Applies a permission to the current command builder
+	 * 
 	 * @param permission The permission node required to execute this command
 	 * @return this command builder
 	 */
@@ -88,6 +97,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Adds an array of aliases to the current command builder
+	 * 
 	 * @param aliases An array of aliases which can be used to execute this command
 	 * @return this command builder
 	 */
@@ -97,10 +107,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 		return (T) this;
 	}
 
-
-
 	/**
 	 * Returns the permission associated with this command
+	 * 
 	 * @return the permission associated with this command
 	 */
 	public CommandPermission getPermission() {
@@ -109,6 +118,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Sets the permission required to run this command
+	 * 
 	 * @param permission the permission required to run this command
 	 */
 	public void setPermission(CommandPermission permission) {
@@ -117,6 +127,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Returns an array of aliases that can be used to run this command
+	 * 
 	 * @return an array of aliases that can be used to run this command
 	 */
 	public String[] getAliases() {
@@ -125,6 +136,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Sets the aliases for this command
+	 * 
 	 * @param aliases the aliases for this command
 	 */
 	public void setAliases(String[] aliases) {
@@ -133,6 +145,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Returns the requirements that must be satisfied to run this command
+	 * 
 	 * @return the requirements that must be satisfied to run this command
 	 */
 	public Predicate<ImplementedSender> getRequirements() {
@@ -141,15 +154,18 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 
 	/**
 	 * Sets the requirements that must be satisfied to run this command
-	 * @param requirements the requirements that must be satisfied to run this command
+	 * 
+	 * @param requirements the requirements that must be satisfied to run this
+	 *                     command
 	 */
 	public void setRequirements(Predicate<ImplementedSender> requirements) {
 		this.meta.requirements = requirements;
 	}
 
 	/**
-	 * Sets the short description for this command. This is the help which is
-	 * shown in the main /help menu.
+	 * Sets the short description for this command. This is the help which is shown
+	 * in the main /help menu.
+	 * 
 	 * @param description the short description for this command
 	 * @return this command builder
 	 */
@@ -160,8 +176,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 	}
 
 	/**
-	 * Sets the full description for this command. This is the help which is
-	 * shown in the specific /help page for this command (e.g. /help mycommand).
+	 * Sets the full description for this command. This is the help which is shown
+	 * in the specific /help page for this command (e.g. /help mycommand).
+	 * 
 	 * @param description the full description for this command
 	 * @return this command builder
 	 */
@@ -175,8 +192,9 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 	 * Sets the short and full description for this command. This is a short-hand
 	 * for the {@link ExecutableCommand#withShortDescription} and
 	 * {@link ExecutableCommand#withFullDescription} methods.
+	 * 
 	 * @param shortDescription the short description for this command
-	 * @param fullDescription the full description for this command
+	 * @param fullDescription  the full description for this command
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
@@ -196,5 +214,5 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 	}
 
 	public abstract void register();
-	
+
 }

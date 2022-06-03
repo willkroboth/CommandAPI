@@ -29,7 +29,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.arguments.ArgumentBase;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
-import dev.jorel.commandapi.arguments.MultiLiteralArgument;
+import dev.jorel.commandapi.arguments.MultiLiteralArgumentBase;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
 import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 
@@ -37,7 +37,7 @@ import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
  * A builder used to create commands to be registered by the CommandAPI.
  */
 public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl extends ArgumentBase<?, ImplementedSender, ArgumentImpl>>
-		extends ExecutableCommand<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender> {
+		extends ExecutableCommand<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl> {
 
 	List<ArgumentImpl> args = new ArrayList<>();
 	List<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>> subcommands = new ArrayList<>();
@@ -150,7 +150,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
 		literals[0] = subcommand.meta.commandName;
 		System.arraycopy(subcommand.meta.aliases, 0, literals, 1, subcommand.meta.aliases.length);
-		MultiLiteralArgument<ImplementedSender> literal = (MultiLiteralArgument<ImplementedSender>) new MultiLiteralArgument<ImplementedSender>(literals)
+		MultiLiteralArgumentBase<ImplementedSender> literal = new MultiLiteralArgumentBase.MultiLiteralArgumentBaseImpl<ImplementedSender>(literals)
 			.withPermission(subcommand.meta.permission)
 			.withRequirement(subcommand.meta.requirements)
 			.setListed(false);

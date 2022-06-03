@@ -16,7 +16,7 @@ public class IntegerArgument extends UnaryBukkitSafeOverrideableArgument<Integer
 	 * @param nodeName the name of the node for this argument
 	 */
 	public IntegerArgument(String nodeName) {
-		super(nodeName, IntegerArgumentType.integer(), String::valueOf);
+		super(nodeName, IntegerArgumentType.integer(), MAPPER);
 	}
 	
 	/**
@@ -25,7 +25,7 @@ public class IntegerArgument extends UnaryBukkitSafeOverrideableArgument<Integer
 	 * @param min The minimum value this argument can take (inclusive)
 	 */
 	public IntegerArgument(String nodeName, int min) {
-		super(nodeName, IntegerArgumentType.integer(min), String::valueOf);
+		super(nodeName, IntegerArgumentType.integer(min), MAPPER);
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public class IntegerArgument extends UnaryBukkitSafeOverrideableArgument<Integer
 	 * @param max The maximum value this argument can take (inclusive)
 	 */
 	public IntegerArgument(String nodeName, int min, int max) {
-		super(nodeName, IntegerArgumentType.integer(min, max), String::valueOf);
+		super(nodeName, IntegerArgumentType.integer(min, max), MAPPER);
 		if(max < min) {
 			throw new InvalidRangeException();
 		}

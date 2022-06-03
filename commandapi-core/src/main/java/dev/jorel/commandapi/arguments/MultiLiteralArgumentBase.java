@@ -20,36 +20,60 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Function;
-
-import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.exceptions.BadLiteralException;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents arbitrary strings
+ * An argument that represents multiple LiteralArguments
  */
-public interface GreedyStringArgumentBase<ImplementedSender> extends IGreedyArgument, IArgumentBase<String, ImplementedSender> {
-	
-	public static final Function<String, String> MAPPER = s -> s;
-	public static final ArgumentType<?> RAW_TYPE = StringArgumentType.greedyString();
-	
+public interface MultiLiteralArgumentBase<ImplementedSender> extends IArgumentBase<String, ImplementedSender> {
+
 	@Override
 	public default Class<String> getPrimitiveType() {
 		return String.class;
 	}
+
+	/**
+	 * Returns the literals that are present in this argument
+	 * @return the literals that are present in this argument
+	 */
+	public String[] getLiterals();
 	
 	@Override
 	public default CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
+		return CommandAPIArgumentType.MULTI_LITERAL;
 	}
-
+	
 	@Override
 	public default <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return cmdCtx.getArgument(key, getPrimitiveType());
+		throw new IllegalStateException("Cannot parse MultiLiteralArgument");
+	}
+	
+	public static class MultiLiteralArgumentBaseImpl<ImplementedSender>
+			extends ArgumentBase<String, ImplementedSender, MultiLiteralArgumentBaseImpl<ImplementedSender>>
+			implements MultiLiteralArgumentBase<ImplementedSender> {
+		
+		String[] literals;
+
+		public MultiLiteralArgumentBaseImpl(final String... literals) {
+			super(null, null);
+			if(literals == null) {
+				throw new BadLiteralException(true);
+			}
+			if(literals.length == 0) {
+				throw new BadLiteralException(false);
+			}
+			this.literals = literals;
+		}
+
+		@Override
+		public String[] getLiterals() {
+			return this.literals;
+		}
+		
 	}
 }
