@@ -24,9 +24,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.Rotation;
 
 /**
@@ -53,7 +51,7 @@ public class RotationArgument extends SafeOverrideableArgument<Rotation, Rotatio
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Rotation parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Rotation parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getRotation(cmdCtx, key);
 	}

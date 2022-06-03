@@ -28,15 +28,13 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
  */
 @SuppressWarnings("rawtypes")
-public class ItemStackPredicateArgument extends Argument<Predicate> {
+public class ItemStackPredicateArgument extends BukkitArgument<Predicate> {
 	
 	/**
 	 * A ItemStack Predicate argument. Represents a predicate for itemstacks
@@ -57,7 +55,7 @@ public class ItemStackPredicateArgument extends Argument<Predicate> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Predicate<ItemStack> parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Predicate<ItemStack> parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getItemStackPredicate(cmdCtx, key);
 	}

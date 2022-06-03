@@ -26,11 +26,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit Sound object
@@ -42,7 +38,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), CommandAPIHandler.getInstance().getNMS()::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), ((BukkitNMS<?>)CommandAPIHandler.getInstance().getNMS())::convert);
 	}
 
 	@Override
@@ -61,7 +57,7 @@ public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implem
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Sound parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Sound parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getSound(cmdCtx, key);
 	}

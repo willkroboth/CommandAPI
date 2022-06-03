@@ -109,7 +109,7 @@ public abstract class Argument<T> extends ArgumentTree {
 	 */
 	public abstract <CommandSourceStack> T parseArgument(NMS<CommandSourceStack> nms,
 			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
-
+	
 	/////////////////
 	// Suggestions //
 	/////////////////

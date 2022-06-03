@@ -26,11 +26,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
 
 /**
@@ -64,7 +60,7 @@ public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[]
 	}
 	
 	@Override
-	public <CommandListenerWrapper> FunctionWrapper[] parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> FunctionWrapper[] parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getFunction(cmdCtx, key);
 	}

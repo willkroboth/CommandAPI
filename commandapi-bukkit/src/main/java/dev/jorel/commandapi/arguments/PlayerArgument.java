@@ -26,9 +26,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit Player object
@@ -56,7 +54,7 @@ public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Player parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Player parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getPlayer(cmdCtx, key);
 	}

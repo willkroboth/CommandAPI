@@ -30,12 +30,11 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.CommandAPICommandSender;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
 import dev.jorel.commandapi.nms.NMS;
@@ -49,10 +48,10 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 
 	private final String delimiter;
 	private final boolean allowDuplicates;
-	private final Function<CommandSender, Collection<T>> supplier;
+	private final Function<CommandAPICommandSender, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
 
-	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
+	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandAPICommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;

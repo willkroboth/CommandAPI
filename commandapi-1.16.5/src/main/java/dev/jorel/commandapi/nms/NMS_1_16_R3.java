@@ -187,7 +187,7 @@ import net.minecraft.server.v1_16_R3.Vec3D;
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
 @RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
-public class NMS_1_16_R3 implements NMS<CommandListenerWrapper> {
+public class NMS_1_16_R3 implements BukkitNMS<CommandListenerWrapper> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();
 	private static final VarHandle DATAPACKRESOURCES_B;

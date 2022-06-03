@@ -24,16 +24,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import net.kyori.adventure.text.Component;
 
 /**
  * An argument that represents raw JSON text
  */
-public class AdventureChatComponentArgument extends Argument<Component> {
+public class AdventureChatComponentArgument extends BukkitArgument<Component> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft
@@ -61,7 +59,7 @@ public class AdventureChatComponentArgument extends Argument<Component> {
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Component parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getAdventureChatComponent(cmdCtx, key);
 	}

@@ -18,40 +18,26 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.BukkitNMS;
+import org.bukkit.command.CommandSender;
 
 /**
- * An argument that represents the name of an objective criteria
+ * A class that represents information which you can use to generate
+ * suggestions.
+ * 
+ * @param sender       - the CommandSender typing this command
+ * @param previousArgs - the list of previously declared (and parsed) arguments
+ * @param currentInput - a string representing the full current input (including
+ *                     /)
+ * @param currentArg   - the current partially typed argument. For example
+ *                     "/mycmd tes" will return "tes"
  */
-public class ObjectiveCriteriaArgument extends BukkitArgument<String> {
+public class SuggestionInfo extends SuggestionInfoBase {
 
-	/**
-	 * An Objective criteria argument. Represents an objective criteria
-	 * @param nodeName the name of the node for this argument
-	 */
-	public ObjectiveCriteriaArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardCriteria());
-	}
-	
-	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
-
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.OBJECTIVE_CRITERIA;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> String parseArgument(BukkitNMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getObjectiveCriteria(cmdCtx, key);
+	public SuggestionInfo(CommandSender sender, Object[] previousArgs, String currentInput,
+			String currentArg) {
+		// TODO: Handle CommandSender -> CAPICS conversion
+		super(sender, previousArgs, currentInput, currentArg);
 	}
 }

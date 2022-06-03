@@ -24,17 +24,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.exceptions.SpigotNotFoundException;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import net.md_5.bungee.api.chat.BaseComponent;
 
 /**
  * An argument that represents chat with entity selectors
  */
-public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument {
+public class ChatArgument extends BukkitArgument<BaseComponent[]> implements IGreedyArgument {
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -63,7 +60,7 @@ public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyAr
 	}
 	
 	@Override
-	public <CommandListenerWrapper> BaseComponent[] parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> BaseComponent[] parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getChat(cmdCtx, key);
 	}

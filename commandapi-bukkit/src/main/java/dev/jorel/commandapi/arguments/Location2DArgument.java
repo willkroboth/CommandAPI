@@ -24,9 +24,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.Location2D;
 
 /**
@@ -76,7 +74,7 @@ public class Location2DArgument extends SafeOverrideableArgument<Location2D, Loc
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Location2D parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Location2D parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return isPrecise ? nms.getLocation2DPrecise(cmdCtx, key) : nms.getLocation2DBlock(cmdCtx, key);
 	}

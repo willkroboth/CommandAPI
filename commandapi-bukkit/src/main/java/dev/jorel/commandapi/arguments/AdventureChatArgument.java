@@ -24,17 +24,14 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.exceptions.PaperAdventureNotFoundException;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import net.kyori.adventure.text.Component;
 
 /**
  * An argument that represents chat with entity selectors
  */
-public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument {
+public class AdventureChatArgument extends BukkitArgument<Component> implements IGreedyArgument {
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy
@@ -63,7 +60,7 @@ public class AdventureChatArgument extends Argument<Component> implements IGreed
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Component parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Component parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getAdventureChat(cmdCtx, key);
 	}

@@ -26,9 +26,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit Enchantment object
@@ -54,7 +52,7 @@ public class EnchantmentArgument extends SafeOverrideableArgument<Enchantment, E
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Enchantment parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Enchantment parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getEnchantment(cmdCtx, key);
 	}

@@ -18,40 +18,7 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
-
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.BukkitNMS;
-
 /**
- * An argument that represents the name of an objective criteria
+ * Classes relating to the different FunctionalInterfaces for command execution
  */
-public class ObjectiveCriteriaArgument extends BukkitArgument<String> {
-
-	/**
-	 * An Objective criteria argument. Represents an objective criteria
-	 * @param nodeName the name of the node for this argument
-	 */
-	public ObjectiveCriteriaArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardCriteria());
-	}
-	
-	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
-
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.OBJECTIVE_CRITERIA;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> String parseArgument(BukkitNMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getObjectiveCriteria(cmdCtx, key);
-	}
-}
+package dev.jorel.commandapi.executors;

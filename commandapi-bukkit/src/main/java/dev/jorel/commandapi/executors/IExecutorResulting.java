@@ -18,40 +18,38 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi.executors;
 
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import org.bukkit.command.CommandSender;
 
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.BukkitNMS;
+import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
- * An argument that represents the name of an objective criteria
+ * The interface for resulting command executors
+ * @param <T> the commandsender
  */
-public class ObjectiveCriteriaArgument extends BukkitArgument<String> {
+public interface IExecutorResulting<T extends CommandSender> extends IExecutorTyped {
+	
+	/**
+	 * Executes the command executor with the provided command sender and the provided arguments.
+	 * @param sender the command sender for this command
+	 * @param args the arguments provided to this command
+	 * @return the value returned by this command if the command succeeds, 0 if the command fails
+	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	default int executeWith(CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+		return this.run((T) sender, args);
+	}
 
 	/**
-	 * An Objective criteria argument. Represents an objective criteria
-	 * @param nodeName the name of the node for this argument
+	 * Executes the command.
+	 * @param sender the command sender for this command
+	 * @param args the arguments provided to this command
+	 * @return the value returned by this command
+	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	public ObjectiveCriteriaArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardCriteria());
-	}
+	int run(T sender, Object[] args) throws WrapperCommandSyntaxException;
 	
-	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
-
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.OBJECTIVE_CRITERIA;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> String parseArgument(BukkitNMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getObjectiveCriteria(cmdCtx, key);
-	}
 }

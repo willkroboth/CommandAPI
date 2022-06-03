@@ -26,9 +26,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents the Bukkit PotionEffectType object
@@ -40,7 +38,7 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PotionEffectArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMobEffect(), CommandAPIHandler.getInstance().getNMS()::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMobEffect(), ((BukkitNMS<?>)CommandAPIHandler.getInstance().getNMS())::convert);
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectT
 	}
 	
 	@Override
-	public <CommandListenerWrapper> PotionEffectType parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> PotionEffectType parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getPotionEffect(cmdCtx, key);
 	}

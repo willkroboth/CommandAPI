@@ -24,9 +24,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.ParticleData;
 
 /**
@@ -40,7 +38,7 @@ public class ParticleArgument extends SafeOverrideableArgument<ParticleData, Par
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ParticleArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentParticle(), CommandAPIHandler.getInstance().getNMS()::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentParticle(), ((BukkitNMS<?>)CommandAPIHandler.getInstance().getNMS())::convert);
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class ParticleArgument extends SafeOverrideableArgument<ParticleData, Par
 	}
 	
 	@Override
-	public <CommandListenerWrapper> ParticleData<?> parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> ParticleData<?> parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getParticle(cmdCtx, key);
 	}

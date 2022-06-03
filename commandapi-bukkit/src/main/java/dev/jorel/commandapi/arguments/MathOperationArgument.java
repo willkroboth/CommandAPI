@@ -24,9 +24,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.MathOperation;
 
 /**
@@ -53,7 +51,7 @@ public class MathOperationArgument extends SafeOverrideableArgument<MathOperatio
 	}
 	
 	@Override
-	public <CommandListenerWrapper> MathOperation parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> MathOperation parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getMathOperation(cmdCtx, key);
 	}

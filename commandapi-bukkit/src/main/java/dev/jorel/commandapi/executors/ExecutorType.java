@@ -18,40 +18,45 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
-
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.nms.BukkitNMS;
+package dev.jorel.commandapi.executors;
 
 /**
- * An argument that represents the name of an objective criteria
+ * An enum representing the type of an executor
  */
-public class ObjectiveCriteriaArgument extends BukkitArgument<String> {
+public enum ExecutorType {
 
 	/**
-	 * An Objective criteria argument. Represents an objective criteria
-	 * @param nodeName the name of the node for this argument
+	 * An executor where the CommandSender is a Player
 	 */
-	public ObjectiveCriteriaArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentScoreboardCriteria());
-	}
-	
-	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
+	PLAYER,
 
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.OBJECTIVE_CRITERIA;
-	}
+	/**
+	 * An executor where the CommandSender is an Entity
+	 */
+	ENTITY, 
 	
-	@Override
-	public <CommandListenerWrapper> String parseArgument(BukkitNMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getObjectiveCriteria(cmdCtx, key);
-	}
+	/**
+	 * An executor where the CommandSender is a ConsoleCommandSender
+	 */
+	CONSOLE, 
+	
+	/**
+	 * An executor where the CommandSender is a BlockCommandSender
+	 */
+	BLOCK, 
+	
+	/**
+	 * An executor where the CommandSender is any CommandSender
+	 */
+	ALL, 
+	
+	/**
+	 * An executor where the CommandSender is a NativeProxyCommandSender
+	 */
+	PROXY,
+	
+	/**
+	 * An executor where the CommandSender is (always) a NativeProxyCommandSender
+	 */
+	NATIVE;
 }

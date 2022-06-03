@@ -31,15 +31,13 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.enums.EntitySelector;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents a selection of entities
  */
-public class EntitySelectorArgument<T> extends Argument<T> {
+public class EntitySelectorArgument<T> extends BukkitArgument<T> {
 	
 	private final EntitySelector selector;
 	
@@ -88,7 +86,7 @@ public class EntitySelectorArgument<T> extends Argument<T> {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> T parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return (T) nms.getEntitySelector(cmdCtx, key, selector);
 	}

@@ -1,10 +1,9 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
-import org.bukkit.command.CommandSender;
-
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 
 /**
  * This class stores metadata about a command
@@ -29,7 +28,7 @@ final class CommandMetaData {
 	/**
 	 * A predicate that a {@link CommandSender} must pass in order to execute the command
 	 */
-	Predicate<CommandSender> requirements = s -> true;
+	Predicate<CommandAPICommandSender> requirements = s -> true;
 	
 	/**
 	 * An optional short description for the command

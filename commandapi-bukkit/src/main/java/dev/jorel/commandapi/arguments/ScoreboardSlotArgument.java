@@ -24,9 +24,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
-import dev.jorel.commandapi.arguments.SafeOverrideableArgument;
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 
 /**
@@ -53,7 +51,7 @@ public class ScoreboardSlotArgument extends SafeOverrideableArgument<ScoreboardS
 	}
 	
 	@Override
-	public <CommandListenerWrapper> ScoreboardSlot parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> ScoreboardSlot parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return nms.getScoreboardSlot(cmdCtx, key);
 	}
