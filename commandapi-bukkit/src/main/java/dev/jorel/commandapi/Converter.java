@@ -38,6 +38,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.GreedyStringArgument;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.NativeProxyCommandSender;
 
 /**
@@ -193,7 +194,7 @@ public final class Converter {
 			org.bukkit.command.Command command = plugin.getCommand(commandName);
 			
 			if (command == null) {
-				command = CommandAPIHandler.getInstance().getNMS().getSimpleCommandMap()
+				command = BukkitNMS.get().getSimpleCommandMap()
 						.getCommand(commandName);
 			}
 			

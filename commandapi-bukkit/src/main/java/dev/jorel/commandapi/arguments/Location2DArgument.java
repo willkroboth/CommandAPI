@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.Location2D;
 /**
  * An argument that represents the Bukkit Location object in x and z directions
  */
-public class Location2DArgument extends SafeOverrideableArgument<Location2D, Location2D> {
+public class Location2DArgument extends BukkitSafeOverrideableArgument<Location2D, Location2D> {
 
 	/**
 	 * A Location argument. Represents Minecraft locations in 2D space. Defaults to LocationType.PRECISE_POSITION

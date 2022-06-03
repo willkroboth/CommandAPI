@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit EntityType object
  */
-public class EntityTypeArgument extends SafeOverrideableArgument<EntityType, EntityType> implements ICustomProvidedArgument {
+public class EntityTypeArgument extends BukkitSafeOverrideableArgument<EntityType, EntityType> implements ICustomProvidedArgument {
 
 	/**
 	 * An EntityType argument. Represents the type of an Entity

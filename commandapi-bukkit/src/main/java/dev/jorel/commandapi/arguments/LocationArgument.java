@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Location object
  */
-public class LocationArgument extends SafeOverrideableArgument<Location, Location> {
+public class LocationArgument extends BukkitSafeOverrideableArgument<Location, Location> {
 	
 	/**
 	 * A Location argument. Represents Minecraft locations. Defaults to LocationType.PRECISE_POSITION

@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.Time;
 /**
  * An argument that represents a duration of time in ticks
  */
-public class TimeArgument extends SafeOverrideableArgument<Integer, Time> {
+public class TimeArgument extends BukkitSafeOverrideableArgument<Integer, Time> {
 	
 	/**
 	 * A Time argument. Represents the number of in game ticks

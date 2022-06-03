@@ -31,14 +31,14 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends SafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
+public class SoundArgument extends BukkitSafeOverrideableArgument<Sound, Sound> implements ICustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object
 	 * @param nodeName the name of the node for this argument
 	 */
 	public SoundArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), ((BukkitNMS<?>)CommandAPIHandler.getInstance().getNMS())::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered(), BukkitNMS.get()::convert);
 	}
 
 	@Override

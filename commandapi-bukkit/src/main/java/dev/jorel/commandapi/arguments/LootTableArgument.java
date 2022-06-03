@@ -32,7 +32,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit LootTable object
  */
-public class LootTableArgument extends SafeOverrideableArgument<LootTable, LootTable> implements ICustomProvidedArgument {
+public class LootTableArgument extends BukkitSafeOverrideableArgument<LootTable, LootTable> implements ICustomProvidedArgument {
 	
 	/**
 	 * A LootTable argument that represents a Bukkit LootTable.

@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents a UUID
  */
-public class UUIDArgument extends SafeOverrideableArgument<UUID, UUID> {
+public class UUIDArgument extends BukkitSafeOverrideableArgument<UUID, UUID> {
 	
 	/**
 	 * A UUID argument. Represents an in-game entity UUID

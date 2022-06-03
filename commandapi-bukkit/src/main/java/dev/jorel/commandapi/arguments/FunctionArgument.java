@@ -32,7 +32,7 @@ import dev.jorel.commandapi.wrappers.FunctionWrapper;
 /**
  * An argument that represents Minecraft functions and tags
  */
-public class FunctionArgument extends SafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements ICustomProvidedArgument {
+public class FunctionArgument extends BukkitSafeOverrideableArgument<FunctionWrapper[], NamespacedKey> implements ICustomProvidedArgument {
 
 	/**
 	 * A Minecraft function. Plugin commands which plan to be used INSIDE a Minecraft

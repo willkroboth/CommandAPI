@@ -33,7 +33,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit ChatColor object
  */
-public class ChatColorArgument extends SafeOverrideableArgument<ChatColor, ChatColor> {
+public class ChatColorArgument extends BukkitSafeOverrideableArgument<ChatColor, ChatColor> {
 
 	/**
 	 * Constructs a ChatColor argument with a given node name. Represents a color or

@@ -31,14 +31,14 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit ItemStack object
  */
-public class ItemStackArgument extends SafeOverrideableArgument<ItemStack, ItemStack> {
+public class ItemStackArgument extends BukkitSafeOverrideableArgument<ItemStack, ItemStack> {
 
 	/**
 	 * An ItemStack argument. Always returns an itemstack of size 1
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ItemStackArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentItemStack(), ((BukkitNMS<?>)CommandAPIHandler.getInstance().getNMS())::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentItemStack(), BukkitNMS.get()::convert);
 	}
 
 	@Override

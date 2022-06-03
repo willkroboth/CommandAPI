@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Player object
  */
-public class PlayerArgument extends SafeOverrideableArgument<Player, Player> {
+public class PlayerArgument extends BukkitSafeOverrideableArgument<Player, Player> {
 
 	/**
 	 * A Player argument. Produces a single player, regardless of whether

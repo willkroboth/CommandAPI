@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.FloatRange;
 /**
  * An argument that represents a range of float values
  */
-public class FloatRangeArgument extends SafeOverrideableArgument<FloatRange, FloatRange> {
+public class FloatRangeArgument extends BukkitSafeOverrideableArgument<FloatRange, FloatRange> {
 
 	/**
 	 * A FloatRange argument that represents a range of floating-point values

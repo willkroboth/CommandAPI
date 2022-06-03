@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the name of a scoreboard Team
  */
-public class TeamArgument extends SafeOverrideableArgument<String, Team> {
+public class TeamArgument extends BukkitSafeOverrideableArgument<String, Team> {
 
 	/**
 	 * A Team argument. Represents a scoreboard Team

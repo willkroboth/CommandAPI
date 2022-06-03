@@ -33,7 +33,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
  * -180.0. Tilde notation can be used to specify a rotation relative to the
  * executor's yaw angle.
  */
-public class AngleArgument extends SafeOverrideableArgument<Float, Float> {
+public class AngleArgument extends BukkitSafeOverrideableArgument<Float, Float> {
 
 	/**
 	 * Constructs an AngleArgument with a given node name

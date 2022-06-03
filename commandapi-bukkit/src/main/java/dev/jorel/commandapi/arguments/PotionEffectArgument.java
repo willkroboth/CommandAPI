@@ -31,14 +31,14 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit PotionEffectType object
  */
-public class PotionEffectArgument extends SafeOverrideableArgument<PotionEffectType, PotionEffectType> {
+public class PotionEffectArgument extends BukkitSafeOverrideableArgument<PotionEffectType, PotionEffectType> {
 
 	/**
 	 * A PotionEffect argument. Represents status/potion effects
 	 * @param nodeName the name of the node for this argument
 	 */
 	public PotionEffectArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMobEffect(), ((BukkitNMS<?>)CommandAPIHandler.getInstance().getNMS())::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentMobEffect(), BukkitNMS.get()::convert);
 	}
 
 	@Override

@@ -1,15 +1,16 @@
 package dev.jorel.commandapi.arguments;
 
+import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
+
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.SuggestionInfo;
 
-import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
+import dev.jorel.commandapi.IStringTooltip;
+import dev.jorel.commandapi.SuggestionInfoBase;
 
 /**
  * This class represents suggestions for an argument. {@link ArgumentSuggestions} objects are best
@@ -29,7 +30,7 @@ public interface ArgumentSuggestions {
      *
      * @throws CommandSyntaxException if there is an error making suggestions
      */
-    CompletableFuture<Suggestions> suggest(SuggestionInfo info, SuggestionsBuilder builder)
+    CompletableFuture<Suggestions> suggest(SuggestionInfoBase info, SuggestionsBuilder builder)
         throws CommandSyntaxException;
 /* ANCHOR_END: Declaration */
 
@@ -55,7 +56,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions strings(Function<SuggestionInfo, String[]> suggestions) {
+	static ArgumentSuggestions strings(Function<SuggestionInfoBase, String[]> suggestions) {
 		return (info, builder) -> future(toSuggestions(builder, suggestions.apply(info)));
 	}
 
@@ -64,7 +65,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings asynchronously
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringsAsync(Function<SuggestionInfo, CompletableFuture<String[]>> suggestions) {
+	static ArgumentSuggestions stringsAsync(Function<SuggestionInfoBase, CompletableFuture<String[]>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(strings -> toSuggestions(builder, strings));
@@ -84,7 +85,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings with tooltips
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfo, IStringTooltip[]> suggestions) {
+	static ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfoBase, IStringTooltip[]> suggestions) {
 		return (info, builder) -> future(toSuggestions(builder, suggestions.apply(info)));
 	}
 
@@ -93,7 +94,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings with tooltips asynchronously
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringsWithTooltipsAsync(Function<SuggestionInfo, CompletableFuture<IStringTooltip[]>> suggestions) {
+	static ArgumentSuggestions stringsWithTooltipsAsync(Function<SuggestionInfoBase, CompletableFuture<IStringTooltip[]>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(stringsWithTooltips -> toSuggestions(builder, stringsWithTooltips));

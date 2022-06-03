@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ * Copyright 2022 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -23,6 +23,8 @@ package dev.jorel.commandapi.arguments;
 
 import java.util.function.Function;
 
+import org.bukkit.NamespacedKey;
+
 import com.mojang.brigadier.arguments.ArgumentType;
 
 /**
@@ -31,8 +33,8 @@ import com.mojang.brigadier.arguments.ArgumentType;
  * @param <T> The type of the underlying object that this argument casts to
  * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
-public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
-	
+public abstract class BukkitSafeOverrideableArgument<T, S> extends BukkitArgument<T> {
+
 	private final Function<S, String> mapper;
 
 	/**
@@ -43,7 +45,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * @param mapper   the mapping function that maps this argument type to a string
 	 *                 for suggestions
 	 */
-	protected SafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
+	protected BukkitSafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
 		super(nodeName, rawType);
 		this.mapper = mapper;
 	}
@@ -52,7 +54,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
 		return this;
 	}
-	
+
 	/**
 	 * Replaces the suggestions with a safe {@link SafeSuggestions} object. Use the static methods in safe suggestions to create safe suggestions.
 	 * @param suggestions The safe suggestions to use
@@ -61,5 +63,8 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	public final Argument<T> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
 		return this.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
-	
+
+	static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {
+		return mapper.andThen(NamespacedKey::toString);
+	}
 }

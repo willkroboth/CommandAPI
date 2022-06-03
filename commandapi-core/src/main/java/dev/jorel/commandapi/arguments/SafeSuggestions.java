@@ -1,7 +1,7 @@
 package dev.jorel.commandapi.arguments;
 
 import dev.jorel.commandapi.IStringTooltip;
-import dev.jorel.commandapi.SuggestionInfo;
+import dev.jorel.commandapi.SuggestionInfoBase;
 import dev.jorel.commandapi.Tooltip;
 
 import java.util.concurrent.CompletableFuture;
@@ -50,7 +50,7 @@ public interface SafeSuggestions<S> {
 	 * @param <T> type of the values
 	 * @return a SafeSuggestion object suggesting the result of the function
 	 */
-	static <T> SafeSuggestions<T> suggest(Function<SuggestionInfo, T[]> suggestions) {
+	static <T> SafeSuggestions<T> suggest(Function<SuggestionInfoBase, T[]> suggestions) {
 		return (mapper) -> ArgumentSuggestions.strings(info -> toStrings(mapper, suggestions.apply(info)));
 	}
 
@@ -60,7 +60,7 @@ public interface SafeSuggestions<S> {
 	 * @param <T> type of the values
 	 * @return a SafeSuggestion object suggestion the result of the asynchronous function
 	 */
-	static <T> SafeSuggestions<T> suggestAsync(Function<SuggestionInfo, CompletableFuture<T[]>> suggestions) {
+	static <T> SafeSuggestions<T> suggestAsync(Function<SuggestionInfoBase, CompletableFuture<T[]>> suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsAsync(info -> suggestions
 			.apply(info)
 			.thenApply(items -> toStrings(mapper, items)));
@@ -83,7 +83,7 @@ public interface SafeSuggestions<S> {
 	 * @param <T> type of the values
 	 * @return a SafeSuggestion object suggesting the result of the function
 	 */
-	static <T> SafeSuggestions<T> tooltips(Function<SuggestionInfo, Tooltip<T>[]> suggestions) {
+	static <T> SafeSuggestions<T> tooltips(Function<SuggestionInfoBase, Tooltip<T>[]> suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltips(info -> toStringsWithTooltips(mapper,
 			suggestions.apply(info)
 		));
@@ -95,7 +95,7 @@ public interface SafeSuggestions<S> {
 	 * @param <T> type of the values
 	 * @return a SafeSuggestion suggesting the result of the asynchronous function
 	 */
-	static <T> SafeSuggestions<T> tooltipsAsync(Function<SuggestionInfo, CompletableFuture<Tooltip<T>[]>> suggestions) {
+	static <T> SafeSuggestions<T> tooltipsAsync(Function<SuggestionInfoBase, CompletableFuture<Tooltip<T>[]>> suggestions) {
 		return (mapper) -> ArgumentSuggestions.stringsWithTooltipsAsync(info -> suggestions
 			.apply(info)
 			.thenApply(items -> toStringsWithTooltips(mapper, items)));

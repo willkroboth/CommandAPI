@@ -31,14 +31,14 @@ import dev.jorel.commandapi.wrappers.ParticleData;
  * An argument that represents the Bukkit Particle object
  */
 @SuppressWarnings("rawtypes")
-public class ParticleArgument extends SafeOverrideableArgument<ParticleData, ParticleData<?>> {
+public class ParticleArgument extends BukkitSafeOverrideableArgument<ParticleData, ParticleData<?>> {
 
 	/**
 	 * A Particle argument. Represents Minecraft particles
 	 * @param nodeName the name of the node for this argument
 	 */
 	public ParticleArgument(String nodeName) {
-		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentParticle(), ((BukkitNMS<?>)CommandAPIHandler.getInstance().getNMS())::convert);
+		super(nodeName, CommandAPIHandler.getInstance().getNMS()._ArgumentParticle(), BukkitNMS.get()::convert);
 	}
 
 	@Override

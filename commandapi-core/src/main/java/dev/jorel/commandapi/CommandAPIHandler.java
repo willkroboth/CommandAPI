@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Field;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -40,10 +41,8 @@ import java.util.function.Predicate;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.help.HelpTopic;
-import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -79,7 +78,7 @@ import dev.jorel.commandapi.preprocessor.RequireField;
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
-public class CommandAPIHandler<CommandSourceStack, CommandSender> {
+public class CommandAPIHandler<CommandSourceStack> {
 
 	private final static VarHandle COMMANDNODE_CHILDREN;
 	private final static VarHandle COMMANDNODE_LITERALS;

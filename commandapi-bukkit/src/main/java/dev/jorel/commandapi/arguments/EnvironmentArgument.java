@@ -33,7 +33,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Environment object
  */
-public class EnvironmentArgument extends SafeOverrideableArgument<Environment, Environment> {
+public class EnvironmentArgument extends BukkitSafeOverrideableArgument<Environment, Environment> {
 	
 	/**
 	 * An Environment argument. Represents Bukkit's Environment object
