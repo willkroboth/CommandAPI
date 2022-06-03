@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the name of a scoreboard objective
  */
-public class ObjectiveArgument extends BukkitSafeOverrideableArgument2<String, Objective> {
+public class ObjectiveArgument extends BinaryBukkitSafeOverrideableArgument<String, Objective> {
 
 	/**
 	 * An Objective argument. Represents a scoreboard objective

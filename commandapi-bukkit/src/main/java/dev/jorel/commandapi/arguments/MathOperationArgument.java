@@ -29,7 +29,7 @@ import dev.jorel.commandapi.wrappers.MathOperation;
 /**
  * An argument that represents Minecraft scoreboard math operations
  */
-public class MathOperationArgument extends BukkitSafeOverrideableArgument3<MathOperation> {
+public class MathOperationArgument extends UnaryBukkitSafeOverrideableArgument<MathOperation> {
 
 	/**
 	 * A MathOperation argument. Represents a math operation (e.g. addition, subtraction etc.)

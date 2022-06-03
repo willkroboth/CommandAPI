@@ -29,7 +29,7 @@ import dev.jorel.commandapi.wrappers.IntegerRange;
 /**
  * An argument that represents a range of integer values
  */
-public class IntegerRangeArgument extends BukkitSafeOverrideableArgument3<IntegerRange> {
+public class IntegerRangeArgument extends UnaryBukkitSafeOverrideableArgument<IntegerRange> {
 
 	/**
 	 * An IntegerRange argument. Represents a range of whole numbers

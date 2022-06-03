@@ -33,7 +33,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
  * An argument that represents x, y and z axes as an EnumSet of Axis
  */
 @SuppressWarnings("rawtypes")
-public class AxisArgument extends BukkitSafeOverrideableArgument2<EnumSet, EnumSet<Axis>> {
+public class AxisArgument extends BinaryBukkitSafeOverrideableArgument<EnumSet, EnumSet<Axis>> {
 
 	/**
 	 * Constructs an AxisArgument with a given node name. Represents the axes x, y and z

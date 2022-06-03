@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Enchantment object
  */
-public class EnchantmentArgument extends BukkitSafeOverrideableArgument3<Enchantment> {
+public class EnchantmentArgument extends UnaryBukkitSafeOverrideableArgument<Enchantment> {
 	
 	/**
 	 * An Enchantment argument. Represents an enchantment for items

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2022 Jorel Ali (Skepter) - MIT License
+ * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -20,23 +20,42 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-
 import java.util.function.Function;
 
-import org.bukkit.NamespacedKey;
-import org.bukkit.command.CommandSender;
-
 import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+
+import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An interface declaring methods required to override argument suggestions
- * 
- * @param <T> The type of the underlying object that this argument casts to
- * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
+ * An argument that represents arbitrary strings
  */
-public abstract class BukkitSafeOverrideableArgument2<T, S> extends BukkitSafeOverrideableArgument<T, S, BukkitSafeOverrideableArgument2<T, S>> {
+public interface GreedyStringArgumentBase<ImplementedSender> extends IGreedyArgument, IArgumentBase<String, ImplementedSender> {
+	
+	public static final Function<String, String> MAPPER = s -> s;
+	
+	@Override
+	public default Class<String> getPrimitiveType() {
+		return String.class;
+	}
+	
+	@Override
+	public default CommandAPIArgumentType getArgumentType() {
+		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
+	}
+	
+	/**
+	 * Not to be confused with the non-static method getRawType
+	 */
+	public static ArgumentType<?> getRawType() {
+		return StringArgumentType.greedyString();
+	}
 
-	protected BukkitSafeOverrideableArgument2(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
-		super(nodeName, rawType, mapper);
+	@Override
+	public default <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
 }

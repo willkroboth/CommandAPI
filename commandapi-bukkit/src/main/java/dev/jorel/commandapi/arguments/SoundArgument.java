@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Sound object
  */
-public class SoundArgument extends BukkitSafeOverrideableArgument3<Sound> implements ICustomProvidedArgument {
+public class SoundArgument extends UnaryBukkitSafeOverrideableArgument<Sound> implements ICustomProvidedArgument {
 	
 	/**
 	 * A Sound argument. Represents Bukkit's Sound object

@@ -32,7 +32,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Biome object
  */
-public class BiomeArgument extends BukkitSafeOverrideableArgument3<Biome> implements ICustomProvidedArgument {
+public class BiomeArgument extends UnaryBukkitSafeOverrideableArgument<Biome> implements ICustomProvidedArgument {
 	
 	/**
 	 * Constructs a BiomeArgument with a given node name.

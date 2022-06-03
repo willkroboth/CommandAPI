@@ -29,7 +29,7 @@ import dev.jorel.commandapi.wrappers.Rotation;
 /**
  * An argument that represents rotation as pitch and yaw
  */
-public class RotationArgument extends BukkitSafeOverrideableArgument3<Rotation> {
+public class RotationArgument extends UnaryBukkitSafeOverrideableArgument<Rotation> {
 
 	/**
 	 * A Rotation argument. Represents pitch and yaw

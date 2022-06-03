@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ * Copyright 2022 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -20,41 +20,20 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+
 import java.util.function.Function;
 
-import org.bukkit.World.Environment;
-
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-
-import dev.jorel.commandapi.nms.BukkitNMS;
+import com.mojang.brigadier.arguments.ArgumentType;
 
 /**
- * An argument that represents the Bukkit Environment object
+ * An interface declaring methods required to override argument suggestions
+ * 
+ * @param <T> The type of the underlying object that this argument casts to
+ * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
-public class EnvironmentArgument extends UnaryBukkitSafeOverrideableArgument<Environment> {
-	
-	/**
-	 * An Environment argument. Represents Bukkit's Environment object
-	 * @param nodeName the name of the node for this argument
-	 */
-	public EnvironmentArgument(String nodeName) {
-		super(nodeName, BukkitNMS.get()._ArgumentDimension(), ((Function<Environment, String>) Environment::name).andThen(String::toLowerCase));
-	}
-	
-	@Override
-	public Class<Environment> getPrimitiveType() {
-		return Environment.class;
-	}
-	
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.ENVIRONMENT;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> Environment parseArgument(BukkitNMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getDimension(cmdCtx, key);
+public abstract class BinaryBukkitSafeOverrideableArgument<T, S> extends BukkitSafeOverrideableArgument<T, S, BinaryBukkitSafeOverrideableArgument<T, S>> {
+
+	protected BinaryBukkitSafeOverrideableArgument(String nodeName, ArgumentType<?> rawType, Function<S, String> mapper) {
+		super(nodeName, rawType, mapper);
 	}
 }

@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit PotionEffectType object
  */
-public class PotionEffectArgument extends BukkitSafeOverrideableArgument3<PotionEffectType> {
+public class PotionEffectArgument extends UnaryBukkitSafeOverrideableArgument<PotionEffectType> {
 
 	/**
 	 * A PotionEffect argument. Represents status/potion effects

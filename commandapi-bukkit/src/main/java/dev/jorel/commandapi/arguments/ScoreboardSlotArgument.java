@@ -29,7 +29,7 @@ import dev.jorel.commandapi.wrappers.ScoreboardSlot;
 /**
  * An argument that represents the Bukkit ScoreboardSlot object
  */
-public class ScoreboardSlotArgument extends BukkitSafeOverrideableArgument3<ScoreboardSlot> {
+public class ScoreboardSlotArgument extends UnaryBukkitSafeOverrideableArgument<ScoreboardSlot> {
 
 	/**
 	 * A Display slot argument. Represents scoreboard slots

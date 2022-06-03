@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents an NBTContainer from the NBTAPI
  */
-public class NBTCompoundArgument extends BukkitSafeOverrideableArgument3<NBTContainer> {
+public class NBTCompoundArgument extends UnaryBukkitSafeOverrideableArgument<NBTContainer> {
 
 	/**
 	 * An NBT Compound Argument. Represents Minecraft's NBT Compound Tag using the NBT API

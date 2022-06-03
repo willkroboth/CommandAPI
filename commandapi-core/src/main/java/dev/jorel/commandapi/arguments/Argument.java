@@ -26,12 +26,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.mojang.brigadier.arguments.ArgumentType;
-import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.ArgumentTree;
 import dev.jorel.commandapi.CommandPermission;
-import dev.jorel.commandapi.nms.NMS;
 
 /**
  * The core abstract class for Command API arguments
@@ -39,22 +36,7 @@ import dev.jorel.commandapi.nms.NMS;
  * @param <T> The type of the underlying object that this argument casts to
  */
 public abstract class Argument<T, ImplementedSender, ArgumentImpl extends Argument<T, ImplementedSender, ArgumentImpl>>
-		extends ArgumentTree<ImplementedSender, ArgumentImpl> {
-
-	/**
-	 * Returns the primitive type of the current Argument. After executing a
-	 * command, this argument should yield an object of this returned class.
-	 * 
-	 * @return the type that this argument yields when the command is run
-	 */
-	public abstract Class<T> getPrimitiveType();
-
-	/**
-	 * Returns the argument type for this argument.
-	 * D
-	 * @return the argument type for this argument
-	 */
-	public abstract CommandAPIArgumentType getArgumentType();
+		extends ArgumentTree<ImplementedSender, ArgumentImpl> implements IArgumentBase<T, ImplementedSender> {
 
 	////////////////////////
 	// Raw Argument Types //
@@ -90,22 +72,7 @@ public abstract class Argument<T, ImplementedSender, ArgumentImpl extends Argume
 	public final String getNodeName() {
 		return this.nodeName;
 	}
-	
-	/**
-	 * Parses an argument, returning the specific Bukkit object that the argument
-	 * represents. This is intended for use by the internals of the CommandAPI and
-	 * isn't expected to be used outside the CommandAPI
-	 * 
-	 * @param <CommandSourceStack> the command source type
-	 * @param nms                      an instance of NMS
-	 * @param cmdCtx                   the context which ran this command
-	 * @param key                      the name of the argument node
-	 * @return the parsed object represented by this argument
-	 * @throws CommandSyntaxException if parsing fails
-	 */
-	public abstract <CommandSourceStack> T parseArgument(NMS<CommandSourceStack, ImplementedSender> nms,
-			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
-	
+
 	/////////////////
 	// Suggestions //
 	/////////////////

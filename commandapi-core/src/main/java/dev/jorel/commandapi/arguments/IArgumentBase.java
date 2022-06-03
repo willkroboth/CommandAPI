@@ -20,40 +20,43 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.nms.NMS;
 
 /**
- * An argument that represents arbitrary strings
+ * An interface for argument bases
  */
-public class GreedyStringArgument<ImplementedSender>
-		extends SafeOverrideableArgument<String, String, ImplementedSender, GreedyStringArgument<ImplementedSender>>
-		implements IGreedyArgument {
-	
+public interface IArgumentBase<T, ImplementedSender> {
+
 	/**
-	 * A string argument for a string of any length
-	 * @param nodeName the name of the node for this argument
+	 * Returns the primitive type of the current Argument. After executing a
+	 * command, this argument should yield an object of this returned class.
+	 * 
+	 * @return the type that this argument yields when the command is run
 	 */
-	public GreedyStringArgument(String nodeName) {
-		super(nodeName, StringArgumentType.greedyString(), s -> s);
-	}
+	public Class<T> getPrimitiveType();
 
-	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
+	/**
+	 * Returns the argument type for this argument.
+	 * 
+	 * @return the argument type for this argument
+	 */
+	public CommandAPIArgumentType getArgumentType();
 
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_GREEDY_STRING;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return cmdCtx.getArgument(key, getPrimitiveType());
-	}
+	/**
+	 * Parses an argument, returning the specific Bukkit object that the argument
+	 * represents. This is intended for use by the internals of the CommandAPI and
+	 * isn't expected to be used outside the CommandAPI
+	 * 
+	 * @param <CommandSourceStack> the command source type
+	 * @param nms                  an instance of NMS
+	 * @param cmdCtx               the context which ran this command
+	 * @param key                  the name of the argument node
+	 * @return the parsed object represented by this argument
+	 * @throws CommandSyntaxException if parsing fails
+	 */
+	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 }

@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit Recipe object
  */
-public class RecipeArgument extends BukkitSafeOverrideableArgument3<Recipe> implements ICustomProvidedArgument {
+public class RecipeArgument extends UnaryBukkitSafeOverrideableArgument<Recipe> implements ICustomProvidedArgument {
 
 	/**
 	 * A Recipe argument. Represents a Bukkit Recipe or ComplexRecipe

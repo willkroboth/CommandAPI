@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit ItemStack object
  */
-public class ItemStackArgument extends BukkitSafeOverrideableArgument3<ItemStack> {
+public class ItemStackArgument extends UnaryBukkitSafeOverrideableArgument<ItemStack> {
 
 	/**
 	 * An ItemStack argument. Always returns an itemstack of size 1

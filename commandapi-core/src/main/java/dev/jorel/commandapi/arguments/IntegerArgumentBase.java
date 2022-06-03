@@ -20,6 +20,9 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
+import java.util.function.Function;
+
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -30,52 +33,41 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java ints
  */
-public class IntegerArgument<ImplementedSender> extends SafeOverrideableArgument<Integer, Integer, ImplementedSender, IntegerArgument<ImplementedSender>> {
+public interface IntegerArgumentBase<ImplementedSender> extends IArgumentBase<Integer, ImplementedSender> {
 
-	/**
-	 * An integer argument
-	 * @param nodeName the name of the node for this argument
-	 */
-	public IntegerArgument(String nodeName) {
-		super(nodeName, IntegerArgumentType.integer(), String::valueOf);
-	}
-	
-	/**
-	 * An integer argument with a minimum value
-	 * @param nodeName the name of the node for this argument
-	 * @param min The minimum value this argument can take (inclusive)
-	 */
-	public IntegerArgument(String nodeName, int min) {
-		super(nodeName, IntegerArgumentType.integer(min), String::valueOf);
-	}
-	
-	/**
-	 * An integer argument with a minimum and maximum value
-	 * @param nodeName the name of the node for this argument
-	 * @param min The minimum value this argument can take (inclusive)
-	 * @param max The maximum value this argument can take (inclusive)
-	 */
-	public IntegerArgument(String nodeName, int min, int max) {
-		super(nodeName, IntegerArgumentType.integer(min, max), String::valueOf);
-		if(max < min) {
-			throw new InvalidRangeException();
-		}
-	}
-	
+	public static final Function<Integer, String> MAPPER = String::valueOf;
+
 	@Override
-	public Class<Integer> getPrimitiveType() {
+	public default Class<Integer> getPrimitiveType() {
 		return int.class;
 	}
-	
+
 	@Override
-	public CommandAPIArgumentType getArgumentType() {
+	public default CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.PRIMITIVE_INTEGER;
 	}
-	
+
+	/**
+	 * Not to be confused with the non-static method getRawType
+	 */
+	static ArgumentType<?> getRawType() {
+		return IntegerArgumentType.integer();
+	}
+
+	public static ArgumentType<?> getRawType(int min) {
+		return IntegerArgumentType.integer(min);
+	}
+
+	public static ArgumentType<?> getRawType(int min, int max) {
+		if (max < min) {
+			throw new InvalidRangeException();
+		}
+		return IntegerArgumentType.integer(min, max);
+	}
+
 	@Override
-	public <CommandListenerWrapper> Integer parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
+	public default <CommandListenerWrapper> Integer parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
-	
 }

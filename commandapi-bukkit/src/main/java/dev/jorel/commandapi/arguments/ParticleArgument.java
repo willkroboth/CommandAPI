@@ -30,7 +30,7 @@ import dev.jorel.commandapi.wrappers.ParticleData;
  * An argument that represents the Bukkit Particle object
  */
 @SuppressWarnings("rawtypes")
-public class ParticleArgument extends BukkitSafeOverrideableArgument2<ParticleData, ParticleData<?>> {
+public class ParticleArgument extends BinaryBukkitSafeOverrideableArgument<ParticleData, ParticleData<?>> {
 
 	/**
 	 * A Particle argument. Represents Minecraft particles
