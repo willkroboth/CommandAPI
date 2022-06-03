@@ -28,7 +28,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the name of an objective criteria
  */
-public class ObjectiveCriteriaArgument extends BukkitArgument<String> {
+public class ObjectiveCriteriaArgument extends Argument<String> {
 
 	/**
 	 * An Objective criteria argument. Represents an objective criteria

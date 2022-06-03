@@ -36,7 +36,7 @@ import dev.jorel.commandapi.nms.NMS;
  *
  * @param <T> the return type of this argument
  */
-public class CustomArgument<T> extends BukkitArgument<T> {
+public class CustomArgument<T> extends Argument<T> {
 	
 	private CustomArgumentInfoParser<T> infoParser;
 	private boolean keyed;

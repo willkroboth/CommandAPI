@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents a simple String
  */
-public class StringArgument extends BukkitArgument<String> {
+public class StringArgument extends Argument<String> {
 	
 	/**
 	 * A string argument for one word

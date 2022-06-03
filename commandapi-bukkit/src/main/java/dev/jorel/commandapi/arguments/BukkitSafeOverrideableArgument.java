@@ -34,7 +34,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
  * @param <T> The type of the underlying object that this argument casts to
  * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
-public abstract class BukkitSafeOverrideableArgument<T, S, ArgumentImpl extends BukkitSafeOverrideableArgument<T, S, ArgumentImpl>> extends BukkitArgument<T> {
+public abstract class BukkitSafeOverrideableArgument<T, S, ArgumentImpl extends BukkitSafeOverrideableArgument<T, S, ArgumentImpl>> extends Argument<T> {
 
 	private final Function<S, String> mapper;
 

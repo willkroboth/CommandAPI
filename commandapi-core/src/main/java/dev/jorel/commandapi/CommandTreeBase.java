@@ -3,12 +3,12 @@ package dev.jorel.commandapi;
 import java.util.ArrayList;
 import java.util.List;
 
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentBase;
 
 /**
  * This is the root node for creating a command as a tree
  */
-public abstract class CommandTreeBase<ImplementedSender, ArgumentImpl extends Argument<?, ImplementedSender, ArgumentImpl>>
+public abstract class CommandTreeBase<ImplementedSender, ArgumentImpl extends ArgumentBase<?, ImplementedSender, ArgumentImpl>>
 		extends ExecutableCommand<CommandTreeBase<ImplementedSender, ArgumentImpl>, ImplementedSender> {
 
 	private final List<ArgumentTree<ImplementedSender, ArgumentImpl>> arguments = new ArrayList<>();

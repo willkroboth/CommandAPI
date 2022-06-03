@@ -31,7 +31,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
  * An argument that represents a <code>Predicate&lt;Block&gt;</code>
  */
 @SuppressWarnings("rawtypes")
-public class BlockPredicateArgument extends BukkitArgument<Predicate> {
+public class BlockPredicateArgument extends Argument<Predicate> {
 	
 	/**
 	 * Constructs a BlockPredicateArgument with a given node name. Represents a predicate for blocks 

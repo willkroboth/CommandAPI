@@ -32,12 +32,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.arguments.AdvancementArgument;
 import dev.jorel.commandapi.arguments.AngleArgument;
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentBase;
 import dev.jorel.commandapi.arguments.AxisArgument;
 import dev.jorel.commandapi.arguments.BiomeArgument;
 import dev.jorel.commandapi.arguments.BlockPredicateArgument;
 import dev.jorel.commandapi.arguments.BlockStateArgument;
 import dev.jorel.commandapi.arguments.BooleanArgument;
+import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;

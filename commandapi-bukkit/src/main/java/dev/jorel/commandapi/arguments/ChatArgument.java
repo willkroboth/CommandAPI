@@ -30,7 +30,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 /**
  * An argument that represents chat with entity selectors
  */
-public class ChatArgument extends BukkitArgument<BaseComponent[]> implements IGreedyArgument {
+public class ChatArgument extends Argument<BaseComponent[]> implements IGreedyArgument {
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy

@@ -110,6 +110,8 @@ import dev.jorel.commandapi.arguments.ChatArgument;
 import dev.jorel.commandapi.arguments.ChatColorArgument;
 import dev.jorel.commandapi.arguments.ChatComponentArgument;
 import dev.jorel.commandapi.arguments.CustomArgument;
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
+import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
 import dev.jorel.commandapi.arguments.EnchantmentArgument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.EntityTypeArgument;
@@ -137,15 +139,13 @@ import dev.jorel.commandapi.arguments.RecipeArgument;
 import dev.jorel.commandapi.arguments.RotationArgument;
 import dev.jorel.commandapi.arguments.SafeSuggestions;
 import dev.jorel.commandapi.arguments.ScoreHolderArgument;
+import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.arguments.ScoreboardSlotArgument;
 import dev.jorel.commandapi.arguments.SoundArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.arguments.TeamArgument;
 import dev.jorel.commandapi.arguments.TextArgument;
 import dev.jorel.commandapi.arguments.TimeArgument;
-import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
-import dev.jorel.commandapi.arguments.CustomArgument.MessageBuilder;
-import dev.jorel.commandapi.arguments.ScoreHolderArgument.ScoreHolderType;
 import dev.jorel.commandapi.enums.EntitySelector;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutorType;
@@ -902,7 +902,7 @@ new CommandAPICommand("tpworld")
 
 /* ANCHOR: customarguments2 */
 // Function that returns our custom argument
-public BukkitArgument<World> worldArgument(String nodeName) {
+public Argument<World> worldArgument(String nodeName) {
     
     // Construct our CustomArgument that takes in a String input and returns a World object
     return new CustomArgument<World>(nodeName, info -> {

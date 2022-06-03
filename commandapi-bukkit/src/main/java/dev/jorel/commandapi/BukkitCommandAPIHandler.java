@@ -17,10 +17,10 @@ import org.bukkit.permissions.Permission;
 
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
-import dev.jorel.commandapi.arguments.BukkitArgument;
+import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
-public class BukkitCommandAPIHandler<CommandSourceStack> extends CommandAPIHandler<BukkitNMS<CommandSourceStack>, CommandSourceStack, CommandSender, BukkitArgument<?>> {
+public class BukkitCommandAPIHandler<CommandSourceStack> extends CommandAPIHandler<BukkitNMS<CommandSourceStack>, CommandSourceStack, CommandSender, Argument<?>> {
 
 	final List<RegisteredCommand> registeredCommands; //Keep track of what has been registered for type checking
 	private static BukkitCommandAPIHandler<?> instance;
@@ -260,7 +260,7 @@ public class BukkitCommandAPIHandler<CommandSourceStack> extends CommandAPIHandl
 	}
 
 	@Override
-	public CommandAPICommandBase<? extends CommandAPICommandBase<?, CommandSender, BukkitArgument<?>>, CommandSender, BukkitArgument<?>> createCommandBase(
+	public CommandAPICommandBase<? extends CommandAPICommandBase<?, CommandSender, Argument<?>>, CommandSender, Argument<?>> createCommandBase(
 			CommandMetaData<CommandSender> meta) {
 			return new CommandAPICommand(meta);
 	}

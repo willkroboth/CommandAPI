@@ -4,24 +4,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentBase;
 
 /**
  * This is a base class for arguments, allowing them to behave as tree nodes in a {@link CommandTreeBase}
  */
-public class ArgumentTree<ImplementedSender, ArgumentImpl extends Argument<?, ImplementedSender, ArgumentImpl>> extends Executable<ArgumentTree<ImplementedSender, ArgumentImpl>, ImplementedSender> {
+public class ArgumentTree<ImplementedSender, ArgumentImpl extends ArgumentBase<?, ImplementedSender, ArgumentImpl>> extends Executable<ArgumentTree<ImplementedSender, ArgumentImpl>, ImplementedSender> {
 
 	final List<ArgumentTree<ImplementedSender, ArgumentImpl>> arguments = new ArrayList<>();
-	final Argument<?, ImplementedSender, ArgumentImpl> argument;
+	final ArgumentBase<?, ImplementedSender, ArgumentImpl> argument;
 
 	protected ArgumentTree() {
-		if(!(this instanceof Argument<?, ?, ?> argument)) {
+		if(!(this instanceof ArgumentBase<?, ?, ?> argument)) {
 			throw new IllegalArgumentException("Implicit inherited constructor must be from Argument");
 		}
-		this.argument = (Argument<?, ImplementedSender, ArgumentImpl>) argument;
+		this.argument = (ArgumentBase<?, ImplementedSender, ArgumentImpl>) argument;
 	}
 
-	public ArgumentTree(final Argument<?, ImplementedSender, ArgumentImpl> argument) {
+	public ArgumentTree(final ArgumentBase<?, ImplementedSender, ArgumentImpl> argument) {
 		this.argument = argument;
 		//Copy the executor in case any executions were defined on the argument
 		this.executor = argument.executor;

@@ -35,7 +35,7 @@ import dev.jorel.commandapi.CommandPermission;
  * 
  * @param <T> The type of the underlying object that this argument casts to
  */
-public abstract class Argument<T, ImplementedSender, ArgumentImpl extends Argument<T, ImplementedSender, ArgumentImpl>>
+public abstract class ArgumentBase<T, ImplementedSender, ArgumentImpl extends ArgumentBase<T, ImplementedSender, ArgumentImpl>>
 		extends ArgumentTree<ImplementedSender, ArgumentImpl> implements IArgumentBase<T, ImplementedSender> {
 
 	////////////////////////
@@ -51,7 +51,7 @@ public abstract class Argument<T, ImplementedSender, ArgumentImpl extends Argume
 	 * @param nodeName the name to assign to this argument node 
 	 * @param rawType the NMS or brigadier type to be used for this argument
 	 */
-	protected Argument(String nodeName, ArgumentType<?> rawType) {
+	protected ArgumentBase(String nodeName, ArgumentType<?> rawType) {
 		this.nodeName = nodeName;
 		this.rawType = rawType;
 	}

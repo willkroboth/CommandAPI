@@ -30,7 +30,7 @@ import net.kyori.adventure.text.Component;
 /**
  * An argument that represents raw JSON text
  */
-public class AdventureChatComponentArgument extends BukkitArgument<Component> {
+public class AdventureChatComponentArgument extends Argument<Component> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft

@@ -36,7 +36,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents a selection of entities
  */
-public class EntitySelectorArgument<T> extends BukkitArgument<T> {
+public class EntitySelectorArgument<T> extends Argument<T> {
 	
 	private final EntitySelector selector;
 	

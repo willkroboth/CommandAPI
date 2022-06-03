@@ -52,7 +52,7 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import com.mojang.brigadier.tree.CommandNode;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentBase;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.ICustomProvidedArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -70,7 +70,7 @@ import dev.jorel.commandapi.preprocessor.RequireField;
 @RequireField(in = CommandNode.class, name = "literals", ofType = Map.class)
 @RequireField(in = CommandNode.class, name = "arguments", ofType = Map.class)
 @RequireField(in = CommandContext.class, name = "arguments", ofType = Map.class)
-public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, ImplementedSender>, CommandSourceStack, ImplementedSender, ArgumentImpl extends Argument<?, ImplementedSender, ArgumentImpl>> {
+public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, ImplementedSender>, CommandSourceStack, ImplementedSender, ArgumentImpl extends ArgumentBase<?, ImplementedSender, ArgumentImpl>> {
 
 	private final static VarHandle COMMANDNODE_CHILDREN;
 	private final static VarHandle COMMANDNODE_LITERALS;
@@ -225,7 +225,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * @return a brigadier command which is registered internally
 	 * @throws CommandSyntaxException if an error occurs when the command is ran
 	 */
-	Command<CommandSourceStack> generateCommand(Argument<?, ImplementedSender, ArgumentImpl>[] args, CustomCommandExecutor<ImplementedSender> executor, boolean converted)
+	Command<CommandSourceStack> generateCommand(ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args, CustomCommandExecutor<ImplementedSender> executor, boolean converted)
 			throws CommandSyntaxException {
 
 		// Generate our command from executor
@@ -276,12 +276,12 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * @return an Object[] which can be used in (sender, args) -> 
 	 * @throws CommandSyntaxException
 	 */
-	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, Argument<?, ImplementedSender, ArgumentImpl>[] args) throws CommandSyntaxException {
+	Object[] argsToObjectArr(CommandContext<CommandSourceStack> cmdCtx, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args) throws CommandSyntaxException {
 		// Array for arguments for executor
 		List<Object> argList = new ArrayList<>();
 
 		// Populate array
-		for (Argument<?, ImplementedSender, ArgumentImpl> argument : args) {
+		for (ArgumentBase<?, ImplementedSender, ArgumentImpl> argument : args) {
 			if(argument.isListed()) {
 				argList.add(parseArgument(cmdCtx, argument.getNodeName(), argument, args));
 			}
@@ -301,7 +301,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * @return the standard Bukkit type
 	 * @throws CommandSyntaxException
 	 */
-	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, Argument<?, ImplementedSender, ArgumentImpl> value, Argument<?, ImplementedSender, ArgumentImpl>[] args) throws CommandSyntaxException {
+	Object parseArgument(CommandContext<CommandSourceStack> cmdCtx, String key, ArgumentBase<?, ImplementedSender, ArgumentImpl> value, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args) throws CommandSyntaxException {
 		if(value.isListed()) {
 			// TODO: CustomArgument support
 //			if(value instanceof CustomArgument<?, ImplementedSender> customValue) {
@@ -344,7 +344,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	 * the provided command. Returns true if multiliteral arguments were present (and expanded) and
 	 * returns false if multiliteral arguments were not present.
 	 */
-	private boolean expandMultiLiterals(CommandMetaData<ImplementedSender> meta, final Argument<?, ImplementedSender, ArgumentImpl>[] args,
+	private boolean expandMultiLiterals(CommandMetaData<ImplementedSender> meta, final ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args,
 			CustomCommandExecutor<ImplementedSender> executor,
 			boolean converted) throws CommandSyntaxException, IOException {
 
@@ -362,8 +362,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 							.withRequirement(superArg.getRequirements());
 
 					//Reconstruct the list of arguments and place in the new literals
-					Argument<?, ImplementedSender, ArgumentImpl>[] newArgs = Arrays.copyOf(args, args.length);
-					newArgs[index] = (Argument<?, ImplementedSender, ArgumentImpl>) litArg;
+					ArgumentBase<?, ImplementedSender, ArgumentImpl>[] newArgs = Arrays.copyOf(args, args.length);
+					newArgs[index] = (ArgumentBase<?, ImplementedSender, ArgumentImpl>) litArg;
 					register(meta, newArgs, executor, converted);
 				}
 				return true;
@@ -376,7 +376,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	// allow    /race invite<LiteralArgument> player<PlayerArgument>
 	// disallow /race invite<LiteralArgument> player<EntitySelectorArgument>
 	// Return true if conflict was present, otherwise return false
-	private boolean hasCommandConflict(String commandName, Argument<?, ImplementedSender, ArgumentImpl>[] args, String argumentsAsString) {
+	private boolean hasCommandConflict(String commandName, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args, String argumentsAsString) {
 		List<String[]> regArgs = new ArrayList<>();
 		for(RegisteredCommand rCommand : registeredCommands) {
 			if(rCommand.command().equals(commandName)) {
@@ -426,8 +426,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	}
 
 	// Links arg -> Executor
-	private ArgumentBuilder<CommandSourceStack, ?> generateInnerArgument(Command<CommandSourceStack> command, Argument<?, ImplementedSender, ArgumentImpl>[] args) {
-		Argument<?, ImplementedSender, ArgumentImpl> innerArg = args[args.length - 1];
+	private ArgumentBuilder<CommandSourceStack, ?> generateInnerArgument(Command<CommandSourceStack> command, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args) {
+		ArgumentBase<?, ImplementedSender, ArgumentImpl> innerArg = args[args.length - 1];
 
 		// Handle Literal arguments
 		if (innerArg instanceof LiteralArgument<?> literalArgument) {
@@ -448,10 +448,10 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	}
 
 	// Links arg1 -> arg2 -> ... argN -> innermostArgument
-	private ArgumentBuilder<CommandSourceStack, ?> generateOuterArguments(ArgumentBuilder<CommandSourceStack, ?> innermostArgument, Argument<?, ImplementedSender, ArgumentImpl>[] args) {
+	private ArgumentBuilder<CommandSourceStack, ?> generateOuterArguments(ArgumentBuilder<CommandSourceStack, ?> innermostArgument, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args) {
 		ArgumentBuilder<CommandSourceStack, ?> outer = innermostArgument;
 		for (int i = args.length - 2; i >= 0; i--) {
-			Argument<?, ImplementedSender, ArgumentImpl> outerArg = args[i];
+			ArgumentBase<?, ImplementedSender, ArgumentImpl> outerArg = args[i];
 
 			// Handle Literal arguments
 			if (outerArg instanceof LiteralArgument<?> literalArgument) {
@@ -476,7 +476,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	// Builds our NMS command using the given arguments for this method, then
 	// registers it
 	void register(CommandMetaData<ImplementedSender> meta,
-			final Argument<?, ImplementedSender, ArgumentImpl>[] args, CustomCommandExecutor<ImplementedSender> executor, boolean converted)
+			final ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args, CustomCommandExecutor<ImplementedSender> executor, boolean converted)
 					throws CommandSyntaxException, IOException {
 
 		//"Expands" our MultiLiterals into Literals
@@ -486,7 +486,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 
 		// Create a list of argument names
 		StringBuilder builder = new StringBuilder();
-		for(Argument<?, ImplementedSender, ArgumentImpl> arg : args) {
+		for(ArgumentBase<?, ImplementedSender, ArgumentImpl> arg : args) {
 			builder.append(arg.getNodeName()).append("<").append(arg.getClass().getSimpleName()).append("> ");
 		}
 
@@ -507,7 +507,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 			return;
 		} else {
 			List<String> argumentsString = new ArrayList<>();
-			for(Argument<?, ImplementedSender, ArgumentImpl> arg : args) {
+			for(ArgumentBase<?, ImplementedSender, ArgumentImpl> arg : args) {
 				argumentsString.add(arg.getNodeName() + ":" + arg.getClass().getSimpleName());
 			}
 			registeredCommands.add(new RegisteredCommand(commandName, argumentsString));
@@ -599,7 +599,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 
 	// Gets a RequiredArgumentBuilder for a DynamicSuggestedStringArgument
 	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderDynamic(
-			final Argument<?, ImplementedSender, ArgumentImpl>[] args, Argument<?, ImplementedSender, ArgumentImpl> argument) {
+			final ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args, ArgumentBase<?, ImplementedSender, ArgumentImpl> argument) {
 
 		if(argument.getOverriddenSuggestions().isPresent()) {
 			// Override the suggestions
@@ -612,7 +612,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 	}
 
 	// Gets a RequiredArgumentBuilder for an argument, given a SuggestionProvider
-	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderWithProvider(Argument<?, ImplementedSender, ArgumentImpl> argument, Argument<?, ImplementedSender, ArgumentImpl>[] args, SuggestionProvider<CommandSourceStack> provider) {
+	RequiredArgumentBuilder<CommandSourceStack, ?> getRequiredArgumentBuilderWithProvider(ArgumentBase<?, ImplementedSender, ArgumentImpl> argument, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args, SuggestionProvider<CommandSourceStack> provider) {
 		SuggestionProvider<CommandSourceStack> newSuggestionsProvider = provider;
 
 		// If we have suggestions to add, combine provider with the suggestions
@@ -646,8 +646,8 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 				.suggests(newSuggestionsProvider);
 	}
 
-	static <ImplementedSender, ArgumentImpl extends Argument<?, ImplementedSender, ArgumentImpl>> Argument<?, ImplementedSender, ArgumentImpl> getArgument(Argument<?, ImplementedSender, ArgumentImpl>[] args, String nodeName) {
-		for(Argument<?, ImplementedSender, ArgumentImpl> arg : args) {
+	static <ImplementedSender, ArgumentImpl extends ArgumentBase<?, ImplementedSender, ArgumentImpl>> ArgumentBase<?, ImplementedSender, ArgumentImpl> getArgument(ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args, String nodeName) {
+		for(ArgumentBase<?, ImplementedSender, ArgumentImpl> arg : args) {
 			if(arg.getNodeName().equals(nodeName)) {
 				return arg;
 			}
@@ -655,11 +655,11 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 		throw new NoSuchElementException("Could not find argument '" + nodeName + "'");
 	}
 
-	Object[] generatePreviousArguments(CommandContext<CommandSourceStack> context, Argument<?, ImplementedSender, ArgumentImpl>[] args, String nodeName) throws CommandSyntaxException {
+	Object[] generatePreviousArguments(CommandContext<CommandSourceStack> context, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args, String nodeName) throws CommandSyntaxException {
 		// Populate Object[], which is our previously filled arguments
 		List<Object> previousArguments = new ArrayList<>();
 
-		for (Argument<?, ImplementedSender, ArgumentImpl> arg : args) {
+		for (ArgumentBase<?, ImplementedSender, ArgumentImpl> arg : args) {
 			if (arg.getNodeName().equals(nodeName)) {
 				break;
 			}
@@ -685,7 +685,7 @@ public abstract class CommandAPIHandler<NMSType extends NMS<CommandSourceStack, 
 		return previousArguments.toArray();
 	}
 
-	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, Argument<?, ImplementedSender, ArgumentImpl>[] args, boolean overrideSuggestions) {
+	SuggestionProvider<CommandSourceStack> toSuggestions(String nodeName, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] args, boolean overrideSuggestions) {
 		return (CommandContext<CommandSourceStack> context, SuggestionsBuilder builder) -> {
 			SuggestionInfoBase<ImplementedSender> suggestionInfo = new SuggestionInfoBase<ImplementedSender>(NMS.getImplementedSenderFromCSS(context.getSource()), generatePreviousArguments(context, args, nodeName), builder.getInput(), builder.getRemaining());
 			Optional<ArgumentSuggestions<ImplementedSender>> suggestionsToAddOrOverride = overrideSuggestions ? getArgument(args, nodeName).getOverriddenSuggestions() : getArgument(args, nodeName).getIncludedSuggestions();

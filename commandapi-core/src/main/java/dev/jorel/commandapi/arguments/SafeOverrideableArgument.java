@@ -32,7 +32,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
  * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
 public abstract class SafeOverrideableArgument<T, S, ImplementedSender, ArgumentImpl extends SafeOverrideableArgument<T, S, ImplementedSender, ArgumentImpl>>
-		extends Argument<T, ImplementedSender, ArgumentImpl> {
+		extends ArgumentBase<T, ImplementedSender, ArgumentImpl> {
 	
 	private final Function<S, String> mapper;
 

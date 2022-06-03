@@ -27,7 +27,7 @@ import java.util.List;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentBase;
 import dev.jorel.commandapi.arguments.IGreedyArgument;
 import dev.jorel.commandapi.arguments.MultiLiteralArgument;
 import dev.jorel.commandapi.exceptions.GreedyArgumentException;
@@ -36,7 +36,7 @@ import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 /**
  * A builder used to create commands to be registered by the CommandAPI.
  */
-public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl extends Argument<?, ImplementedSender, ArgumentImpl>>
+public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl extends ArgumentBase<?, ImplementedSender, ArgumentImpl>>
 		extends ExecutableCommand<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender> {
 
 	List<ArgumentImpl> args = new ArrayList<>();
@@ -179,7 +179,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 			CommandAPIBase.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
-			Argument<?, ImplementedSender, ArgumentImpl>[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
+			ArgumentBase<?, ImplementedSender, ArgumentImpl>[] argumentsArr = args == null ? new ArgumentBase[0] : args.toArray(new ArgumentBase[0]);
 			
 			// Check IGreedyArgument constraints 
 			for(int i = 0, numGreedyArgs = 0; i < argumentsArr.length; i++) {
@@ -191,7 +191,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 			}
 			
 			//Assign the command's permissions to arguments if the arguments don't already have one
-			for(Argument<?, ImplementedSender, ?> argument : argumentsArr) {
+			for(ArgumentBase<?, ImplementedSender, ?> argument : argumentsArr) {
 				if(argument.getArgumentPermission() == null) {
 					argument.withPermission(meta.permission);
 				}
@@ -210,7 +210,7 @@ public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, I
 		
 	}
 
-	abstract void register(CommandMetaData<ImplementedSender> meta, Argument<?, ImplementedSender, ArgumentImpl>[] argumentsArr,
+	abstract void register(CommandMetaData<ImplementedSender> meta, ArgumentBase<?, ImplementedSender, ArgumentImpl>[] argumentsArr,
 			CustomCommandExecutor<ImplementedSender> executor, boolean isConverted)
 			throws CommandSyntaxException, IOException;
 	

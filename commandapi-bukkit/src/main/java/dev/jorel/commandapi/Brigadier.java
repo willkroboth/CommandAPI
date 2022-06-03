@@ -37,7 +37,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.tree.RootCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.BukkitArgument;
+import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
@@ -123,7 +123,7 @@ public final class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommand command) {
 		try {
-			BukkitArgument<?>[] args = command.getArguments().toArray(new BukkitArgument[0]);
+			Argument<?>[] args = command.getArguments().toArray(new Argument[0]);
 			return BukkitCommandAPIHandler.getInstance().generateCommand(args, command.getExecutor(),
 					command.isConverted());
 		} catch (CommandSyntaxException e) {

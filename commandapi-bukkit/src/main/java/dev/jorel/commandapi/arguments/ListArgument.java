@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2018, 2020 Jorel Ali (Skepter) - MIT License
+ * Copyright 2022 Jorel Ali (Skepter) - MIT License
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -20,42 +20,44 @@
  *******************************************************************************/
 package dev.jorel.commandapi.arguments;
 
-import java.util.function.Predicate;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.Function;
 
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.command.CommandSender;
 
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
- * An argument that represents a <code>Predicate&lt;ItemStack&gt;</code>
+ * An argument that accepts a list of objects
+ * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
-public class ItemStackPredicateArgument extends Argument<Predicate> {
-	
-	/**
-	 * A ItemStack Predicate argument. Represents a predicate for itemstacks
-	 * @param nodeName the name of the node for this argument 
-	 */
-	public ItemStackPredicateArgument(String nodeName) {
-		super(nodeName, BukkitNMS.get()._ArgumentItemPredicate());
+public class ListArgument<T> extends Argument<List> implements IGreedyArgument, ListArgumentBase<T, CommandSender> {
+
+	private final String delimiter;
+	private final boolean allowDuplicates;
+	private final Function<CommandSender, Collection<T>> supplier;
+	private final Function<T, IStringTooltip> mapper;
+
+	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandSender, Collection<T>> supplier, Function<T, IStringTooltip> mapper) {
+		super(nodeName, StringArgumentType.greedyString());
+		this.delimiter = delimiter;
+		this.allowDuplicates = allowDuplicates;
+		this.supplier = supplier;
+		this.mapper = mapper;
+
+		this.replaceSuggestions(ListArgumentBase.super.applySuggestions(delimiter, allowDuplicates, supplier, mapper));
 	}
 
 	@Override
-	public Class<Predicate> getPrimitiveType() {
-		return Predicate.class;
-	}
-	
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.ITEMSTACK_PREDICATE;
-	}
-	
-	@Override
-	public <CommandListenerWrapper> Predicate<ItemStack> parseArgument(BukkitNMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return nms.getItemStackPredicate(cmdCtx, key);
+	public <CommandSourceStack> List<T> parseArgument(BukkitNMS<CommandSourceStack> nms,
+			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
+		return ListArgumentBase.super.parseArgument(nms, cmdCtx, key, delimiter, allowDuplicates, supplier, mapper);
 	}
 }

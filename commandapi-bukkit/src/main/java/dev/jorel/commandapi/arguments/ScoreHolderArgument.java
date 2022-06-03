@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents a scoreholder's name, or a collection of scoreholder names
  */
-public class ScoreHolderArgument<T> extends BukkitArgument<T> {
+public class ScoreHolderArgument<T> extends Argument<T> {
 		
 	private final boolean single;
 	

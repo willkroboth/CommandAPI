@@ -1,9 +1,9 @@
 package dev.jorel.commandapi;
 
-import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentBase;
 
 /**
- * This class represents something that is executable. This is mostly, {@link CommandAPICommandBase} instances, or can also be {@link CommandTreeBase} nodes and even {@link Argument} nodes in a tree
+ * This class represents something that is executable. This is mostly, {@link CommandAPICommandBase} instances, or can also be {@link CommandTreeBase} nodes and even {@link ArgumentBase} nodes in a tree
  *
  * @param <T> return type for chain calls
  */

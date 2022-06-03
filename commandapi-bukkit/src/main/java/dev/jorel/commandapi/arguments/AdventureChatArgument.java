@@ -30,7 +30,7 @@ import net.kyori.adventure.text.Component;
 /**
  * An argument that represents chat with entity selectors
  */
-public class AdventureChatArgument extends BukkitArgument<Component> implements IGreedyArgument {
+public class AdventureChatArgument extends Argument<Component> implements IGreedyArgument {
 
 	/**
 	 * Constructs a Chat argument with a given node name. Represents fancy greedy

@@ -30,7 +30,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 /**
  * An argument that represents raw JSON text
  */
-public class ChatComponentArgument extends BukkitArgument<BaseComponent[]> {
+public class ChatComponentArgument extends Argument<BaseComponent[]> {
 
 	/**
 	 * Constructs a ChatComponnent argument with a given node name. Represents raw JSON text, used in Book MetaData, Chat and other various areas of Minecraft

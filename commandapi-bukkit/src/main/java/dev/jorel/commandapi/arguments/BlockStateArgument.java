@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.BukkitNMS;
 /**
  * An argument that represents the Bukkit BlockData object
  */
-public class BlockStateArgument extends BukkitArgument<BlockData> {
+public class BlockStateArgument extends Argument<BlockData> {
 
 	/**
 	 * Constructs a BlockStateArgument with a given node name.

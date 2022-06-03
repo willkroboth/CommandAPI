@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents text, encased in quotes
  */
-public class TextArgument<ImplementedSender> extends Argument<String, ImplementedSender, TextArgument<ImplementedSender>> {
+public class TextArgument<ImplementedSender> extends ArgumentBase<String, ImplementedSender, TextArgument<ImplementedSender>> {
 
 	/**
 	 * A string argument for one word, or multiple words encased in quotes

@@ -30,7 +30,6 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -41,116 +40,107 @@ import dev.jorel.commandapi.nms.NMS;
 
 /**
  * An argument that accepts a list of objects
+ * 
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
-public class ListArgument<T, ImplementedSender> extends Argument<List, ImplementedSender, ListArgument<T, ImplementedSender>> implements IGreedyArgument {
+public interface ListArgumentBase<T, ImplementedSender>
+		extends IGreedyArgument, IArgumentBase<List, ImplementedSender> {
 
-	private final String delimiter;
-	private final boolean allowDuplicates;
-	private final Function<ImplementedSender, Collection<T>> supplier;
-	private final Function<T, IStringTooltip> mapper;
-
-	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<ImplementedSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
-		super(nodeName, StringArgumentType.greedyString());
-		this.delimiter = delimiter;
-		this.allowDuplicates = allowDuplicates;
-		this.supplier = supplier;
-		this.mapper = suggestionsMapper;
-
-		applySuggestions();
-	}
-
-	private void applySuggestions() {
-		this.replaceSuggestions(ArgumentSuggestions.stringsWithTooltips((SuggestionInfoBase<ImplementedSender> info) -> {
+	public default ArgumentSuggestions<ImplementedSender> applySuggestions(String delimiter, boolean allowDuplicates,
+			Function<ImplementedSender, Collection<T>> supplier, Function<T, IStringTooltip> mapper) {
+		return ArgumentSuggestions.stringsWithTooltips((SuggestionInfoBase<ImplementedSender> info) -> {
 			String currentArg = info.currentArg();
 
 			// This need not be a sorted map because entries in suggestions are
 			// automatically sorted anyway
 			Set<IStringTooltip> values = new HashSet<>();
-			for(T object : supplier.apply(info.sender())) {
+			for (T object : supplier.apply(info.sender())) {
 				values.add(mapper.apply(object));
 			}
 
 			List<String> currentArgList = new ArrayList<>();
-			for(String str : currentArg.split(Pattern.quote(delimiter))) {
+			for (String str : currentArg.split(Pattern.quote(delimiter))) {
 				currentArgList.add(str);
 			}
 
-			if(!allowDuplicates) {
-				for(String str : currentArgList) {
+			if (!allowDuplicates) {
+				for (String str : currentArgList) {
 					IStringTooltip valueToRemove = null;
-					for(IStringTooltip value : values) {
-						if(value.getSuggestion().equals(str)) {
+					for (IStringTooltip value : values) {
+						if (value.getSuggestion().equals(str)) {
 							valueToRemove = value;
 							break;
 						}
 					}
-					if(valueToRemove != null) {
+					if (valueToRemove != null) {
 						values.remove(valueToRemove);
 					}
 				}
 			}
 
 			// If we end with the specified delimiter, we prompt for the next entry
-			if(currentArg.endsWith(delimiter)) {
+			if (currentArg.endsWith(delimiter)) {
 				// 'values' now contains a set of all objects that are NOT in
 				// the current list that the user is typing. We want to return
 				// a list of the current argument + each value that isn't
 				// in the list (i.e. each key in 'values')
 				IStringTooltip[] returnValues = new IStringTooltip[values.size()];
 				int i = 0;
-				for(IStringTooltip str : values) {
+				for (IStringTooltip str : values) {
 					returnValues[i] = StringTooltip.of(currentArg + str.getSuggestion(), str.getTooltip());
 					i++;
 				}
 				return returnValues;
 			} else {
 				// Auto-complete the current value that the user is typing
-				// Remove the last argument and turn it into a string as the base for suggestions
+				// Remove the last argument and turn it into a string as the base for
+				// suggestions
 				String valueStart = currentArgList.remove(currentArgList.size() - 1);
-				String suggestionBase = currentArgList.isEmpty() ? "" : String.join(delimiter, currentArgList) + delimiter;
+				String suggestionBase = currentArgList.isEmpty() ? ""
+						: String.join(delimiter, currentArgList) + delimiter;
 
 				List<IStringTooltip> returnValues = new ArrayList<>();
-				for(IStringTooltip str : values) {
-					if(str.getSuggestion().startsWith(valueStart)) {
+				for (IStringTooltip str : values) {
+					if (str.getSuggestion().startsWith(valueStart)) {
 						returnValues.add(StringTooltip.of(suggestionBase + str.getSuggestion(), str.getTooltip()));
 					}
 				}
 				return returnValues.toArray(new IStringTooltip[0]);
 			}
-		}));
+		});
 	}
 
 	@Override
-	public Class<List> getPrimitiveType() {
+	public default Class<List> getPrimitiveType() {
 		return List.class;
 	}
 
 	@Override
-	public CommandAPIArgumentType getArgumentType() {
+	public default CommandAPIArgumentType getArgumentType() {
 		return CommandAPIArgumentType.LIST;
 	}
 
-	@Override
-	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+	public default <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
+			CommandContext<CommandListenerWrapper> cmdCtx, String key, String delimiter, boolean allowDuplicates,
+			Function<ImplementedSender, Collection<T>> supplier, Function<T, IStringTooltip> mapper)
+			throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
-		for(T object : supplier.apply(nms.getImplementedSenderFromCSS(cmdCtx.getSource()))) {
+		for (T object : supplier.apply(nms.getImplementedSenderFromCSS(cmdCtx.getSource()))) {
 			values.put(mapper.apply(object), object);
 		}
 
 		// If the argument argument's value is in the list of values, include it
 		List<T> list = new ArrayList<>();
 		String[] strArr = cmdCtx.getArgument(key, String.class).split(Pattern.quote(delimiter));
-		for(String str : strArr) {
+		for (String str : strArr) {
 			// Yes, this isn't an instant lookup HashMap, but this is the best we can do
-			for(IStringTooltip value : values.keySet()) {
-				if(value.getSuggestion().equals(str)) {
-					if(allowDuplicates) {
+			for (IStringTooltip value : values.keySet()) {
+				if (value.getSuggestion().equals(str)) {
+					if (allowDuplicates) {
 						list.add(values.get(value));
-					} else if(!list.contains(values.get(value))) {
+					} else if (!list.contains(values.get(value))) {
 						list.add(values.get(value));
 					}
 				}

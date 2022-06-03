@@ -9,9 +9,9 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.nms.NMS;
 
-public abstract class BukkitArgument<T> extends Argument<T, CommandSender, BukkitArgument<T>> {
+public abstract class Argument<T> extends ArgumentBase<T, CommandSender, Argument<T>> {
 
-	protected BukkitArgument(String nodeName, ArgumentType<?> rawType) {
+	protected Argument(String nodeName, ArgumentType<?> rawType) {
 		super(nodeName, rawType);
 	}
 	
