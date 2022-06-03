@@ -36,10 +36,10 @@ import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
 /**
  * A builder used to create commands to be registered by the CommandAPI.
  */
-abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableCommand<CommandAPICommandBase<ImplementedSender>, ImplementedSender> {
+public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, ImplementedSender>, ImplementedSender> extends ExecutableCommand<CommandAPICommandBase<T, ImplementedSender>, ImplementedSender> {
 
-	private List<Argument<?, ImplementedSender>> args = new ArrayList<>();
-	private List<CommandAPICommandBase<ImplementedSender>> subcommands = new ArrayList<>();
+	List<Argument<?, ImplementedSender>> args = new ArrayList<>();
+	List<CommandAPICommandBase<T, ImplementedSender>> subcommands = new ArrayList<>();
 	boolean isConverted;
 	
 	/**
@@ -51,7 +51,7 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 		this.isConverted = false;
 	}
 
-	protected CommandAPICommandBase(CommandMetaData<ImplementedSender> metaData) {
+	public CommandAPICommandBase(CommandMetaData<ImplementedSender> metaData) {
 		super(metaData);
 		this.isConverted = false;
 	}
@@ -61,9 +61,9 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 	 * @param args A <code>List</code> that represents the arguments that this command can accept
 	 * @return this command builder
 	 */
-	public CommandAPICommandBase<ImplementedSender> withArguments(List<Argument<?, ImplementedSender>> args) {
+	public T withArguments(List<Argument<?, ImplementedSender>> args) {
 		this.args.addAll(args);
-		return this;
+		return (T) this;
 	}
 	
 	/**
@@ -71,9 +71,10 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 	 * @param args Arguments that this command can accept
 	 * @return this command builder
 	 */
-	public CommandAPICommandBase<ImplementedSender> withArguments(Argument<?, ImplementedSender>... args) {
+	@SafeVarargs
+	public final T withArguments(Argument<?, ImplementedSender>... args) {
 		this.args.addAll(Arrays.asList(args));
-		return this;
+		return (T) this;
 	}
 	
 	/**
@@ -81,9 +82,9 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 	 * @param subcommand the subcommand to add as a child of this command 
 	 * @return this command builder
 	 */
-	public CommandAPICommandBase<ImplementedSender> withSubcommand(CommandAPICommandBase<ImplementedSender> subcommand) {
+	public T withSubcommand(T subcommand) {
 		this.subcommands.add(subcommand);
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -106,7 +107,7 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 	 * Returns the list of subcommands that this command has
 	 * @return the list of subcommands that this command has
 	 */
-	public List<CommandAPICommandBase<ImplementedSender>> getSubcommands() {
+	public List<CommandAPICommandBase<T, ImplementedSender>> getSubcommands() {
 		return subcommands;
 	}
 
@@ -114,7 +115,7 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 	 * Sets the list of subcommands that this command has
 	 * @param subcommands the list of subcommands that this command has
 	 */
-	public void setSubcommands(List<CommandAPICommandBase<ImplementedSender>> subcommands) {
+	public void setSubcommands(List<CommandAPICommandBase<T, ImplementedSender>> subcommands) {
 		this.subcommands = subcommands;
 	}
 
@@ -133,13 +134,13 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 	 * @param isConverted whether this command is converted or not
 	 * @return this command builder
 	 */
-	CommandAPICommandBase<ImplementedSender> setConverted(boolean isConverted) {
+	T setConverted(boolean isConverted) {
 		this.isConverted = isConverted;
-		return this;
+		return (T) this;
 	}
 	
 	//Expand subcommands into arguments
-	private void flatten(CommandAPICommandBase<ImplementedSender> rootCommand, List<Argument<?, ImplementedSender>> prevArguments, CommandAPICommandBase<ImplementedSender> subcommand) {
+	private void flatten(CommandAPICommandBase<T, ImplementedSender> rootCommand, List<Argument<?, ImplementedSender>> prevArguments, CommandAPICommandBase<T, ImplementedSender> subcommand) {
 		
 		String[] literals = new String[subcommand.meta.aliases.length + 1];
 		literals[0] = subcommand.meta.commandName;
@@ -160,7 +161,7 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 			rootCommand.register();
 		}
 		
-		for(CommandAPICommandBase<ImplementedSender> subsubcommand : new ArrayList<>(subcommand.subcommands)) {
+		for(CommandAPICommandBase<T, ImplementedSender> subsubcommand : new ArrayList<>(subcommand.subcommands)) {
 			flatten(rootCommand, new ArrayList<>(prevArguments), subsubcommand);
 		}
 	}
@@ -169,8 +170,8 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 	 * Registers the command
 	 */
 	public void register() {
-		if(!CommandAPI.canRegister()) {
-			CommandAPI.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
+		if(!CommandAPIBase.canRegister()) {
+			CommandAPIBase.logWarning("Command /" + meta.commandName + " is being registered after the server had loaded. Undefined behavior ahead!");
 		}
 		try {
 			Argument<?, ImplementedSender>[] argumentsArr = args == null ? new Argument[0] : args.toArray(new Argument[0]);
@@ -195,7 +196,7 @@ abstract class CommandAPICommandBase<ImplementedSender> extends ExecutableComman
 				register(meta, argumentsArr, executor, isConverted);
 			}
 			
-			for(CommandAPICommandBase<ImplementedSender> subcommand : this.subcommands) {
+			for(CommandAPICommandBase<T, ImplementedSender> subcommand : this.subcommands) {
 				flatten(this, new ArrayList<>(), subcommand);
 			}
 		} catch (InvalidCommandNameException | GreedyArgumentException | CommandSyntaxException | IOException e) {

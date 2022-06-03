@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * This is a base class for {@link CommandAPICommandBase} and {@link CommandTree} command definitions
+ * This is a base class for {@link CommandAPICommandBase} and {@link CommandTreeBase} command definitions
  *
  * @param <T> return type for chain calls
  */
@@ -191,7 +191,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSende
 	 * CommandAPI.unregister() and then registering the command using .register()
 	 */
 	public void override() {
-		CommandAPI.unregister(this.meta.commandName, true);
+		CommandAPIBase.unregister(this.meta.commandName, true);
 		register();
 	}
 

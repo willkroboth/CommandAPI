@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * This is a base class for arguments, allowing them to behave as tree nodes in a {@link CommandTree}
+ * This is a base class for arguments, allowing them to behave as tree nodes in a {@link CommandTreeBase}
  */
 public class ArgumentTree<ImplementedSender> extends Executable<ArgumentTree<ImplementedSender>, ImplementedSender> {
 

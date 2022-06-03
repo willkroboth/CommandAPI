@@ -3,7 +3,7 @@ package dev.jorel.commandapi;
 import dev.jorel.commandapi.arguments.Argument;
 
 /**
- * This class represents something that is executable. This is mostly, {@link CommandAPICommandBase} instances, or can also be {@link CommandTree} nodes and even {@link Argument} nodes in a tree
+ * This class represents something that is executable. This is mostly, {@link CommandAPICommandBase} instances, or can also be {@link CommandTreeBase} nodes and even {@link Argument} nodes in a tree
  *
  * @param <T> return type for chain calls
  */

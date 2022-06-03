@@ -98,7 +98,7 @@ class CustomCommandExecutor<ImplementedSender> {
 			return execute(executors, sender, args, ExecutorType.ALL);
 		} else {
 			throw new WrapperCommandSyntaxException(new SimpleCommandExceptionType(
-					new LiteralMessage(CommandAPI.getConfiguration().getMissingImplementationMessage()
+					new LiteralMessage(CommandAPIBase.getConfiguration().getMissingImplementationMessage()
 							.replace("%s", sender.getClass().getSimpleName().toLowerCase())
 							.replace("%S", sender.getClass().getSimpleName()))).create());
 		}

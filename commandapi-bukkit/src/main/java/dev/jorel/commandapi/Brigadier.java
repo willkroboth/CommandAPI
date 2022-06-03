@@ -38,6 +38,7 @@ import com.mojang.brigadier.tree.RootCommandNode;
 
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * The Brigadier class is used to access some of the internals of the CommandAPI
@@ -121,8 +122,10 @@ public final class Brigadier {
 	 */
 	public static Command fromCommand(CommandAPICommandBase command) {
 		try {
-			return BukkitCommandAPIHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]),
-					command.getExecutor(), command.isConverted());
+			Argument<?, CommandSender>[] args = (Argument<?, CommandSender>[]) command.getArguments()
+					.toArray(new Argument[0]);
+			return BukkitCommandAPIHandler.getInstance().generateCommand(args, command.getExecutor(),
+					command.isConverted());
 		} catch (CommandSyntaxException e) {
 			e.printStackTrace();
 		}
@@ -160,7 +163,8 @@ public final class Brigadier {
 	 * @return a RequiredArgumentBuilder that represents the provided argument
 	 */
 	public static RequiredArgumentBuilder fromArgument(Argument argument) {
-		return BukkitCommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(new Argument[] { argument }, argument);
+		return BukkitCommandAPIHandler.getInstance().getRequiredArgumentBuilderDynamic(new Argument[] { argument },
+				argument);
 	}
 
 	/**
@@ -204,10 +208,9 @@ public final class Brigadier {
 	 *         CommandSender
 	 */
 	public static Object getBrigadierSourceFromCommandSender(CommandSender sender) {
-		return BukkitBukkitNMS.get().getCLWFromCommandSender(sender);
+		return BukkitNMS.get().getCLWFromCommandSender(sender);
 	}
 
-	
 	/**
 	 * Returns a Bukkit CommandSender from a Brigadier CommandContext
 	 * 
@@ -215,6 +218,6 @@ public final class Brigadier {
 	 * @return a Bukkit CommandSender from the provided Brigadier CommandContext
 	 */
 	public static CommandSender getBukkitCommandSenderFromContext(CommandContext cmdCtx) {
-		return BukkitBukkitNMS.get().getSenderForCommand(cmdCtx, false);
+		return BukkitNMS.get().getSenderForCommand(cmdCtx, false);
 	}
 }

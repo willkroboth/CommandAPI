@@ -902,7 +902,7 @@ new CommandAPICommand("tpworld")
 
 /* ANCHOR: customarguments2 */
 // Function that returns our custom argument
-public Argument<World> worldArgument(String nodeName) {
+public BukkitArgument<World> worldArgument(String nodeName) {
     
     // Construct our CustomArgument that takes in a String input and returns a World object
     return new CustomArgument<World>(nodeName, info -> {

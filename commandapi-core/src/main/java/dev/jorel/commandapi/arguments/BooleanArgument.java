@@ -50,7 +50,7 @@ public class BooleanArgument<ImplementedSender> extends SafeOverrideableArgument
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Boolean parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Boolean parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

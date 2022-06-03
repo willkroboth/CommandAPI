@@ -51,14 +51,14 @@ import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.Vibration;
-import org.bukkit.World;
 import org.bukkit.Particle.DustOptions;
 import org.bukkit.Particle.DustTransition;
+import org.bukkit.Sound;
+import org.bukkit.Vibration;
 import org.bukkit.Vibration.Destination;
 import org.bukkit.Vibration.Destination.BlockDestination;
 import org.bukkit.Vibration.Destination.EntityDestination;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -98,6 +98,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.BukkitCommandAPIHandler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -545,7 +546,7 @@ public class NMS_1_18_R1 implements BukkitNMS<CommandSourceStack> {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getInstance().getField(EntitySelector.class, "o").set(argument, false);
+			BukkitCommandAPIHandler.getInstance().getField(EntitySelector.class, "o").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -914,7 +915,7 @@ public class NMS_1_18_R1 implements BukkitNMS<CommandSourceStack> {
 		
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
+			BukkitCommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
 					.set(serverResources.getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

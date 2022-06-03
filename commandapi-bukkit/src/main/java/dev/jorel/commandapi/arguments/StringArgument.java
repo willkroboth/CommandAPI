@@ -24,13 +24,13 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * An argument that represents a simple String
  */
-public class StringArgument<ImplementedSender> extends Argument<String, ImplementedSender> {
-
+public class StringArgument extends BukkitArgument<String> {
+	
 	/**
 	 * A string argument for one word
 	 * @param nodeName the name of the node for this argument
@@ -50,7 +50,7 @@ public class StringArgument<ImplementedSender> extends Argument<String, Implemen
 	}
 	
 	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

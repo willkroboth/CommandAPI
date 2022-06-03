@@ -20,8 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Map;
@@ -56,10 +54,8 @@ import org.bukkit.potion.PotionEffectType;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import de.tr7zw.nbtapi.NBTContainer;
-import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.enums.EntitySelector;
 import dev.jorel.commandapi.wrappers.FloatRange;
 import dev.jorel.commandapi.wrappers.FunctionWrapper;
@@ -73,7 +69,7 @@ import dev.jorel.commandapi.wrappers.SimpleFunctionWrapper;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
 
-public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWrapper> {
+public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWrapper, CommandSender> {
 	
 	static BukkitNMS<?> get() {
 		return (BukkitNMS<?>) BukkitNMS.get();
@@ -86,16 +82,6 @@ public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWr
 	String convert(PotionEffectType potion);
 
 	String convert(Sound sound);
-
-	/**
-	 * Creates a JSON file that describes the hierarchical structure of the commands
-	 * that have been registered by the server.
-	 * 
-	 * @param file       The JSON file to write to
-	 * @param dispatcher The Brigadier CommandDispatcher
-	 * @throws IOException When the file fails to be written to
-	 */
-	void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException;
 
 	Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 
@@ -206,20 +192,6 @@ public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWr
 			throws CommandSyntaxException;
 
 	/**
-	 * Retrieves a CommandSender, given some CommandContext. This method should
-	 * handle Proxied CommandSenders for entities if a Proxy is being used.
-	 * 
-	 * @param cmdCtx      The
-	 *                    <code>CommandContext&lt;CommandListenerWrapper&gt;</code>
-	 *                    for a given command
-	 * @param forceNative whether or not the CommandSender should be a
-	 *                    NativeProxyCommandSender or not
-	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or
-	 *         Player)
-	 */
-	CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative);
-
-	/**
 	 * Returns the Server's internal (OBC) CommandMap
 	 * 
 	 * @return A SimpleCommandMap from the OBC server
@@ -227,14 +199,6 @@ public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWr
 	SimpleCommandMap getSimpleCommandMap();
 
 	Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
-
-	/**
-	 * Retrieve a specific NMS implemented SuggestionProvider
-	 * 
-	 * @param provider The SuggestionProvider type to retrieve
-	 * @return A SuggestionProvider that matches the SuggestionProviders input
-	 */
-	SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider);
 
 	SimpleFunctionWrapper[] getTag(NamespacedKey key);
 

@@ -73,7 +73,7 @@ public class DoubleArgument<ImplementedSender> extends SafeOverrideableArgument<
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Double parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Double parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

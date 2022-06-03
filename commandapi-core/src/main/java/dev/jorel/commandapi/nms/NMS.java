@@ -20,11 +20,18 @@
  *******************************************************************************/
 package dev.jorel.commandapi.nms;
 
-import com.mojang.brigadier.arguments.ArgumentType;
+import java.io.File;
+import java.io.IOException;
 
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.ArgumentType;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+
+import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.enums.EntitySelector;
 
-public interface NMS<CommandListenerWrapper> {
+public interface NMS<CommandListenerWrapper, ImplementedSender> {
 
 	/* Argument types */
 	ArgumentType<?> _ArgumentAngle();
@@ -120,5 +127,37 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param clw The CommandListenerWrapper object
 	 * @return A CommandSender (not proxied) from the command listener wrapper
 	 */
-	<T> T getImplementedSenderFromCSS(CommandListenerWrapper clw);
+	ImplementedSender getImplementedSenderFromCSS(CommandListenerWrapper clw);
+
+	/**
+	 * Retrieves a CommandSender, given some CommandContext. This method should
+	 * handle Proxied CommandSenders for entities if a Proxy is being used.
+	 * 
+	 * @param cmdCtx      The
+	 *                    <code>CommandContext&lt;CommandListenerWrapper&gt;</code>
+	 *                    for a given command
+	 * @param forceNative whether or not the CommandSender should be a
+	 *                    NativeProxyCommandSender or not
+	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or
+	 *         Player)
+	 */
+	ImplementedSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative);
+
+	/**
+	 * Retrieve a specific NMS implemented SuggestionProvider
+	 * 
+	 * @param provider The SuggestionProvider type to retrieve
+	 * @return A SuggestionProvider that matches the SuggestionProviders input
+	 */
+	SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider);
+
+	/**
+	 * Creates a JSON file that describes the hierarchical structure of the commands
+	 * that have been registered by the server.
+	 * 
+	 * @param file       The JSON file to write to
+	 * @param dispatcher The Brigadier CommandDispatcher
+	 * @throws IOException When the file fails to be written to
+	 */
+	void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException;
 }

@@ -67,7 +67,7 @@ public class MultiLiteralArgument<ImplementedSender> extends Argument<String, Im
 	}
 	
 	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		throw new IllegalStateException("Cannot parse MultiLiteralArgument");
 	}

@@ -50,7 +50,7 @@ public class TextArgument<ImplementedSender> extends Argument<String, Implemente
 	}
 	
 	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}

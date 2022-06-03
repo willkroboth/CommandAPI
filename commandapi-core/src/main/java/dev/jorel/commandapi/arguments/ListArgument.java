@@ -133,7 +133,7 @@ public class ListArgument<T, ImplementedSender> extends Argument<List, Implement
 	}
 
 	@Override
-	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> List<T> parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();

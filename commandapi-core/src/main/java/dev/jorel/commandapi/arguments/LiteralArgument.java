@@ -76,7 +76,7 @@ public class LiteralArgument<ImplementedSender> extends Argument<String, Impleme
 	}
 	
 	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return literal;
 	}

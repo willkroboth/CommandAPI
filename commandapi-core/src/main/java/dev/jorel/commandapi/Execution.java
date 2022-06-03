@@ -6,7 +6,7 @@ import java.util.List;
 import dev.jorel.commandapi.arguments.Argument;
 
 /**
- * A list of arguments which results in an execution. This is used for building branches in a {@link CommandTree}
+ * A list of arguments which results in an execution. This is used for building branches in a {@link CommandTreeBase}
  */
 record Execution<ImplementedSender>(List<Argument<?, ImplementedSender>> arguments, CustomCommandExecutor<ImplementedSender> executor) {
 

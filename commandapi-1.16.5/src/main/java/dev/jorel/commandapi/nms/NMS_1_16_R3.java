@@ -93,6 +93,7 @@ import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.mojang.brigadier.suggestion.Suggestions;
 
 import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.BukkitCommandAPIHandler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -552,7 +553,7 @@ public class NMS_1_16_R3 implements BukkitNMS<CommandListenerWrapper> {
 		
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
+			BukkitCommandAPIHandler.getInstance().getField(EntitySelector.class, "checkPermissions").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -904,7 +905,7 @@ public class NMS_1_16_R3 implements BukkitNMS<CommandListenerWrapper> {
 
 		// Update the CustomFunctionManager for the datapackResources which now has the new commandDispatcher
 		try {
-			CommandAPIHandler.getInstance().getField(CustomFunctionManager.class, "h").set(datapackResources.a(),
+			BukkitCommandAPIHandler.getInstance().getField(CustomFunctionManager.class, "h").set(datapackResources.a(),
 					getBrigadierDispatcher());
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();

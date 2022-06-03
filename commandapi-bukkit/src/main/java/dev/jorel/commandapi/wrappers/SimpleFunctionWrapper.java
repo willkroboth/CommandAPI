@@ -27,7 +27,7 @@ import org.bukkit.Keyed;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**
  * A wrapper class for Minecraft 1.12's functions

@@ -48,7 +48,7 @@ public abstract class SafeOverrideableArgument<T, S, ImplementedSender> extends 
 		this.mapper = mapper;
 	}
 
-	public final Argument<T, ImplementedSender> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Argument<T, ImplementedSender> replaceSafeSuggestions(SafeSuggestions<S, ImplementedSender> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
 		return this;
 	}
@@ -58,7 +58,7 @@ public abstract class SafeOverrideableArgument<T, S, ImplementedSender> extends 
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Argument<T, ImplementedSender> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Argument<T, ImplementedSender> includeSafeSuggestions(SafeSuggestions<S, ImplementedSender> suggestions) {
 		return this.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
 	

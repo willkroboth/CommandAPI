@@ -16,7 +16,7 @@ public abstract class BukkitArgument<T> extends Argument<T, CommandSender> {
 	}
 
 	@Override
-	public <CommandSourceStack> T parseArgument(NMS<CommandSourceStack> nms, CommandContext<CommandSourceStack> cmdCtx,
+	public <CommandSourceStack> T parseArgument(NMS<CommandSourceStack, CommandSender> nms, CommandContext<CommandSourceStack> cmdCtx,
 			String key) throws CommandSyntaxException {
 		return parseArgument(nms, cmdCtx, key);
 	}

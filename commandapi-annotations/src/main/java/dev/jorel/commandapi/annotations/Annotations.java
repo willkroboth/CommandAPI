@@ -45,7 +45,7 @@ import javax.lang.model.type.ExecutableType;
 import javax.tools.Diagnostic.Kind;
 import javax.tools.JavaFileObject;
 
-import dev.jorel.commandapi.CommandAPICommandBase;
+import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.annotations.arguments.AAdvancementArgument;
 import dev.jorel.commandapi.annotations.arguments.AAdventureChatArgument;
@@ -167,7 +167,7 @@ public class Annotations extends AbstractProcessor {
 	private SortedSet<String> calculateImports(Element classElement) {
 		SortedSet<String> imports = new TreeSet<>();
 		
-		imports.add(CommandAPICommandBase.class.getCanonicalName());
+		imports.add(CommandAPICommand.class.getCanonicalName());
 		if(classElement.getAnnotation(NeedsOp.class) != null) {
 			imports.add(CommandPermission.class.getCanonicalName());
 		}

@@ -102,6 +102,7 @@ import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.logging.LogUtils;
 
 import de.tr7zw.nbtapi.NBTContainer;
+import dev.jorel.commandapi.BukkitCommandAPIHandler;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -591,7 +592,7 @@ public class NMS_1_18_R2 implements BukkitNMS<CommandSourceStack> {
 		// to be used by anyone that registers a command via the CommandAPI.
 		EntitySelector argument = cmdCtx.getArgument(str, EntitySelector.class);
 		try {
-			CommandAPIHandler.getInstance().getField(EntitySelector.class, "o").set(argument, false);
+			BukkitCommandAPIHandler.getInstance().getField(EntitySelector.class, "o").set(argument, false);
 		} catch (IllegalArgumentException | IllegalAccessException e1) {
 			e1.printStackTrace();
 		}
@@ -848,7 +849,7 @@ public class NMS_1_18_R2 implements BukkitNMS<CommandSourceStack> {
 	public String getScoreHolderSingle(CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException {
 		return ScoreHolderArgument.getName(cmdCtx, key);
 	}
-
+	
 	@Override
 	public CommandSender getSenderForCommand(CommandContext<CommandSourceStack> cmdCtx, boolean isNative) {
 		CommandSourceStack css = cmdCtx.getSource();
@@ -960,7 +961,7 @@ public class NMS_1_18_R2 implements BukkitNMS<CommandSourceStack> {
 
 		// Update the ServerFunctionLibrary's command dispatcher with the new one
 		try {
-			CommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
+			BukkitCommandAPIHandler.getInstance().getField(ServerFunctionLibrary.class, "i")
 					.set(serverResources.managers().getFunctionLibrary(), getBrigadierDispatcher());
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();

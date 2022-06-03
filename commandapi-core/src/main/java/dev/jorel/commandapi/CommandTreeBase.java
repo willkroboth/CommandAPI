@@ -6,11 +6,11 @@ import java.util.List;
 /**
  * This is the root node for creating a command as a tree
  */
-public class CommandTree<ImplementedSender> extends ExecutableCommand<CommandTree<ImplementedSender>, ImplementedSender> {
+public abstract class CommandTreeBase<ImplementedSender> extends ExecutableCommand<CommandTreeBase<ImplementedSender>, ImplementedSender> {
 
 	private final List<ArgumentTree<ImplementedSender>> arguments = new ArrayList<>();
 
-	public CommandTree(final String commandName) {
+	public CommandTreeBase(final String commandName) {
 		super(commandName);
 	}
 
@@ -19,7 +19,7 @@ public class CommandTree<ImplementedSender> extends ExecutableCommand<CommandTre
 	 * @param tree the child node
 	 * @return this root node
 	 */
-	public CommandTree<ImplementedSender> then(final ArgumentTree<ImplementedSender> tree) {
+	public CommandTreeBase<ImplementedSender> then(final ArgumentTree<ImplementedSender> tree) {
 		this.arguments.add(tree);
 		return this;
 	}

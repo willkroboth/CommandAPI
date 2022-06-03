@@ -28,7 +28,7 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
-import dev.jorel.commandapi.CommandAPIHandler;
+import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -36,7 +36,7 @@ import dev.jorel.commandapi.nms.NMS;
  *
  * @param <T> the return type of this argument
  */
-public class CustomArgument<T, ImplementedSender> extends Argument<T, ImplementedSender> {
+public class CustomArgument<T> extends BukkitArgument<T> {
 	
 	private CustomArgumentInfoParser<T> infoParser;
 	private boolean keyed;
@@ -66,7 +66,7 @@ public class CustomArgument<T, ImplementedSender> extends Argument<T, Implemente
 	 *                 <code>NamespacedKey</code> as valid arguments
 	 */
 	public CustomArgument(String nodeName, CustomArgumentInfoParser<T> parser, boolean keyed) {
-		super(nodeName, keyed ? CommandAPIHandler.getInstance().getNMS()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
+		super(nodeName, keyed ? BukkitNMS.get()._ArgumentMinecraftKeyRegistered() : StringArgumentType.string());
 		this.keyed = keyed;
 		this.infoParser = parser;
 	}
@@ -93,7 +93,7 @@ public class CustomArgument<T, ImplementedSender> extends Argument<T, Implemente
 			CommandContext<CommandListenerWrapper> cmdCtx, String key, Object[] previousArguments) throws CommandSyntaxException {
 		String customresult;
 		if(this.keyed) {
-			customresult = nms.getKeyedAsString(cmdCtx, key);
+			customresult = ((BukkitNMS<CommandListenerWrapper>) nms).getKeyedAsString(cmdCtx, key);
 		} else {
 			customresult = cmdCtx.getArgument(key, String.class);
 		}
@@ -115,8 +115,9 @@ public class CustomArgument<T, ImplementedSender> extends Argument<T, Implemente
 	}
 	
 	@Override
-	public <CommandListenerWrapper> T parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> T parseArgument(BukkitNMS<CommandListenerWrapper> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
+		// TODO: This.
 		throw new RuntimeException("parseArgument() is not implemented for CustomArgument. Did you mean parseCustomArgument()?");
 	}
 	

@@ -102,7 +102,7 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree<Implem
 	 * @return the parsed object represented by this argument
 	 * @throws CommandSyntaxException if parsing fails
 	 */
-	public abstract <CommandSourceStack> T parseArgument(NMS<CommandSourceStack> nms,
+	public abstract <CommandSourceStack> T parseArgument(NMS<CommandSourceStack, ImplementedSender> nms,
 			CommandContext<CommandSourceStack> cmdCtx, String key) throws CommandSyntaxException;
 	
 	/////////////////

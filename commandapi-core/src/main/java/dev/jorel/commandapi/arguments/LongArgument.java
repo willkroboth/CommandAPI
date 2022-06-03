@@ -73,7 +73,7 @@ public class LongArgument<ImplementedSender> extends SafeOverrideableArgument<Lo
 	}
 	
 	@Override
-	public <CommandListenerWrapper> Long parseArgument(NMS<CommandListenerWrapper> nms,
+	public <CommandListenerWrapper> Long parseArgument(NMS<CommandListenerWrapper, ImplementedSender> nms,
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		return cmdCtx.getArgument(key, getPrimitiveType());
 	}
