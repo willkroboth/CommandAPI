@@ -30,7 +30,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java ints
  */
-public class IntegerArgument extends SafeOverrideableArgument<Integer, Integer> {
+public class IntegerArgument<ImplementedSender> extends SafeOverrideableArgument<Integer, Integer, ImplementedSender> {
 
 	/**
 	 * An integer argument

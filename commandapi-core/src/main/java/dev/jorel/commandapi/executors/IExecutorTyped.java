@@ -20,7 +20,6 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.CommandAPICommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
@@ -28,7 +27,7 @@ import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
  * can execute) and has a method that executes an executor with a given command
  * sender and arguments
  */
-public interface IExecutorTyped {
+public interface IExecutorTyped<T> {
 	
 	/**
 	 * Returns the type of the sender of the current executor.
@@ -45,6 +44,6 @@ public interface IExecutorTyped {
 	 * @return the value returned by this command if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	int executeWith(CommandAPICommandSender sender, Object[] args) throws WrapperCommandSyntaxException;
+	int executeWith(T sender, Object[] args) throws WrapperCommandSyntaxException;
 
 }

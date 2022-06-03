@@ -24,13 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.bukkit.command.BlockCommandSender;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.ProxiedCommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-
 import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
@@ -41,10 +34,10 @@ import dev.jorel.commandapi.executors.IExecutorNormal;
 import dev.jorel.commandapi.executors.IExecutorResulting;
 import dev.jorel.commandapi.executors.IExecutorTyped;
 
-class CustomCommandExecutor<T extends CommandSender> {
+class CustomCommandExecutor<ImplementedSender> {
 	
-	private List<IExecutorNormal<T>> normalExecutors;
-	private List<IExecutorResulting<T>> resultingExecutors;
+	private List<IExecutorNormal<ImplementedSender>> normalExecutors;
+	private List<IExecutorResulting<ImplementedSender>> resultingExecutors;
 	
 	public CustomCommandExecutor() {
 		normalExecutors = new ArrayList<>();
@@ -53,15 +46,15 @@ class CustomCommandExecutor<T extends CommandSender> {
 	
 	@SuppressWarnings("unchecked")
 	public <S extends IExecutorNormal<?>> void addNormalExecutor(S executor) {
-		this.normalExecutors.add((IExecutorNormal<T>) executor);
+		this.normalExecutors.add((IExecutorNormal<ImplementedSender>) executor);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <S extends IExecutorResulting<?>> void addResultingExecutor(S executor) {
-		this.resultingExecutors.add((IExecutorResulting<T>) executor);
+		this.resultingExecutors.add((IExecutorResulting<ImplementedSender>) executor);
 	}
 	
-	public int execute(CommandSender sender, Object[] arguments) throws CommandSyntaxException {
+	public int execute(ImplementedSender sender, Object[] arguments) throws CommandSyntaxException {
 		
 		//Parse executor type
         if (!resultingExecutors.isEmpty()) {
@@ -87,19 +80,20 @@ class CustomCommandExecutor<T extends CommandSender> {
         }
 	}
 	
-	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
+	private int execute(List<? extends IExecutorTyped<ImplementedSender>> executors, ImplementedSender sender, Object[] args) throws WrapperCommandSyntaxException {
 		if(isForceNative()) {
 			return execute(executors, sender, args, ExecutorType.NATIVE);
-		} else if (sender instanceof Player && matches(executors, ExecutorType.PLAYER)) {
-			return execute(executors, sender, args, ExecutorType.PLAYER);
-		} else if (sender instanceof Entity && matches(executors, ExecutorType.ENTITY)) {
-			return execute(executors, sender, args, ExecutorType.ENTITY);
-		} else if (sender instanceof ConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
-			return execute(executors, sender, args, ExecutorType.CONSOLE);
-		} else if (sender instanceof BlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
-			return execute(executors, sender, args, ExecutorType.BLOCK);
-		} else if (sender instanceof ProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
-			return execute(executors, sender, args, ExecutorType.PROXY);
+		// TODO: Implement execution hierarchy
+//		} else if (sender instanceof Player && matches(executors, ExecutorType.PLAYER)) {
+//			return execute(executors, sender, args, ExecutorType.PLAYER);
+//		} else if (sender instanceof Entity && matches(executors, ExecutorType.ENTITY)) {
+//			return execute(executors, sender, args, ExecutorType.ENTITY);
+//		} else if (sender instanceof ConsoleCommandSender && matches(executors, ExecutorType.CONSOLE)) {
+//			return execute(executors, sender, args, ExecutorType.CONSOLE);
+//		} else if (sender instanceof BlockCommandSender && matches(executors, ExecutorType.BLOCK)) {
+//			return execute(executors, sender, args, ExecutorType.BLOCK);
+//		} else if (sender instanceof ProxiedCommandSender && matches(executors, ExecutorType.PROXY)) {
+//			return execute(executors, sender, args, ExecutorType.PROXY);
 		} else if (matches(executors, ExecutorType.ALL)) {
 			return execute(executors, sender, args, ExecutorType.ALL);
 		} else {
@@ -110,8 +104,8 @@ class CustomCommandExecutor<T extends CommandSender> {
 		}
 	}
 	
-	private int execute(List<? extends IExecutorTyped> executors, CommandSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
-		for(IExecutorTyped executor : executors) {
+	private int execute(List<? extends IExecutorTyped<ImplementedSender>> executors, ImplementedSender sender, Object[] args, ExecutorType type) throws WrapperCommandSyntaxException {
+		for(IExecutorTyped<ImplementedSender> executor : executors) {
 			if(executor.getType() == type) {
 				return executor.executeWith(sender, args);
 			}
@@ -119,11 +113,11 @@ class CustomCommandExecutor<T extends CommandSender> {
 		throw new NoSuchElementException("Executor had no valid executors for type " + type.toString());
 	}
 	
-	public List<IExecutorNormal<T>> getNormalExecutors() {
+	public List<IExecutorNormal<ImplementedSender>> getNormalExecutors() {
 		return normalExecutors;
 	}
 
-	public List<IExecutorResulting<T>> getResultingExecutors() {
+	public List<IExecutorResulting<ImplementedSender>> getResultingExecutors() {
 		return resultingExecutors;
 	}
 
@@ -135,8 +129,8 @@ class CustomCommandExecutor<T extends CommandSender> {
 		return matches(normalExecutors, ExecutorType.NATIVE) || matches(resultingExecutors, ExecutorType.NATIVE);
 	}
 	
-	private boolean matches(List<? extends IExecutorTyped> executors, ExecutorType type) {
-		for(IExecutorTyped executor : executors) {
+	private boolean matches(List<? extends IExecutorTyped<ImplementedSender>> executors, ExecutorType type) {
+		for(IExecutorTyped<ImplementedSender> executor : executors) {
 			if(executor.getType() == type) {
 				return true;
 			}
@@ -144,8 +138,8 @@ class CustomCommandExecutor<T extends CommandSender> {
 		return false;
 	}
 	
-	CustomCommandExecutor<T> mergeExecutor(CustomCommandExecutor<T> executor) {
-		CustomCommandExecutor<T> result = new CustomCommandExecutor<>();
+	CustomCommandExecutor<ImplementedSender> mergeExecutor(CustomCommandExecutor<ImplementedSender> executor) {
+		CustomCommandExecutor<ImplementedSender> result = new CustomCommandExecutor<>();
 		result.normalExecutors = new ArrayList<>(normalExecutors);
 		result.resultingExecutors = new ArrayList<>(resultingExecutors);
 		result.normalExecutors.addAll(executor.normalExecutors);
@@ -153,11 +147,11 @@ class CustomCommandExecutor<T extends CommandSender> {
 		return result;
 	}
 	
-	public void setNormalExecutors(List<IExecutorNormal<T>> normalExecutors) {
+	public void setNormalExecutors(List<IExecutorNormal<ImplementedSender>> normalExecutors) {
 		this.normalExecutors = normalExecutors;
 	}
 	
-	public void setResultingExecutors(List<IExecutorResulting<T>> resultingExecutors) {
+	public void setResultingExecutors(List<IExecutorResulting<ImplementedSender>> resultingExecutors) {
 		this.resultingExecutors = resultingExecutors;
 	}
 }

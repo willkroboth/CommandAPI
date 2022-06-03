@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents multiple LiteralArguments
  */
-public class MultiLiteralArgument extends Argument<String> {
+public class MultiLiteralArgument<ImplementedSender> extends Argument<String, ImplementedSender> {
 
 	private String[] literals;
 	

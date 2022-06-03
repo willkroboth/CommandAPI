@@ -24,6 +24,7 @@ package dev.jorel.commandapi.arguments;
 import java.util.function.Function;
 
 import org.bukkit.NamespacedKey;
+import org.bukkit.command.CommandSender;
 
 import com.mojang.brigadier.arguments.ArgumentType;
 
@@ -50,7 +51,7 @@ public abstract class BukkitSafeOverrideableArgument<T, S> extends BukkitArgumen
 		this.mapper = mapper;
 	}
 
-	public final BukkitArgument<T> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Argument<T, CommandSender> replaceSafeSuggestions(SafeSuggestions<S, CommandSender> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
 		return this;
 	}
@@ -60,8 +61,8 @@ public abstract class BukkitSafeOverrideableArgument<T, S> extends BukkitArgumen
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final BukkitArgument<T> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
-		return (BukkitArgument<T>) this.includeSuggestions(suggestions.toSuggestions(mapper));
+	public final Argument<T, CommandSender> includeSafeSuggestions(SafeSuggestions<S, CommandSender> suggestions) {
+		return this.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
 
 	static <S> Function<S, String> fromKey(Function<S, NamespacedKey> mapper) {

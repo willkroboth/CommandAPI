@@ -29,8 +29,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
 import dev.jorel.commandapi.CommandAPIHandler;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.CommandAPIArgumentType;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -38,7 +36,7 @@ import dev.jorel.commandapi.nms.NMS;
  *
  * @param <T> the return type of this argument
  */
-public class CustomArgument<T> extends Argument<T> {
+public class CustomArgument<T, ImplementedSender> extends Argument<T, ImplementedSender> {
 	
 	private CustomArgumentInfoParser<T> infoParser;
 	private boolean keyed;
@@ -101,7 +99,7 @@ public class CustomArgument<T> extends Argument<T> {
 		}
 		
 		try {
-			CustomArgumentInfo info = new CustomArgumentInfo(nms.getCommandSenderFromCSS(cmdCtx.getSource()), previousArguments, 
+			CustomArgumentInfo info = new CustomArgumentInfo(nms.getImplementedSenderFromCSS(cmdCtx.getSource()), previousArguments, 
 					customresult);
 			return infoParser.apply(info);
 		} catch (CustomArgumentException e) {

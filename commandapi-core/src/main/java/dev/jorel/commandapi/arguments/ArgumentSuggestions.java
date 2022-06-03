@@ -20,7 +20,7 @@ import dev.jorel.commandapi.SuggestionInfoBase;
 // change the spaces into tabs!
 /* ANCHOR: Declaration */
 @FunctionalInterface
-public interface ArgumentSuggestions {
+public interface ArgumentSuggestions<ImplementedSender> {
 
     /**
      * Create a {@link CompletableFuture} resolving onto a brigadier {@link Suggestions} object.
@@ -30,7 +30,7 @@ public interface ArgumentSuggestions {
      *
      * @throws CommandSyntaxException if there is an error making suggestions
      */
-    CompletableFuture<Suggestions> suggest(SuggestionInfoBase info, SuggestionsBuilder builder)
+    CompletableFuture<Suggestions> suggest(SuggestionInfoBase<ImplementedSender> info, SuggestionsBuilder builder)
         throws CommandSyntaxException;
 /* ANCHOR_END: Declaration */
 
@@ -38,7 +38,7 @@ public interface ArgumentSuggestions {
 	 * Suggest nothing
 	 * @return an {@link ArgumentSuggestions} object suggesting nothing.
 	 */
-	static ArgumentSuggestions empty() {
+	static <ImplementedSender> ArgumentSuggestions<ImplementedSender> empty() {
 		return (info, builder) -> builder.buildFuture();
 	}
 
@@ -47,7 +47,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions array of hardcoded strings
 	 * @return an {@link ArgumentSuggestions} object suggesting hardcoded strings
 	 */
-	static ArgumentSuggestions strings(String... suggestions) {
+	static <ImplementedSender> ArgumentSuggestions<ImplementedSender> strings(String... suggestions) {
 		return (info, builder) -> future(toSuggestions(builder, suggestions));
 	}
 
@@ -56,7 +56,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions strings(Function<SuggestionInfoBase, String[]> suggestions) {
+	static <ImplementedSender> ArgumentSuggestions<ImplementedSender> strings(Function<SuggestionInfoBase<ImplementedSender>, String[]> suggestions) {
 		return (info, builder) -> future(toSuggestions(builder, suggestions.apply(info)));
 	}
 
@@ -65,7 +65,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings asynchronously
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringsAsync(Function<SuggestionInfoBase, CompletableFuture<String[]>> suggestions) {
+	static <ImplementedSender> ArgumentSuggestions<ImplementedSender> stringsAsync(Function<SuggestionInfoBase<ImplementedSender>, CompletableFuture<String[]>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(strings -> toSuggestions(builder, strings));
@@ -76,7 +76,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions array of hardcoded strings with tooltips
 	 * @return an {@link ArgumentSuggestions} object suggesting the hardcoded strings with tooltips
 	 */
-	static ArgumentSuggestions stringsWithTooltips(IStringTooltip... suggestions) {
+	static <ImplementedSender> ArgumentSuggestions<ImplementedSender> stringsWithTooltips(IStringTooltip... suggestions) {
 		return (info, builder) -> future(toSuggestions(builder, suggestions));
 	}
 
@@ -85,7 +85,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings with tooltips
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the function
 	 */
-	static ArgumentSuggestions stringsWithTooltips(Function<SuggestionInfoBase, IStringTooltip[]> suggestions) {
+	static <ImplementedSender> ArgumentSuggestions<ImplementedSender> stringsWithTooltips(Function<SuggestionInfoBase<ImplementedSender>, IStringTooltip[]> suggestions) {
 		return (info, builder) -> future(toSuggestions(builder, suggestions.apply(info)));
 	}
 
@@ -94,7 +94,7 @@ public interface ArgumentSuggestions {
 	 * @param suggestions function providing the strings with tooltips asynchronously
 	 * @return an {@link ArgumentSuggestions} object suggesting the result of the asynchronous function
 	 */
-	static ArgumentSuggestions stringsWithTooltipsAsync(Function<SuggestionInfoBase, CompletableFuture<IStringTooltip[]>> suggestions) {
+	static <ImplementedSender> ArgumentSuggestions<ImplementedSender> stringsWithTooltipsAsync(Function<SuggestionInfoBase<ImplementedSender>, CompletableFuture<IStringTooltip[]>> suggestions) {
 		return (info, builder) -> suggestions
 			.apply(info)
 			.thenApply(stringsWithTooltips -> toSuggestions(builder, stringsWithTooltips));

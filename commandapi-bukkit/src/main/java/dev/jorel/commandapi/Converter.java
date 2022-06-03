@@ -129,12 +129,12 @@ public final class Converter {
 		CommandAPI.logInfo("Converting command /" + commandName);
 
 		// No arguments
-		new CommandAPICommand(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
+		new CommandAPICommandBase(commandName).withPermission(CommandPermission.NONE).executesNative((sender, args) -> {
 			Bukkit.dispatchCommand(mergeProxySender(sender), commandName);
 		}).register();
 
 		// Multiple arguments
-		CommandAPICommand multiArgs = new CommandAPICommand(commandName).withPermission(CommandPermission.NONE)
+		CommandAPICommandBase multiArgs = new CommandAPICommandBase(commandName).withPermission(CommandPermission.NONE)
 				.withArguments(arguments).executesNative((sender, args) -> {
 					// We know the args are a String[] because that's how converted things are
 					// handled in generateCommand()
@@ -206,7 +206,7 @@ public final class Converter {
 		};
 
 		// No arguments
-		new CommandAPICommand(commandName)
+		new CommandAPICommandBase(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withFullDescription(fullDescription)
@@ -216,7 +216,7 @@ public final class Converter {
 			.register();
 
 		// Multiple arguments
-		new CommandAPICommand(commandName)
+		new CommandAPICommandBase(commandName)
 			.withPermission(permissionNode)
 			.withAliases(aliases)
 			.withArguments(arguments)

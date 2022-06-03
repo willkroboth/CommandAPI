@@ -30,7 +30,6 @@ import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import dev.jorel.commandapi.ArgumentTree;
-import dev.jorel.commandapi.CommandAPICommandSender;
 import dev.jorel.commandapi.CommandPermission;
 import dev.jorel.commandapi.nms.NMS;
 
@@ -39,7 +38,7 @@ import dev.jorel.commandapi.nms.NMS;
  * 
  * @param <T> The type of the underlying object that this argument casts to
  */
-public abstract class Argument<T, ImplementedSender> extends ArgumentTree {
+public abstract class Argument<T, ImplementedSender> extends ArgumentTree<ImplementedSender> {
 
 	/**
 	 * Returns the primitive type of the current Argument. After executing a
@@ -110,8 +109,8 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree {
 	// Suggestions //
 	/////////////////
 
-	private Optional<ArgumentSuggestions> suggestions = Optional.empty();
-	private Optional<ArgumentSuggestions> addedSuggestions = Optional.empty();
+	private Optional<ArgumentSuggestions<ImplementedSender>> suggestions = Optional.empty();
+	private Optional<ArgumentSuggestions<ImplementedSender>> addedSuggestions = Optional.empty();
 
 	/**
 	 * Include suggestions to add to the list of default suggestions represented by this argument.
@@ -121,7 +120,7 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree {
 	 *
 	 * @return the current argument
 	 */
-	public Argument<T, ImplementedSender> includeSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<T, ImplementedSender> includeSuggestions(ArgumentSuggestions<ImplementedSender> suggestions) {
 		this.addedSuggestions = Optional.of(suggestions);
 		return this;
 	}
@@ -131,7 +130,7 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree {
 	 * to existing suggestions.
 	 * @return An Optional containing a function which generates suggestions
 	 */
-	public Optional<ArgumentSuggestions> getIncludedSuggestions() {
+	public Optional<ArgumentSuggestions<ImplementedSender>> getIncludedSuggestions() {
 		return addedSuggestions;
 	}
 
@@ -143,7 +142,7 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree {
 	 * @return the current argument
 	 */
   
-	public Argument<T, ImplementedSender> replaceSuggestions(ArgumentSuggestions suggestions) {
+	public Argument<T, ImplementedSender> replaceSuggestions(ArgumentSuggestions<ImplementedSender> suggestions) {
 		this.suggestions = Optional.of(suggestions);
 		return this;
 	}
@@ -155,7 +154,7 @@ public abstract class Argument<T, ImplementedSender> extends ArgumentTree {
 	 * @return a function that provides suggestions, or <code>Optional.empty()</code> if there
 	 *         are no overridden suggestions.
 	 */
-	public final Optional<ArgumentSuggestions> getOverriddenSuggestions() {
+	public final Optional<ArgumentSuggestions<ImplementedSender>> getOverriddenSuggestions() {
 		return suggestions;
 	}
 

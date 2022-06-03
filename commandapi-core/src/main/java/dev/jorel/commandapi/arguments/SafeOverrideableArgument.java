@@ -31,7 +31,7 @@ import com.mojang.brigadier.arguments.ArgumentType;
  * @param <T> The type of the underlying object that this argument casts to
  * @param <S> A custom type which is represented by this argument. For example, a {@link LocationArgument} will have a custom type <code>Location</code>
  */
-public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
+public abstract class SafeOverrideableArgument<T, S, ImplementedSender> extends Argument<T, ImplementedSender> {
 	
 	private final Function<S, String> mapper;
 
@@ -48,7 +48,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 		this.mapper = mapper;
 	}
 
-	public final Argument<T> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Argument<T, ImplementedSender> replaceSafeSuggestions(SafeSuggestions<S> suggestions) {
 		replaceSuggestions(suggestions.toSuggestions(mapper));
 		return this;
 	}
@@ -58,7 +58,7 @@ public abstract class SafeOverrideableArgument<T, S> extends Argument<T> {
 	 * @param suggestions The safe suggestions to use
 	 * @return the current argument
 	 */
-	public final Argument<T> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
+	public final Argument<T, ImplementedSender> includeSafeSuggestions(SafeSuggestions<S> suggestions) {
 		return this.includeSuggestions(suggestions.toSuggestions(mapper));
 	}
 	

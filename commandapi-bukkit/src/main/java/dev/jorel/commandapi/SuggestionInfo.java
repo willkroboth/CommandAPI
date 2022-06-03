@@ -33,11 +33,10 @@ import org.bukkit.command.CommandSender;
  * @param currentArg   - the current partially typed argument. For example
  *                     "/mycmd tes" will return "tes"
  */
-public class SuggestionInfo extends SuggestionInfoBase {
+public class SuggestionInfo extends SuggestionInfoBase<CommandSender> {
 
 	public SuggestionInfo(CommandSender sender, Object[] previousArgs, String currentInput,
 			String currentArg) {
-		// TODO: Handle CommandSender -> CAPICS conversion
 		super(sender, previousArgs, currentInput, currentArg);
 	}
 }

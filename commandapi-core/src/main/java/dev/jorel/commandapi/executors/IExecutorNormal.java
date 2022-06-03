@@ -20,14 +20,13 @@
  *******************************************************************************/
 package dev.jorel.commandapi.executors;
 
-import dev.jorel.commandapi.CommandAPICommandSender;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
  * The interface for normal command executors
  * @param <T> the commandsender
  */
-public interface IExecutorNormal<T extends CommandAPICommandSender> extends IExecutorTyped {
+public interface IExecutorNormal<T> extends IExecutorTyped<T> {
 	
 	/**
 	 * Executes the command executor with the provided command sender and the provided arguments.
@@ -36,10 +35,9 @@ public interface IExecutorNormal<T extends CommandAPICommandSender> extends IExe
 	 * @return 1 if the command succeeds, 0 if the command fails
 	 * @throws WrapperCommandSyntaxException if an error occurs during the execution of this command
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	default int executeWith(CommandAPICommandSender sender, Object[] args) throws WrapperCommandSyntaxException {
-		this.run((T) sender, args);
+	default int executeWith(T sender, Object[] args) throws WrapperCommandSyntaxException {
+		this.run(sender, args);
 		return 1;
 	}
 	

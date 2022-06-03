@@ -6,9 +6,9 @@ import java.util.List;
 /**
  * This is the root node for creating a command as a tree
  */
-public class CommandTree extends ExecutableCommand<CommandTree> {
+public class CommandTree<ImplementedSender> extends ExecutableCommand<CommandTree<ImplementedSender>, ImplementedSender> {
 
-	private final List<ArgumentTree> arguments = new ArrayList<>();
+	private final List<ArgumentTree<ImplementedSender>> arguments = new ArrayList<>();
 
 	public CommandTree(final String commandName) {
 		super(commandName);
@@ -19,7 +19,7 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 	 * @param tree the child node
 	 * @return this root node
 	 */
-	public CommandTree then(final ArgumentTree tree) {
+	public CommandTree<ImplementedSender> then(final ArgumentTree<ImplementedSender> tree) {
 		this.arguments.add(tree);
 		return this;
 	}
@@ -28,14 +28,14 @@ public class CommandTree extends ExecutableCommand<CommandTree> {
 	 * Registers the command
 	 */
 	public void register() {
-		List<Execution> executions = new ArrayList<>();
+		List<Execution<ImplementedSender>> executions = new ArrayList<>();
 		if(this.executor.hasAnyExecutors()) {
-			executions.add(new Execution(new ArrayList<>(), this.executor));
+			executions.add(new Execution<ImplementedSender>(new ArrayList<>(), this.executor));
 		}
-		for(ArgumentTree tree : arguments) {
+		for(ArgumentTree<ImplementedSender> tree : arguments) {
 			executions.addAll(tree.getExecutions());
 		}
-		for(Execution execution : executions) {
+		for(Execution<ImplementedSender> execution : executions) {
 			execution.register(this.meta);
 		}
 	}

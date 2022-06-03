@@ -528,7 +528,7 @@ public class NMS_1_16_R3 implements BukkitNMS<CommandListenerWrapper> {
 	}
 
 	@Override
-	public CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw) {
+	public CommandSender getImplementedSenderFromCSS(CommandListenerWrapper clw) {
 		try {
 			return clw.getBukkitSender();
 		} catch (UnsupportedOperationException e) {

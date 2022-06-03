@@ -27,7 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPICommand;
+import dev.jorel.commandapi.CommandAPICommandBase;
 import dev.jorel.commandapi.annotations.Command;
 import dev.jorel.commandapi.annotations.Default;
 import dev.jorel.commandapi.annotations.Permission;
@@ -109,7 +109,7 @@ class Examples {
 Map<String, Location> warps = new HashMap<>();
 
 // /warp
-new CommandAPICommand("warp")
+new CommandAPICommandBase("warp")
     .executes((sender, args) -> {
         sender.sendMessage("--- Warp help ---");
         sender.sendMessage("/warp - Show this help");
@@ -119,7 +119,7 @@ new CommandAPICommand("warp")
     .register();
 
 // /warp <warp>
-new CommandAPICommand("warp")
+new CommandAPICommandBase("warp")
     .withArguments(new StringArgument("warp").replaceSuggestions(ArgumentSuggestions.strings(info -> 
         warps.keySet().toArray(new String[0])
     )))
@@ -129,9 +129,9 @@ new CommandAPICommand("warp")
     .register();
 
 // /warp create <warpname>
-new CommandAPICommand("warp")
+new CommandAPICommandBase("warp")
     .withSubcommand(
-        new CommandAPICommand("create")
+        new CommandAPICommandBase("create")
             .withPermission("warps.create")
             .withArguments(new StringArgument("warpname"))
             .executesPlayer((player, args) -> {

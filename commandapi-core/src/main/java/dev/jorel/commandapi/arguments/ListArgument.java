@@ -34,9 +34,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPICommandSender;
 import dev.jorel.commandapi.IStringTooltip;
 import dev.jorel.commandapi.StringTooltip;
+import dev.jorel.commandapi.SuggestionInfoBase;
 import dev.jorel.commandapi.nms.NMS;
 
 /**
@@ -44,14 +44,14 @@ import dev.jorel.commandapi.nms.NMS;
  * @param <T> the type that this list argument generates a list of.
  */
 @SuppressWarnings("rawtypes")
-public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
+public class ListArgument<T, ImplementedSender> extends Argument<List, ImplementedSender> implements IGreedyArgument {
 
 	private final String delimiter;
 	private final boolean allowDuplicates;
-	private final Function<CommandAPICommandSender, Collection<T>> supplier;
+	private final Function<ImplementedSender, Collection<T>> supplier;
 	private final Function<T, IStringTooltip> mapper;
 
-	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<CommandAPICommandSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
+	ListArgument(String nodeName, String delimiter, boolean allowDuplicates, Function<ImplementedSender, Collection<T>> supplier, Function<T, IStringTooltip> suggestionsMapper) {
 		super(nodeName, StringArgumentType.greedyString());
 		this.delimiter = delimiter;
 		this.allowDuplicates = allowDuplicates;
@@ -62,7 +62,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 	}
 
 	private void applySuggestions() {
-		this.replaceSuggestions(ArgumentSuggestions.stringsWithTooltips(info -> {
+		this.replaceSuggestions(ArgumentSuggestions.stringsWithTooltips((SuggestionInfoBase<ImplementedSender> info) -> {
 			String currentArg = info.currentArg();
 
 			// This need not be a sorted map because entries in suggestions are
@@ -137,7 +137,7 @@ public class ListArgument<T> extends Argument<List> implements IGreedyArgument {
 			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
 		// Get the list of values which this can take
 		Map<IStringTooltip, T> values = new HashMap<>();
-		for(T object : supplier.apply(nms.getCommandSenderFromCSS(cmdCtx.getSource()))) {
+		for(T object : supplier.apply(nms.getImplementedSenderFromCSS(cmdCtx.getSource()))) {
 			values.put(mapper.apply(object), object);
 		}
 

@@ -18,40 +18,40 @@
  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *******************************************************************************/
-package dev.jorel.commandapi.arguments;
+package dev.jorel.commandapi;
 
-import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.context.CommandContext;
+import java.io.IOException;
+
+import org.bukkit.command.CommandSender;
+
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.nms.NMS;
+import dev.jorel.commandapi.arguments.Argument;
 
 /**
- * An argument that represents a simple String
+ * A builder used to create commands to be registered by the CommandAPI.
  */
-public class StringArgument<ImplementedSender> extends Argument<String, ImplementedSender> {
-
+public class CommandAPICommand extends CommandAPICommandBase<CommandSender> {
+	
 	/**
-	 * A string argument for one word
-	 * @param nodeName the name of the node for this argument
+	 * Creates a new command builder
+	 * @param commandName The name of the command to create
 	 */
-	public StringArgument(String nodeName) {
-		super(nodeName, StringArgumentType.word());
+	public CommandAPICommand(String commandName) {
+		super(commandName);
+		this.isConverted = false;
+	}
+
+	protected CommandAPICommand(CommandMetaData<CommandSender> metaData) {
+		super(metaData);
+		this.isConverted = false;
 	}
 
 	@Override
-	public Class<String> getPrimitiveType() {
-		return String.class;
-	}
-
-	@Override
-	public CommandAPIArgumentType getArgumentType() {
-		return CommandAPIArgumentType.PRIMITIVE_STRING;
+	void register(CommandMetaData<CommandSender> meta, Argument<?, CommandSender>[] argumentsArr,
+			CustomCommandExecutor<CommandSender> executor, boolean isConverted)
+			throws CommandSyntaxException, IOException {
+		BukkitCommandAPIHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
 	}
 	
-	@Override
-	public <CommandListenerWrapper> String parseArgument(NMS<CommandListenerWrapper> nms,
-			CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException {
-		return cmdCtx.getArgument(key, getPrimitiveType());
-	}
 }

@@ -29,7 +29,7 @@ import dev.jorel.commandapi.nms.NMS;
 /**
  * An argument that represents primitive Java booleans
  */
-public class BooleanArgument extends SafeOverrideableArgument<Boolean, Boolean> {
+public class BooleanArgument<ImplementedSender> extends SafeOverrideableArgument<Boolean, Boolean, ImplementedSender> {
 	
 	/**
 	 * Constructs a Boolean argument with a given node name

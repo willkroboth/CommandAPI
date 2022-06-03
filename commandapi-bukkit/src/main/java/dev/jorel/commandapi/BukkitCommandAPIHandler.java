@@ -51,7 +51,7 @@ public class BukkitCommandAPIHandler<CommandSourceStack> extends CommandAPIHandl
 	 * @return true if the sender satisfies the provided permission
 	 */
 	@Override
-	boolean permissionCheck(CommandAPICommandSender<CommandSender> sender, CommandPermission permission,
+	boolean permissionCheck(CommandSender sender, CommandPermission permission,
 			Predicate<CommandAPICommandSender<CommandSender>> requirements) {
 		boolean satisfiesPermissions;
 		if (sender == null) {
@@ -80,7 +80,7 @@ public class BukkitCommandAPIHandler<CommandSourceStack> extends CommandAPIHandl
 	 */
 	LiteralArgumentBuilder<CommandSourceStack> getLiteralArgumentBuilderArgument(String commandName, CommandPermission permission, Predicate<CommandAPICommandSender> requirements) {
 		LiteralArgumentBuilder<CommandSourceStack> builder = LiteralArgumentBuilder.literal(commandName);
-		return builder.requires((CommandSourceStack css) -> permissionCheck(NMS.getCommandSenderFromCSS(css), permission, requirements));
+		return builder.requires((CommandSourceStack css) -> permissionCheck(NMS.getImplementedSenderFromCSS(css), permission, requirements));
 	}
 	
 }

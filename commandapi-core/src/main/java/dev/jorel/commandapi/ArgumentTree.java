@@ -9,19 +9,19 @@ import java.util.List;
 /**
  * This is a base class for arguments, allowing them to behave as tree nodes in a {@link CommandTree}
  */
-public class ArgumentTree extends Executable<ArgumentTree> {
+public class ArgumentTree<ImplementedSender> extends Executable<ArgumentTree<ImplementedSender>, ImplementedSender> {
 
-	final List<ArgumentTree> arguments = new ArrayList<>();
-	final Argument<?> argument;
+	final List<ArgumentTree<ImplementedSender>> arguments = new ArrayList<>();
+	final Argument<?, ImplementedSender> argument;
 
 	protected ArgumentTree() {
-		if(!(this instanceof Argument<?> argument)) {
+		if(!(this instanceof Argument<?, ?> argument)) {
 			throw new IllegalArgumentException("Implicit inherited constructor must be from Argument");
 		}
-		this.argument = argument;
+		this.argument = (Argument<?, ImplementedSender>) argument;
 	}
 
-	public ArgumentTree(final Argument<?> argument) {
+	public ArgumentTree(final Argument<?, ImplementedSender> argument) {
 		this.argument = argument;
 		//Copy the executor in case any executions were defined on the argument
 		this.executor = argument.executor;
@@ -32,20 +32,20 @@ public class ArgumentTree extends Executable<ArgumentTree> {
 	 * @param tree The child branch
 	 * @return this tree node
 	 */
-	public ArgumentTree then(final ArgumentTree tree) {
+	public ArgumentTree<ImplementedSender> then(final ArgumentTree<ImplementedSender> tree) {
 		this.arguments.add(tree);
 		return this;
 	}
 
-	List<Execution> getExecutions() {
-		List<Execution> executions = new ArrayList<>();
+	List<Execution<ImplementedSender>> getExecutions() {
+		List<Execution<ImplementedSender>> executions = new ArrayList<>();
 		//If this is executable, add its execution
 		if(this.executor.hasAnyExecutors()) {
-			executions.add(new Execution(Arrays.asList(this.argument), this.executor));
+			executions.add(new Execution<ImplementedSender>(Arrays.asList(this.argument), this.executor));
 		}
 		//Add all executions from all arguments
-		for(ArgumentTree tree: arguments) {
-			for(Execution execution : tree.getExecutions()) {
+		for(ArgumentTree<ImplementedSender> tree: arguments) {
+			for(Execution<ImplementedSender> execution : tree.getExecutions()) {
 				//Prepend this argument to the arguments of the executions
 				executions.add(execution.prependedBy(this.argument));
 			}

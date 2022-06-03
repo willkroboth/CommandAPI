@@ -564,7 +564,7 @@ public class NMS_1_18_R2 implements BukkitNMS<CommandSourceStack> {
 	}
 
 	@Override
-	public CommandSender getCommandSenderFromCSS(CommandSourceStack css) {
+	public CommandSender getImplementedSenderFromCSS(CommandSourceStack css) {
 		try {
 			return css.getBukkitSender();
 		} catch (UnsupportedOperationException e) {

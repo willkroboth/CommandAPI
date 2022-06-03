@@ -1,24 +1,22 @@
 package dev.jorel.commandapi;
 
-import org.bukkit.command.CommandSender;
-
 import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * This is a base class for {@link CommandAPICommand} and {@link CommandTree} command definitions
+ * This is a base class for {@link CommandAPICommandBase} and {@link CommandTree} command definitions
  *
  * @param <T> return type for chain calls
  */
-abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executable<T> {
+abstract class ExecutableCommand<T extends ExecutableCommand<T, ImplementedSender>, ImplementedSender> extends Executable<T, ImplementedSender> {
 
-	protected final CommandMetaData meta;
+	protected final CommandMetaData<ImplementedSender> meta;
 
 	ExecutableCommand(final String commandName) {
-		this.meta = new CommandMetaData(commandName);
+		this.meta = new CommandMetaData<ImplementedSender>(commandName);
 	}
 
-	protected ExecutableCommand(final CommandMetaData meta) {
+	protected ExecutableCommand(final CommandMetaData<ImplementedSender> meta) {
 		this.meta = meta;
 	}
 
@@ -83,7 +81,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public T withRequirement(Predicate<CommandSender> requirement) {
+	public T withRequirement(Predicate<ImplementedSender> requirement) {
 		this.meta.requirements = this.meta.requirements.and(requirement);
 		return (T) this;
 	}
@@ -137,7 +135,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * Returns the requirements that must be satisfied to run this command
 	 * @return the requirements that must be satisfied to run this command
 	 */
-	public Predicate<CommandSender> getRequirements() {
+	public Predicate<ImplementedSender> getRequirements() {
 		return this.meta.requirements;
 	}
 
@@ -145,7 +143,7 @@ abstract class ExecutableCommand<T extends ExecutableCommand<T>> extends Executa
 	 * Sets the requirements that must be satisfied to run this command
 	 * @param requirements the requirements that must be satisfied to run this command
 	 */
-	public void setRequirements(Predicate<CommandSender> requirements) {
+	public void setRequirements(Predicate<ImplementedSender> requirements) {
 		this.meta.requirements = requirements;
 	}
 

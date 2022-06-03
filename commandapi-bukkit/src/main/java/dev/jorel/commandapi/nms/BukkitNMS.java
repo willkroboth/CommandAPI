@@ -59,7 +59,6 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 
 import de.tr7zw.nbtapi.NBTContainer;
-import dev.jorel.commandapi.BukkitCommandAPIHandler;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
 import dev.jorel.commandapi.enums.EntitySelector;
 import dev.jorel.commandapi.wrappers.FloatRange;
@@ -77,7 +76,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWrapper> {
 	
 	static BukkitNMS<?> get() {
-		return (BukkitNMS<?>) BukkitBukkitNMS.get();
+		return (BukkitNMS<?>) BukkitNMS.get();
 	}
 
 	String convert(ItemStack is);
@@ -135,14 +134,6 @@ public interface BukkitNMS<CommandListenerWrapper> extends NMS<CommandListenerWr
 	 * @return a CLW.
 	 */
 	CommandListenerWrapper getCLWFromCommandSender(CommandSender sender);
-
-	/**
-	 * Returns a CommandSender of a given CommandListenerWrapper object
-	 * 
-	 * @param clw The CommandListenerWrapper object
-	 * @return A CommandSender (not proxied) from the command listener wrapper
-	 */
-	CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw);
 
 	Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
 

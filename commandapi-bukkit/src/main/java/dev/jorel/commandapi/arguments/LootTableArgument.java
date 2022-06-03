@@ -26,7 +26,6 @@ import org.bukkit.loot.LootTable;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 
 /**

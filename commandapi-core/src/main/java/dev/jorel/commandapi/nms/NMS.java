@@ -113,4 +113,12 @@ public interface NMS<CommandListenerWrapper> {
 	 * @return A String array of compatible Minecraft versions
 	 */
 	String[] compatibleVersions();
+	
+	/**
+	 * Returns a CommandSender of a given CommandListenerWrapper object
+	 * 
+	 * @param clw The CommandListenerWrapper object
+	 * @return A CommandSender (not proxied) from the command listener wrapper
+	 */
+	<T> T getImplementedSenderFromCSS(CommandListenerWrapper clw);
 }

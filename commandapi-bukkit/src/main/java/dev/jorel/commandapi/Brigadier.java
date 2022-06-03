@@ -119,7 +119,7 @@ public final class Brigadier {
 	 * @param command the command to convert
 	 * @return a Brigadier Command object that represents the provided command
 	 */
-	public static Command fromCommand(CommandAPICommand command) {
+	public static Command fromCommand(CommandAPICommandBase command) {
 		try {
 			return BukkitCommandAPIHandler.getInstance().generateCommand(command.getArguments().toArray(new Argument[0]),
 					command.getExecutor(), command.isConverted());

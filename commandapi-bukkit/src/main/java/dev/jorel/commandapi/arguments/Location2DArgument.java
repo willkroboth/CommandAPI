@@ -23,7 +23,6 @@ package dev.jorel.commandapi.arguments;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
-import dev.jorel.commandapi.CommandAPIHandler;
 import dev.jorel.commandapi.nms.BukkitNMS;
 import dev.jorel.commandapi.wrappers.Location2D;
 

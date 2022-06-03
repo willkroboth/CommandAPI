@@ -29,7 +29,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 
@@ -130,23 +129,6 @@ public final class CommandAPI {
 	 */
 	public static void logError(String message) {
 		getLog().severe(message);
-	}
-	
-	/**
-	 * Initializes the CommandAPI for loading. This should be placed at the
-	 * start of your <code>onLoad()</code> method.
-	 * @param verbose if true, enables verbose output for the CommandAPI
-	 * @deprecated Use {@link CommandAPI#onLoad(CommandAPIConfig)} instead
-	 */
-	@Deprecated(forRemoval = true)
-	public static void onLoad(boolean verbose) {
-		if(!loaded) {
-			CommandAPI.config = new Config(verbose);
-			CommandAPIHandler.getInstance().checkDependencies();
-			loaded = true;
-		} else {
-			getLog().severe("You've tried to call the CommandAPI's onLoad() method more than once!");
-		}
 	}
 	
 	/**

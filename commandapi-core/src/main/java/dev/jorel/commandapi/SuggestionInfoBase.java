@@ -24,9 +24,9 @@ package dev.jorel.commandapi;
  * A class that represents information which you can use to generate
  * suggestions.
  */
-public class SuggestionInfoBase {
+public class SuggestionInfoBase<ImplementedSender> {
 
-	private final CommandAPICommandSender sender;
+	private final ImplementedSender sender;
 	private final Object[] previousArgs;
 	private final String currentInput;
 	private final String currentArg;
@@ -41,7 +41,7 @@ public class SuggestionInfoBase {
 	 * @param currentArg   - the current partially typed argument. For example
 	 *                     "/mycmd tes" will return "tes"
 	 */
-	public SuggestionInfoBase(CommandAPICommandSender sender, Object[] previousArgs, String currentInput,
+	public SuggestionInfoBase(ImplementedSender sender, Object[] previousArgs, String currentInput,
 			String currentArg) {
 		this.sender = sender;
 		this.previousArgs = previousArgs;
@@ -52,7 +52,7 @@ public class SuggestionInfoBase {
 	/**
 	 * The CommandSender typing this command
 	 */
-	public CommandAPICommandSender sender() {
+	public ImplementedSender sender() {
 		return this.sender;
 	}
 

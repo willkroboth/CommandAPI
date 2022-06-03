@@ -50,10 +50,10 @@ public class BukkitHelp {
 			String permission = command.permission().getPermission().orElseGet(() -> "");
 
 			// Don't override the plugin help topic
-			String commandPrefix = generateCommandHelpPrefix(command.commandName);
-			helpTopicsToAdd.put(commandPrefix, NMS.generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission));
+			String commandPrefix = generateCommandHelpPrefix(command.commandName());
+			helpTopicsToAdd.put(commandPrefix, BukkitNMS.get().generateHelpTopic(commandPrefix, shortDescription, sb.toString().trim(), permission));
 
-			for(String alias : command.aliases) {
+			for(String alias : command.aliases()) {
 				StringBuilder currentAliasSb = new StringBuilder(aliasSb.toString());
 				if(command.aliases().length > 0) {
 					currentAliasSb.append(ChatColor.GOLD + "Aliases: " + ChatColor.WHITE);
