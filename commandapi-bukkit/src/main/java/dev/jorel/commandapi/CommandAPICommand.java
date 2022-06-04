@@ -27,8 +27,8 @@ import org.bukkit.entity.Player;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentBase;
-import dev.jorel.commandapi.arguments.BukkitArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.CommandBlockCommandExecutor;
 import dev.jorel.commandapi.executors.CommandBlockResultingCommandExecutor;
@@ -38,11 +38,8 @@ import dev.jorel.commandapi.executors.ConsoleResultingCommandExecutor;
 import dev.jorel.commandapi.executors.EntityCommandExecutor;
 import dev.jorel.commandapi.executors.EntityResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ExecutorType;
-import dev.jorel.commandapi.executors.IExecutorNormal;
 import dev.jorel.commandapi.executors.NativeCommandExecutor;
 import dev.jorel.commandapi.executors.NativeResultingCommandExecutor;
-import dev.jorel.commandapi.executors.PlayerCommandExecutor;
-import dev.jorel.commandapi.executors.PlayerResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ProxyCommandExecutor;
 import dev.jorel.commandapi.executors.ProxyResultingCommandExecutor;
 import dev.jorel.commandapi.executors.ResultingCommandExecutor;
@@ -50,7 +47,7 @@ import dev.jorel.commandapi.executors.ResultingCommandExecutor;
 /**
  * A builder used to create commands to be registered by the CommandAPI.
  */
-public class CommandAPICommand<A extends CommandSender> extends CommandAPICommandBase<CommandAPICommand<A>, A, BukkitArgument<?, A>> {
+public class CommandAPICommand extends CommandAPICommandBase<CommandAPICommand, CommandSender, Argument<?>> {
 	
 	/**
 	 * Creates a new command builder
@@ -67,8 +64,8 @@ public class CommandAPICommand<A extends CommandSender> extends CommandAPIComman
 	}
 
 	@Override
-	void register(CommandMetaData<A> meta, ArgumentBase<?, A, BukkitArgument<?, A>>[] argumentsArr,
-			CustomCommandExecutor<A> executor, boolean isConverted)
+	void register(CommandMetaData<CommandSender> meta, ArgumentBase<?, CommandSender, Argument<?>>[] argumentsArr,
+			CustomCommandExecutor<CommandSender> executor, boolean isConverted)
 			throws CommandSyntaxException, IOException {
 		BukkitCommandAPIHandler.getInstance().register(meta, argumentsArr, executor, isConverted);
 	}
@@ -257,7 +254,7 @@ public class CommandAPICommand<A extends CommandSender> extends CommandAPIComman
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public CommandAPICommand<A> executesNative(NativeCommandExecutor executor) {
+	public CommandAPICommand executesNative(NativeCommandExecutor executor) {
 		this.executor.addNormalExecutor(executor);
 		return this;
 	}
@@ -268,24 +265,8 @@ public class CommandAPICommand<A extends CommandSender> extends CommandAPIComman
 	 * @return this command builder
 	 */
 	@SuppressWarnings("unchecked")
-	public CommandAPICommand<A> executesNative(NativeResultingCommandExecutor executor) {
+	public CommandAPICommand executesNative(NativeResultingCommandExecutor executor) {
 		this.executor.addResultingExecutor(executor);
 		return this;
-	}
-	
-	static class AAAAAA {
-		{
-			new CommandAPICommand("hello")
-			.executesPlayer((Player player, Object[] args) -> {
-				
-			}).register();
-		}
-	}
-
-	@Override
-	public CommandAPICommandBase<CommandAPICommand<A>, A, BukkitArgument<?, A>> executesPlayer(
-			IExecutorNormal<A> executor) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

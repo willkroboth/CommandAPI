@@ -36,7 +36,7 @@ import dev.jorel.commandapi.CommandPermission;
  * @param <T> The type of the underlying object that this argument casts to
  */
 public abstract class ArgumentBase<T, ImplementedSender, ArgumentImpl extends ArgumentBase<T, ImplementedSender, ArgumentImpl>>
-		extends ArgumentTree<ImplementedSender, ArgumentImpl> implements IArgumentBase<T, ImplementedSender> {
+		implements ArgumentTree<ImplementedSender, ArgumentImpl>, IArgumentBase<T, ImplementedSender> {
 
 	////////////////////////
 	// Raw Argument Types //

@@ -37,7 +37,8 @@ import dev.jorel.commandapi.exceptions.InvalidCommandNameException;
  * A builder used to create commands to be registered by the CommandAPI.
  */
 public abstract class CommandAPICommandBase<T extends CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl extends ArgumentBase<?, ImplementedSender, ArgumentImpl>>
-		extends ExecutableCommand<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl> {
+		extends
+		ExecutableCommand<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>, ImplementedSender, ArgumentImpl> {
 
 	List<ArgumentImpl> args = new ArrayList<>();
 	List<CommandAPICommandBase<T, ImplementedSender, ArgumentImpl>> subcommands = new ArrayList<>();
