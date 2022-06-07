@@ -160,7 +160,7 @@ import net.minecraft.server.v1_13_R1.Vec3D;
 @RequireField(in = SimpleHelpMap.class, name = "helpTopics", ofType = Map.class)
 @RequireField(in = ParticleParamBlock.class, name = "c", ofType = IBlockData.class)
 @RequireField(in = ParticleParamItem.class, name = "c", ofType = ItemStack.class)
-@RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
+//@RequireField(in = ParticleParamRedstone.class, name = "g", ofType = float.class)
 public class NMS_1_13 implements NMS<CommandListenerWrapper> {
 	
 	private static final MinecraftServer MINECRAFT_SERVER = ((CraftServer) Bukkit.getServer()).getServer();

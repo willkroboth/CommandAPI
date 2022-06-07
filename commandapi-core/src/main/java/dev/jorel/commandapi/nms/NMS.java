@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
-
 import org.bukkit.Axis;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -52,13 +51,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.potion.PotionEffectType;
-
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
-
 import de.tr7zw.nbtapi.NBTContainer;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument.EntitySelector;
 import dev.jorel.commandapi.arguments.SuggestionProviders;
@@ -77,82 +74,153 @@ import net.md_5.bungee.api.chat.BaseComponent;
 public interface NMS<CommandListenerWrapper> {
 
 	/* Argument types */
-	ArgumentType<?> _ArgumentAngle();
+	public default ArgumentType<?> _ArgumentAngle() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentAxis();
+	public default ArgumentType<?> _ArgumentAxis() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentBlockPredicate();
+	public default ArgumentType<?> _ArgumentBlockPredicate() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentBlockState();
+	public default ArgumentType<?> _ArgumentBlockState() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentChat();
+	public default ArgumentType<?> _ArgumentChat() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentChatComponent();
+	public default ArgumentType<?> _ArgumentChatComponent() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentChatFormat();
+	public default ArgumentType<?> _ArgumentChatFormat() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentDimension();
+	public default ArgumentType<?> _ArgumentDimension() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentEnchantment();
+	public default ArgumentType<?> _ArgumentEnchantment() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentEntity(EntitySelector selector);
+	public default ArgumentType<?> _ArgumentEntity(EntitySelector selector) {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentEntitySummon();
+	public default ArgumentType<?> _ArgumentEntitySummon() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentFloatRange();
+	public default ArgumentType<?> _ArgumentFloatRange() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentIntRange();
+	public default ArgumentType<?> _ArgumentIntRange() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentItemPredicate();
+	public default ArgumentType<?> _ArgumentItemPredicate() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentItemStack();
+	public default ArgumentType<?> _ArgumentItemStack() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentMathOperation();
+	public default ArgumentType<?> _ArgumentMathOperation() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentMinecraftKeyRegistered();
+	public default ArgumentType<?> _ArgumentMinecraftKeyRegistered() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentMobEffect();
+	public default ArgumentType<?> _ArgumentMobEffect() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentNBTCompound();
+	public default ArgumentType<?> _ArgumentNBTCompound() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentParticle();
+	public default ArgumentType<?> _ArgumentParticle() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentPosition();
+	public default ArgumentType<?> _ArgumentPosition() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentPosition2D();
+	public default ArgumentType<?> _ArgumentPosition2D() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentProfile();
+	public default ArgumentType<?> _ArgumentProfile() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentRotation();
+	public default ArgumentType<?> _ArgumentRotation() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentScoreboardCriteria();
+	public default ArgumentType<?> _ArgumentScoreboardCriteria() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentScoreboardObjective();
+	public default ArgumentType<?> _ArgumentScoreboardObjective() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentScoreboardSlot();
+	public default ArgumentType<?> _ArgumentScoreboardSlot() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentScoreboardTeam();
+	public default ArgumentType<?> _ArgumentScoreboardTeam() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentScoreholder(boolean single);
+	public default ArgumentType<?> _ArgumentScoreholder(boolean single) {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentTag();
+	public default ArgumentType<?> _ArgumentTag() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentTime();
+	public default ArgumentType<?> _ArgumentTime() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentUUID();
+	public default ArgumentType<?> _ArgumentUUID() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentVec2();
+	public default ArgumentType<?> _ArgumentVec2() {
+		return null;
+	};
 
-	ArgumentType<?> _ArgumentVec3();
-	
+	public default ArgumentType<?> _ArgumentVec3() {
+		return null;
+	};
+
 	/*
 	 * Synthetic arguments - arguments that don't actually exist, but have
-	 * version-specific implementations, so we can switch their implementation
-	 * as needed. For example, the BiomeArgument is both a _ArgumentMinecraftKeyRegistered
-	 * and a _ArgumentResourceOrTag, but we'll refer to it as an _ArgumentSyntheticBiome
+	 * version-specific implementations, so we can switch their implementation as
+	 * needed. For example, the BiomeArgument is both a
+	 * _ArgumentMinecraftKeyRegistered and a _ArgumentResourceOrTag, but we'll refer
+	 * to it as an _ArgumentSyntheticBiome
 	 */
-	
-	ArgumentType<?> _ArgumentSyntheticBiome();
+
+	public default ArgumentType<?> _ArgumentSyntheticBiome() {
+		return null;
+	};
 
 	/**
 	 * A String array of Minecraft versions that this NMS implementation is
@@ -162,15 +230,25 @@ public interface NMS<CommandListenerWrapper> {
 	 * 
 	 * @return A String array of compatible Minecraft versions
 	 */
-	String[] compatibleVersions();
+	public default String[] compatibleVersions() {
+		return null;
+	};
 
-	String convert(ItemStack is);
+	public default String convert(ItemStack is) {
+		return null;
+	};
 
-	String convert(ParticleData<?> particle);
+	public default String convert(ParticleData<?> particle) {
+		return null;
+	};
 
-	String convert(PotionEffectType potion);
+	public default String convert(PotionEffectType potion) {
+		return null;
+	};
 
-	String convert(Sound sound);
+	public default String convert(Sound sound) {
+		return null;
+	};
 
 	/**
 	 * Creates a JSON file that describes the hierarchical structure of the commands
@@ -180,37 +258,67 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param dispatcher The Brigadier CommandDispatcher
 	 * @throws IOException When the file fails to be written to
 	 */
-	void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher) throws IOException;
+	public default void createDispatcherFile(File file, CommandDispatcher<CommandListenerWrapper> dispatcher)
+			throws IOException {
+	};
 
-	Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default Advancement getAdvancement(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default Component getAdventureChat(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default Component getAdventureChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default float getAngle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return 0f;
+	};
 
-	EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default EnumSet<Axis> getAxis(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default Biome getBiome(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public default Predicate<Block> getBlockPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default BlockData getBlockState(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
 	/**
 	 * Returns the Brigadier CommandDispatcher from the NMS CommandDispatcher
 	 * 
 	 * @return A Brigadier CommandDispatcher
 	 */
-	CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher();
+	public default CommandDispatcher<CommandListenerWrapper> getBrigadierDispatcher() {
+		return null;
+	};
 
-	BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default BaseComponent[] getChat(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default ChatColor getChatColor(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default BaseComponent[] getChatComponent(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
 	/**
 	 * Converts a CommandSender into a CLW
@@ -218,7 +326,9 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param sender the command sender to convert
 	 * @return a CLW.
 	 */
-	CommandListenerWrapper getCLWFromCommandSender(CommandSender sender);
+	public default CommandListenerWrapper getCLWFromCommandSender(CommandSender sender) {
+		return null;
+	};
 
 	/**
 	 * Returns a CommandSender of a given CommandListenerWrapper object
@@ -226,100 +336,178 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param clw The CommandListenerWrapper object
 	 * @return A CommandSender (not proxied) from the command listener wrapper
 	 */
-	CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw);
+	public default CommandSender getCommandSenderFromCSS(CommandListenerWrapper clw) {
+		return null;
+	};
 
-	Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default Environment getDimension(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default Enchantment getEnchantment(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key, EntitySelector selector)
-			throws CommandSyntaxException;
+	public default Object getEntitySelector(CommandContext<CommandListenerWrapper> cmdCtx, String key,
+			EntitySelector selector) throws CommandSyntaxException {
+		return null;
+	};
 
-	EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default EntityType getEntityType(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	FloatRange getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default FloatRange getFloatRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public default FunctionWrapper[] getFunction(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	SimpleFunctionWrapper getFunction(NamespacedKey key);
+	public default SimpleFunctionWrapper getFunction(NamespacedKey key) {
+		return null;
+	};
 
-	Set<NamespacedKey> getFunctions();
+	public default Set<NamespacedKey> getFunctions() {
+		return null;
+	};
 
-	IntegerRange getIntRange(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default IntegerRange getIntRange(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default ItemStack getItemStack(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Predicate<ItemStack> getItemStackPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public default Predicate<ItemStack> getItemStackPredicate(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default String getKeyedAsString(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
-	
-	Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public default Location2D getLocation2DBlock(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str) throws CommandSyntaxException;
+	public default Location2D getLocation2DPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
-			throws CommandSyntaxException;
+	public default Location getLocationBlock(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default Location getLocationPrecise(CommandContext<CommandListenerWrapper> cmdCtx, String str)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public default LootTable getLootTable(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	NBTContainer getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default MathOperation getMathOperation(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws IllegalArgumentException, CommandSyntaxException;
+	public default NBTContainer getNBTCompound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	String getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default String getObjective(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws IllegalArgumentException, CommandSyntaxException {
+		return null;
+	};
 
-	ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default String getObjectiveCriteria(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
-	OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default ParticleData<?> getParticle(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public default Player getPlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default OfflinePlayer getOfflinePlayer(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default PotionEffectType getPotionEffect(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default Recipe getRecipe(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	Collection<String> getScoreHolderMultiple(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public default Rotation getRotation(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	String getScoreHolderSingle(CommandContext<CommandListenerWrapper> cmdCtx, String key)
-			throws CommandSyntaxException;
+	public default ScoreboardSlot getScoreboardSlot(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
+
+	public default Collection<String> getScoreHolderMultiple(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
+
+	public default String getScoreHolderSingle(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
 	/**
 	 * Retrieves a CommandSender, given some CommandContext. This method should
 	 * handle Proxied CommandSenders for entities if a Proxy is being used.
 	 * 
 	 * @param cmdCtx      The
-	 *                    <code>CommandContext&lt;CommandListenerWrapper&gt;</code>
+	 *                    <code>CommandContext&lt { return null; }; public defaultCommandListenerWrapper&gt { return null; }; public default</code>
 	 *                    for a given command
 	 * @param forceNative whether or not the CommandSender should be a
 	 *                    NativeProxyCommandSender or not
 	 * @return A CommandSender instance (such as a ProxiedNativeCommandSender or
 	 *         Player)
 	 */
-	CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx, boolean forceNative);
+	public default CommandSender getSenderForCommand(CommandContext<CommandListenerWrapper> cmdCtx,
+			boolean forceNative) {
+		return null;
+	};
 
 	/**
 	 * Returns the Server's internal (OBC) CommandMap
 	 * 
 	 * @return A SimpleCommandMap from the OBC server
 	 */
-	SimpleCommandMap getSimpleCommandMap();
+	public default SimpleCommandMap getSimpleCommandMap() {
+		return null;
+	};
 
-	Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default Sound getSound(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
 	/**
 	 * Retrieve a specific NMS implemented SuggestionProvider
@@ -327,19 +515,34 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param provider The SuggestionProvider type to retrieve
 	 * @return A SuggestionProvider that matches the SuggestionProviders input
 	 */
-	SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider);
+	public default SuggestionProvider<CommandListenerWrapper> getSuggestionProvider(SuggestionProviders provider) {
+		return null;
+	};
 
-	SimpleFunctionWrapper[] getTag(NamespacedKey key);
+	public default SimpleFunctionWrapper[] getTag(NamespacedKey key) {
+		return null;
+	};
 
-	Set<NamespacedKey> getTags();
+	public default Set<NamespacedKey> getTags() {
+		return null;
+	};
 
-	String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key) throws CommandSyntaxException;
+	public default String getTeam(CommandContext<CommandListenerWrapper> cmdCtx, String key)
+			throws CommandSyntaxException {
+		return null;
+	};
 
-	int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default int getTime(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return 0;
+	};
 
-	UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key);
+	public default UUID getUUID(CommandContext<CommandListenerWrapper> cmdCtx, String key) {
+		return null;
+	};
 
-	World getWorldForCSS(CommandListenerWrapper clw);
+	public default World getWorldForCSS(CommandListenerWrapper clw) {
+		return null;
+	};
 
 	/**
 	 * Checks if a Command is an instance of the OBC VanillaCommandWrapper
@@ -347,22 +550,30 @@ public interface NMS<CommandListenerWrapper> {
 	 * @param command The Command to check
 	 * @return true if Command is an instance of VanillaCommandWrapper
 	 */
-	boolean isVanillaCommandWrapper(Command command);
+	public default boolean isVanillaCommandWrapper(Command command) {
+		return false;
+	};
 
 	/**
 	 * Reloads the datapacks by using the updated the commandDispatcher tree
 	 */
-	void reloadDataPacks();
+	public default void reloadDataPacks() {
+	};
 
 	/**
 	 * Resends the command dispatcher's set of commands to a player.
 	 * 
 	 * @param player the player to send the command graph packet to
 	 */
-	void resendPackets(Player player);
+	public default void resendPackets(Player player) {
+	};
 
-	HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription, String permission);
+	public default HelpTopic generateHelpTopic(String commandName, String shortDescription, String fullDescription,
+			String permission) {
+		return null;
+	};
 
-	void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd);
-	
+	public default void addToHelpMap(Map<String, HelpTopic> helpTopicsToAdd) {
+	};
+
 }
