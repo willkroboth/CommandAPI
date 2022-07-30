@@ -55,6 +55,7 @@
 			<version>${spigot.version}</version>
 			<scope>test</scope>
 		</dependency>
+
 		<!-- Spigot compilation -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>

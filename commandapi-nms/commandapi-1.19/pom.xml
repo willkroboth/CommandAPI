@@ -30,13 +30,10 @@
 	<properties>
 		<minecraft.mappings>1.19-R0.1-SNAPSHOT</minecraft.mappings>
 		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
+		<paper.version>1.19-R0.1-SNAPSHOT</paper.version>
 	</properties>
 
 	<repositories>
-		<repository>
-			<id>minecraft-libraries</id>
-			<url>https://libraries.minecraft.net</url>
-		</repository>
 		<repository>
 			<id>codemc-repo</id>
 			<url>https://repo.codemc.io/repository/nms/</url>
@@ -48,19 +45,24 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Spigot testing (for reflection checks) -->
 		<dependency>
-			<groupId>org.spigotmc</groupId>
-			<artifactId>spigot</artifactId>
-			<version>${spigot.version}</version>
-			<scope>test</scope>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.19-common</artifactId>
+			<version>${project.version}</version>
 		</dependency>
+
 		<!-- Spigot compilation -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<classifier>remapped-mojang</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -70,21 +72,6 @@
 			<artifactId>paper-api</artifactId>
 			<version>${paper.version}</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- CommandAPI core -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-core</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.19-common</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
