@@ -39,6 +39,8 @@ import com.mojang.brigadier.LiteralMessage;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 
+import dev.jorel.commandapi.arguments.CustomArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 
 /**
@@ -232,6 +234,19 @@ public final class CommandAPI {
 		}
 
 		CommandAPIHandler.getInstance().getPaper().registerReloadHandler(plugin);
+		
+		class SpecialArgument extends CustomArgument<String, String> {
+			public SpecialArgument(String nodeName) {
+				super(new StringArgument(nodeName), info -> info.input());
+				replaceSuggestions((info, builder) -> builder.suggest("foo").buildFuture());
+			}
+		}
+		
+		new CommandAPICommand("test_error2")
+			.withArguments(new SpecialArgument("special1"), new SpecialArgument("special2"))
+			.executes((s, a) -> 1)
+			.register();
+		
 	}
 
 	/**

@@ -37,25 +37,25 @@ import net.minecraft.world.level.gameevent.EntityPositionSource;
 
 // Mojang-Mapped reflection
 /**
- * NMS implementation for Minecraft 1.19
+ * NMS implementation for Minecraft 1.19.1
  */
-@NMSMeta(compatibleWith = "1.19")
+@NMSMeta(compatibleWith = "1.19.1")
 @RequireField(in = ServerFunctionLibrary.class, name = "dispatcher", ofType = CommandDispatcher.class)
 @RequireField(in = EntitySelector.class, name = "usesSelector", ofType = boolean.class)
 @RequireField(in = EntityPositionSource.class, name = "entityOrUuidOrId", ofType = Either.class)
-public class NMS_1_19_R1 extends NMS_1_19_Common {
-	
+public class NMS_1_19_1_R1 extends NMS_1_19_Common {
+
 	@Override
 	public String[] compatibleVersions() {
-		return new String[] { "1.19" };
+		return new String[] { "1.19.1" };
 	}
 
-	@Differs(from = "1.18.2", by = "Chat preview!")
+	@Differs(from = "1.19", by = "Chat preview needs to use NMS_1_19_1_R1_ChatPreviewHandler with caching system")
 	@Override
 	public void hookChatPreview(Plugin plugin, Player player) {
 		final Channel playerChannel = ((CraftPlayer) player).getHandle().connection.connection.channel;
 		if (playerChannel.pipeline().get("CommandAPI_" + player.getName()) == null) {
-			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_R1_ChatPreviewHandler(this, plugin, player));
+			playerChannel.pipeline().addBefore("packet_handler", "CommandAPI_" + player.getName(), new NMS_1_19_1_R1_ChatPreviewHandler(this, plugin, player));
 		}
 	}
 }

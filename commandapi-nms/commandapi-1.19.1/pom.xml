@@ -25,11 +25,11 @@
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>commandapi-1.19</artifactId>
+	<artifactId>commandapi-1.19.1</artifactId>
 
 	<properties>
-		<minecraft.mappings>1.19-R0.1-SNAPSHOT</minecraft.mappings>
-		<spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
+		<minecraft.mappings>1.19.1-R0.1-SNAPSHOT</minecraft.mappings>
+		<spigot.version>1.19.1-R0.1-SNAPSHOT</spigot.version>
 	</properties>
 
 	<repositories>
@@ -48,19 +48,31 @@
 	</repositories>
 
 	<dependencies>
-		<!-- Spigot testing (for reflection checks) -->
 		<dependency>
+			<groupId>dev.jorel</groupId>
+			<artifactId>commandapi-1.19-common</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<!-- Spigot testing (for reflection checks) -->
+		<!-- <dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 		<!-- Spigot compilation -->
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot</artifactId>
 			<version>${spigot.version}</version>
 			<classifier>remapped-mojang</classifier>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot</artifactId>
+			<version>${spigot.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -70,21 +82,6 @@
 			<artifactId>paper-api</artifactId>
 			<version>${paper.version}</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- CommandAPI core -->
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-core</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>dev.jorel</groupId>
-			<artifactId>commandapi-1.19-common</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 
