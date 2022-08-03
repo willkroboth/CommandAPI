@@ -49,6 +49,8 @@
 			<groupId>dev.jorel</groupId>
 			<artifactId>commandapi-1.19-common</artifactId>
 			<version>${project.version}</version>
+			<classifier>mojang-mapped</classifier>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Spigot compilation -->
